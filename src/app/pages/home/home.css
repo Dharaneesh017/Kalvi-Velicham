@@ -1,0 +1,23 @@
+.header {
+  background-color: #004080;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.logo {
+  height: 60px;
+}
+
+.hero {
+  
+  background-size: cover;
+  color: white;
+  padding: 60px;
+  text-align: center;
+}
+
+.about, .notices, .principal, .footer {
+  padding: 20px;
+  margin: 10px;
+}
