@@ -1,39 +1,62 @@
-<!-- Header -->
-<header class="header">
-  <img src="" alt="School Logo" class="logo" />
-  <h1>Govt Higher Secondary School, Tamil Nadu</h1>
-</header>
+<!-- home.component.html -->
+<div class="home-container">
 
-<!-- Hero Section -->
-<section class="hero">
-  <h2>Welcome to Our School</h2>
-  <p>Empowering rural education through digital transformation</p>
-</section>
+  <!-- Professional Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <!-- Optional logo -->
+      <!--
+      <div class="logo-container">
+        <img src="src\assets\school_logo.jpg" alt="" class="logo">
+      </div>
+      -->
+      <h1 class="title">
+        <span class="title-text">Tiruchengode Boys</span>
+        <span class="alumni-text"> Alumni Association</span>
+      </h1>
+    </div>
 
-<!-- About Section -->
-<section class="about">
-  <h3>About Our School</h3>
-  <p>Our school is dedicated to providing quality education to rural students...</p>
-</section>
-
-<!-- Notice Board -->
-<section class="notices">
-  <h3>Latest Announcements</h3>
-  <ul>
-    <li>🏫 Admissions Open for 2025-26</li>
-    <li>📢 PTA Meeting on 20th July</li>
-  </ul>
-</section>
-
-<!-- Principal's Message -->
-<section class="principal">
-  <h3>From the Principal's Desk</h3>
-  <p>"Education is the most powerful weapon..."</p>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-  <p>📍 Address: Govt Hr Sec School, District, Tamil Nadu</p>
-  <p>📧 Email: schoolexample</p>
-  <p>&copy; 2025 All rights reserved.</p>
-</footer>
+    <div class="navbar-right">
+      <ul class="nav-menu">
+        <li class="nav-item"><a routerLink="/" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a routerLink="/about" class="nav-link">About</a></li>
+        <li class="nav-item"><a routerLink="/events" class="nav-link">Events</a></li>
+        <li class="nav-item"><a routerLink="/gallery" class="nav-link">Gallery</a></li>
+        <li class="nav-item"><a routerLink="/members" class="nav-link">Members</a></li>
+        <li class="nav-item"><a routerLink="/contact" class="nav-link">Contact</a></li>
+        <li class="nav-item language-switch">
+          <select class="language-selector">
+            <option value="en">English</option>
+            <option value="ta">தமிழ்</option>
+          </select>
+        </li>
+      </ul>
+      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </nav>
+  <div class="school-header">
+  <div class="school-branding">
+    <div class="school-logo">
+      <img src="src/assets/school_logo.png" 
+           alt="" />
+    </div>
+    
+    <div class="school-info">
+      <h2 class="school-name">Government Boys Higher Secondary School</h2>
+      <p class="school-location">Tiruchengode, Namakkal</p>
+    </div>
+  </div>
+  <div class="govt-logo">
+    <img src="src/assets/govt_logo.png" 
+         alt="" />
+  </div>
+</div>
+  <!-- 🚨 This must be OUTSIDE the nav -->
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
