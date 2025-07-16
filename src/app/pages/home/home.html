@@ -1,62 +1,128 @@
-<!-- home.component.html -->
-<div class="home-container">
-
-  <!-- Professional Navigation Bar -->
-  <nav class="navbar">
-    <div class="navbar-left">
-      <!-- Optional logo -->
-      <!--
-      <div class="logo-container">
-        <img src="src\assets\school_logo.jpg" alt="" class="logo">
+<main>
+  <section class="hero-banner">
+    <div class="container">
+      <div class="hero-content">
+        <h1>{{ currentLanguage === 'english' ? 'Transforming Tamil Nadu\'s Government Schools' : 'தமிழ்நாடு அரசு பள்ளிகளின் மாற்றம்' }}</h1>
+        <p>{{ currentLanguage === 'english' ? 'Join us in creating better learning environments for over 1 million students across 45,000 government schools' : '45,000 அரசு பள்ளிகளில் 10 லட்சம் மாணவர்களுக்கு சிறந்த கற்றல் சூழலை உருவாக்க எங்களுடன் இணையுங்கள்' }}</p>
+        <div class="hero-buttons">
+          <a routerLink="/donate" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போது நன்கொடை அளிக்கவும்' }}</a>
+          <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Become a Volunteer' : 'தன்னார்வலராக இணையுங்கள்' }}</a>
+        </div>
       </div>
-      -->
-      <h1 class="title">
-        <span class="title-text">Tiruchengode Boys</span>
-        <span class="alumni-text"> Alumni Association</span>
-      </h1>
     </div>
+  </section>
 
-    <div class="navbar-right">
-      <ul class="nav-menu">
-        <li class="nav-item"><a routerLink="/" class="nav-link active">Home</a></li>
-        <li class="nav-item"><a routerLink="/about" class="nav-link">About</a></li>
-        <li class="nav-item"><a routerLink="/events" class="nav-link">Events</a></li>
-        <li class="nav-item"><a routerLink="/gallery" class="nav-link">Gallery</a></li>
-        <li class="nav-item"><a routerLink="/members" class="nav-link">Members</a></li>
-        <li class="nav-item"><a routerLink="/contact" class="nav-link">Contact</a></li>
-        <li class="nav-item language-switch">
-          <select class="language-selector">
-            <option value="en">English</option>
-            <option value="ta">தமிழ்</option>
-          </select>
-        </li>
-      </ul>
-      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+  <!-- About Initiative -->
+  <section class="about-section">
+    <div class="container">
+      <h2>{{ currentLanguage === 'english' ? 'About the Initiative' : 'முயற்சி பற்றி' }}</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>{{ currentLanguage === 'english' ? 'Our mission is to improve the infrastructure and learning environment of government schools across Tamil Nadu. We believe every child deserves access to quality education in a safe and conducive environment.' : 'தமிழ்நாடு முழுவதும் உள்ள அரசு பள்ளிகளின் உள்கட்டமைப்பு மற்றும் கற்றல் சூழலை மேம்படுத்துவதே எங்கள் பணி. பாதுகாப்பான மற்றும் சாதகமான சூழலில் ஒவ்வொரு குழந்தையும் தரமான கல்வியை அணுக வேண்டும் என்று நாங்கள் நம்புகிறோம்.' }}</p>
+          <p>{{ currentLanguage === 'english' ? 'Since 2018, we\'ve renovated over 1,200 schools, impacting more than 350,000 students.' : '2018 முதல், நாங்கள் 1,200 க்கும் மேற்பட்ட பள்ளிகளை புதுப்பித்துள்ளோம், இது 350,000 க்கும் மேற்பட்ட மாணவர்களை பாதித்துள்ளது.' }}</p>
+        </div>
+        <div class="about-image">
+          <img src="assets/images/aboutschool.jpg" alt="asdf">
+        </div>
+      </div>
     </div>
-  </nav>
-  <div class="school-header">
-  <div class="school-branding">
-    <div class="school-logo">
-      <img src="src/assets/school_logo.png" 
-           alt="" />
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="container">
+      <h2>{{ currentLanguage === 'english' ? 'How It Works' : 'இது எவ்வாறு செயல்படுகிறது' }}</h2>
+      <div class="steps-container">
+        <div class="step" *ngFor="let step of howItWorks">
+          <div class="step-number">{{ step.step }}</div>
+          <h3>{{ currentLanguage === 'english' ? step.title : step.titleTa }}</h3>
+          <p>{{ currentLanguage === 'english' ? step.description : step.descriptionTa }}</p>
+        </div>
+      </div>
     </div>
-    
-    <div class="school-info">
-      <h2 class="school-name">Government Boys Higher Secondary School</h2>
-      <p class="school-location">Tiruchengode, Namakkal</p>
+  </section>
+
+  <!-- Featured Schools -->
+  <section class="featured-schools">
+    <div class="container">
+      <h2>{{ currentLanguage === 'english' ? 'Featured Schools in Need' : 'தேவையுள்ள முன்னிலைப் பள்ளிகள்' }}</h2>
+      <div class="schools-grid">
+        <div class="school-card" *ngFor="let school of featuredSchools">
+          <div class="school-image">
+            <img src="assets/images/ooty-school.jpeg" alt="School image">
+            <img src="assets/images/govt_logo.png" alt="School image">
+          </div>
+          <div class="school-info">
+            <h3>{{ currentLanguage === 'english' ? school.name : school.nameTa }}</h3>
+            <p class="location">{{ currentLanguage === 'english' ? school.location : school.locationTa }}</p>
+            <p class="needs">{{ currentLanguage === 'english' ? 'Needs: ' + school.needs : 'தேவைகள்: ' + school.needsTa }}</p>
+            <div class="progress-container">
+              <div class="progress-bar" [style.width.%]="school.progress"></div>
+              <span>{{ school.progress }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி திரட்டப்பட்டது' }}</span>
+            </div>
+            <a routerLink="/donate" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Success Stories -->
+  <section class="success-stories">
+    <div class="container">
+      <h2>{{ currentLanguage === 'english' ? 'Recent Success Stories' : 'சமீபத்திய வெற்றிக் கதைகள்' }}</h2>
+      <div class="stories-grid">
+        <div class="story-card" *ngFor="let story of successStories">
+          <div class="story-image">
+            <img [src]="story.image" alt="Success story">
+          </div>
+          <div class="story-content">
+            <h3>{{ currentLanguage === 'english' ? story.title : story.titleTa }}</h3>
+            <p>{{ currentLanguage === 'english' ? story.description : story.descriptionTa }}</p>
+            <p class="date">{{ story.date }}</p>
+            <a routerLink="/successstories" class="btn btn-small">{{ currentLanguage === 'english' ? 'Read More' : 'மேலும் படிக்க' }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>{{ currentLanguage === 'english' ? 'Join Us in Transforming Schools' : 'பள்ளிகளை மாற்றுவதில் எங்களுடன் இணையுங்கள்' }}</h2>
+      <p>{{ currentLanguage === 'english' ? 'Your support can make a lasting difference in the lives of thousands of students' : 'ஆயிரக்கணக்கான மாணவர்களின் வாழ்க்கையில் உங்கள் ஆதரவு நீடித்த மாற்றத்தை ஏற்படுத்தும்' }}</p>
+      <div class="cta-buttons">
+        <a routerLink="/donate" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போது நன்கொடை அளிக்கவும்' }}</a>
+        <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Volunteer Today' : 'இன்றே தன்னார்வலராகுங்கள்' }}</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி' }}</h3>
+        <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம் சிறந்த எதிர்காலத்தை உருவாக்குதல்' }}</p>
+      </div>
+      <div class="footer-links">
+        <h4>{{ currentLanguage === 'english' ? 'Quick Links' : 'விரைவு இணைப்புகள்' }}</h4>
+        <ul>
+          <li><a routerLink="/">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
+          <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
+          <li><a routerLink="/donate">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
+          <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
+        <p>infotnschools.com</p>
+        <p>+91 9876543210</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {{ currentLanguage === 'english' ? '2023 Tamil Nadu School Renovation Initiative. All rights reserved.' : '2023 தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}</p>
     </div>
   </div>
-  <div class="govt-logo">
-    <img src="src/assets/govt_logo.png" 
-         alt="" />
-  </div>
-</div>
-  <!-- 🚨 This must be OUTSIDE the nav -->
-  <div class="main-content">
-    <router-outlet></router-outlet>
-  </div>
-</div>
+</footer>

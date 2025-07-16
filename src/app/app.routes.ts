@@ -1,15 +1,19 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
 import { About } from './pages/about/about';
-import { Gallery } from './pages/gallery/gallery';
-import { Members } from './pages/members/members';
 import { Contact } from './pages/contact/contact';
-import { Events } from './pages/events/events';
+import {  SchoolsComponent } from './pages/schools/schools';
+import { Volunteer } from './pages/volunteer/volunteer';
+import { Successstories } from './pages/successstories/successstories';
+import { Donate } from './pages/donate/donate';
 
 export const routes: Routes = [
-    { path:'about',component:About},
-    { path:'gallery',component:Gallery},
-    { path:'members',component:Members},
-    {path:'contact',component:Contact},
-    { path:'events',component:Events},
+  { path: '',component:Home },
+  { path: 'about', component: About },
+  { path: 'contact', component: Contact },
+  { path: 'schools', component:SchoolsComponent },
+  { path: 'volunteer',  component: Volunteer},
+  { path: 'successstories', component: Successstories },
+  { path: 'donate', component: Donate },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

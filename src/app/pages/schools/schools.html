@@ -1,0 +1,425 @@
+
+<main class="main-content">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">School Registration for Renovation</h1>
+      <p class="page-subtitle">
+        Submit your government school for renovation consideration under the Tamil Nadu School Infrastructure Development Program
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h3>📋 Required Documents & Information</h3>
+      <ul>
+        <li>School Recognition Certificate</li>
+        <li>Latest Infrastructure Assessment Report</li>
+        <li>Current enrollment data</li>
+        <li>Photographs of areas requiring renovation</li>
+        <li>Principal's official seal and signature</li>
+      </ul>
+    </div>
+
+    <div class="progress-indicator">
+      <div class="progress-step" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+        <span>1</span> School Details
+      </div>
+      <div class="progress-step" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
+        <span>2</span> Infrastructure Needs
+      </div>
+      <div class="progress-step" [class.active]="currentStep === 3" [class.completed]="currentStep > 3">
+        <span>3</span> Documentation
+      </div>
+      <div class="progress-step" [class.active]="currentStep === 4">
+        <span>4</span> Review & Submit
+      </div>
+    </div>
+
+    <form [formGroup]="schoolForm" class="form-container" (ngSubmit)="onSubmit()">
+      <!-- Step 1: Basic School Information -->
+      <div class="form-section" *ngIf="currentStep === 1">
+        <h2 class="section-title">
+          <span class="section-icon">1</span>
+          Basic School Information
+        </h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              School Name (English) <span class="required">*</span>
+            </label>
+            <input type="text" class="form-input" formControlName="schoolNameEn">
+             <div *ngIf="schoolForm.get('basicInfo')?.get('schoolNameEn')?.invalid && schoolForm.get('basicInfo')?.get('schoolNameEn')?.touched" class="error-message">
+              School name in English is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              School Name (Tamil) <span class="required">*</span>
+            </label>
+            <input type="text" class="form-input" formControlName="schoolNameTa">
+            <div *ngIf="schoolForm.get('basicInfo.schoolNameTa')?.invalid && schoolForm.get('basicInfo')?.get('schoolNameTa')?.touched" class="error-message">
+              School name in Tamil is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              UDISE Code <span class="required">*</span>
+            </label>
+            <input type="text" class="form-input" formControlName="udiseCode">
+            <div *ngIf="schoolForm.get('basicInfo.udiseCode')?.invalid && schoolForm.get('basicInfo')?.get('udiseCode')?.touched" class="error-message">
+              11-digit UDISE code is required
+            </div>
+            <div class="help-text">11-digit UDISE code</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              School Type <span class="required">*</span>
+            </label>
+            <select class="form-select" formControlName="schoolType">
+              <option value="">Select School Type</option>
+              <option value="primary">Primary School (Classes 1-5)</option>
+              <option value="middle">Middle School (Classes 6-8)</option>
+              <option value="high">High School (Classes 9-10)</option>
+              <option value="higher_secondary">Higher Secondary (Classes 11-12)</option>
+              <option value="composite">Composite School (Classes 1-12)</option>
+            </select>
+            <div *ngIf="schoolForm.get('basicInfo.schoolType')?.invalid && schoolForm.get('basicInfo')?.get('schoolType')?.touched" class="error-message">
+              School type is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              District <span class="required">*</span>
+            </label>
+            <select class="form-select" formControlName="district">
+              <option value="">Select District</option>
+              <option *ngFor="let district of districts" [value]="district.toLowerCase()">{{district}}</option>
+            </select>
+            <div *ngIf="schoolForm.get('basicInfo.district')?.invalid && schoolForm.get('basicInfo')?.get('district')?.touched" class="error-message">
+
+              District is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Block/Taluk <span class="required">*</span>
+            </label>
+            <input type="text" class="form-input" formControlName="block">
+            <div *ngIf="schoolForm.get('basicInfo.block')?.invalid && schoolForm.get('basicInfo')?.get('block')?.touched" class="error-message">
+              Block/Taluk is required
+            </div>
+          </div>
+          
+          <div class="form-group full-width">
+            <label class="form-label">
+              Complete Address <span class="required">*</span>
+            </label>
+            <textarea class="form-textarea" formControlName="address"></textarea>
+            <div *ngIf="schoolForm.get('basicInfo.address')?.invalid && schoolForm.get('basicInfo')?.get('address')?.touched" class="error-message">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Pincode <span class="required">*</span>
+            </label>
+            <input type="text" class="form-input" formControlName="pincode">
+            <div *ngIf="schoolForm.get('basicInfo.pincode')?.invalid && schoolForm.get('basicInfo')?.get('pincode')?.touched" class="error-message">
+              6-digit pincode is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Established Year <span class="required">*</span>
+            </label>
+            <input type="number" class="form-input" formControlName="establishedYear">
+            <div *ngIf="schoolForm.get('basicInfo.establishedYear')?.invalid && schoolForm.get('basicInfo')?.get('establishedYear')?.touched" class="error-message">
+
+              Valid established year is required (1900-{{currentYear}})
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Current Student Enrollment <span class="required">*</span>
+            </label>
+            <input type="number" class="form-input" formControlName="studentCount">
+            <div *ngIf="schoolForm.get('basicInfo.studentCount')?.invalid && schoolForm.get('basicInfo')?.get('studentCount')?.touched" class="error-message">
+
+              Student count must be at least 1
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Number of Teachers <span class="required">*</span>
+            </label>
+            <input type="number" class="form-input" formControlName="teacherCount">
+            <div *ngIf="schoolForm.get('basicInfo.teacherCount')?.invalid && schoolForm.get('basicInfo')?.get('principalName')?.touched" class="error-message">
+              Teacher count must be at least 1
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Principal Name <span class="required">*</span>
+            </label>
+            <input type="text" class="form-input" formControlName="principalName">
+            <div *ngIf="schoolForm.get('basicInfo.principalName')?.invalid && schoolForm.get('basicInfo')?.get('principalEmail')?.touched" class="error-message">
+              Principal name is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Principal Contact Number <span class="required">*</span>
+            </label>
+            <input type="tel" class="form-input" formControlName="principalContact">
+            <div *ngIf="schoolForm.get('basicInfo.principalContact')?.invalid && schoolForm.get('basicInfo')?.get('principalContact')?.touched" class="error-message">
+              10-digit contact number is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Principal Email <span class="required">*</span>
+            </label>
+            <input type="email" class="form-input" formControlName="principalEmail">
+            <div *ngIf="schoolForm.get('basicInfo.principalEmail')?.invalid && schoolForm.get('basicInfo')?.get('principalEmail')?.touched" class="error-message">
+
+              Valid email is required
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Infrastructure Needs Assessment -->
+      <div class="form-section" *ngIf="currentStep === 2">
+        <h2 class="section-title">
+          <span class="section-icon">2</span>
+          Infrastructure Needs Assessment
+        </h2>
+        
+        <div class="form-group">
+          <label class="form-label">
+            Areas Requiring Renovation <span class="required">*</span>
+          </label>
+          <div class="checkbox-group">
+            <div class="checkbox-item" *ngFor="let area of renovationAreas; let i = index">
+              <input
+  type="checkbox"
+  [id]="area.id"
+  [formControl]="getRenovationAreaControl(i)">
+              <label [for]="area.id">{{area.label}}</label>
+            </div>
+          </div>
+          <div *ngIf="schoolForm.get('infrastructure.renovationAreas')?.invalid && schoolForm.get('infrastructure')?.get('renovationAreas')?.touched" class="error-message">
+
+            At least one area must be selected
+          </div>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              Priority Level <span class="required">*</span>
+            </label>
+            <div class="priority-selector">
+              <button type="button" *ngFor="let level of priorityLevels" 
+                class="priority-btn {{level.class}}" 
+              [class.active]="schoolForm.get('infrastructure')?.get('priority')?.value === level.value"
+
+                (click)="setPriority(level.value)">
+                {{level.label}}
+              </button>
+            </div>
+            <div *ngIf="schoolForm.get('infrastructure.priority')?.invalid && schoolForm.get('infrastructure')?.get('currentCondition')?.touched" class="error-message">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Estimated Budget Required
+            </label>
+            <select class="form-select" formControlName="budgetRange">
+              <option value="">Select Budget Range</option>
+              <option *ngFor="let range of budgetRanges" [value]="range.value">{{range.label}}</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            Detailed Description of Current Condition <span class="required">*</span>
+          </label>
+          <textarea class="form-textarea" formControlName="currentCondition" placeholder="Describe the current state of infrastructure, specific issues, and urgent needs..."></textarea>
+          <div *ngIf="schoolForm.get('infrastructure.currentCondition')?.invalid && schoolForm.get('documentation')?.get('recognitionCert')?.touched" class="error-message">
+
+            Description is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            Expected Renovation Outcome
+          </label>
+          <textarea class="form-textarea" formControlName="expectedOutcome" placeholder="Describe the expected improvements and benefits for students..."></textarea>
+        </div>
+      </div>
+
+      <!-- Step 3: Documentation Upload -->
+      <div class="form-section" *ngIf="currentStep === 3">
+        <h2 class="section-title">
+          <span class="section-icon">3</span>
+          Documentation & Evidence
+        </h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              School Recognition Certificate <span class="required">*</span>
+            </label>
+            <div class="file-upload">
+              <input type="file" id="recognitionCert" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileChange($event, 'recognitionCert', 'documentation')">
+              <label for="recognitionCert" class="file-upload-label">
+                📄 Upload Recognition Certificate
+              </label>
+            </div>
+           <div *ngIf="schoolForm.get('documentation')?.get('recognitionCert')?.invalid && schoolForm.get('documentation')?.get('recognitionCert')?.touched" class="error-message">
+              Certificate is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Infrastructure Assessment Report
+            </label>
+            <div class="file-upload">
+              <input type="file" id="assessmentReport" accept=".pdf,.doc,.docx" (change)="onFileChange($event, 'assessmentReport', 'documentation')">
+              <label for="assessmentReport" class="file-upload-label">
+                📋 Upload Assessment Report
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Current Condition Photos <span class="required">*</span>
+            </label>
+            <div class="file-upload">
+              <input type="file" id="conditionPhotos" accept=".jpg,.jpeg,.png" multiple (change)="onFileChange($event, 'conditionPhotos', 'documentation')">
+              <label for="conditionPhotos" class="file-upload-label">
+                📸 Upload Photos (Multiple files allowed)
+              </label>
+            </div>
+            <div *ngIf="schoolForm.get('documentation.conditionPhotos')?.invalid && schoolForm.get('documentation')?.get('conditionPhotos')?.touched" class="error-message">
+              Photos are required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Budget Estimates/Quotations
+            </label>
+            <div class="file-upload">
+              <input type="file" id="budgetEstimates" accept=".pdf,.doc,.docx,.xlsx" (change)="onFileChange($event, 'budgetEstimates', 'documentation')">
+              <label for="budgetEstimates" class="file-upload-label">
+                💰 Upload Budget Documents
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Additional Information -->
+      <div class="form-section" *ngIf="currentStep === 4">
+        <h2 class="section-title">
+          <span class="section-icon">4</span>
+          Additional Information
+        </h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              Community Contribution (if any)
+            </label>
+            <textarea class="form-textarea" formControlName="communityContribution" placeholder="Describe any community support or contributions for the renovation..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Previous Renovation History
+            </label>
+            <textarea class="form-textarea" formControlName="renovationHistory" placeholder="Mention any previous renovations or improvements done..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Special Requirements/Accessibility Needs
+            </label>
+            <textarea class="form-textarea" formControlName="specialRequirements" placeholder="Any special requirements for disabled students or other specific needs..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              Preferred Timeline for Renovation
+            </label>
+            <select class="form-select" formControlName="timeline">
+              <option value="">Select Timeline</option>
+              <option value="immediate">Immediate (Within 1 month)</option>
+              <option value="short_term">Short Term (1-3 months)</option>
+              <option value="medium_term">Medium Term (3-6 months)</option>
+              <option value="long_term">Long Term (6-12 months)</option>
+              <option value="next_academic_year">Next Academic Year</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" *ngIf="currentStep > 1" (click)="prevStep()">
+          Previous
+        </button>
+        <button type="button" class="btn btn-primary" *ngIf="currentStep < totalSteps" (click)="nextStep()">
+          Next
+        </button>
+        <button type="submit" class="btn btn-success" *ngIf="currentStep === totalSteps">
+          Submit Application
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி' }}</h3>
+        <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம் சிறந்த எதிர்காலத்தை உருவாக்குதல்' }}</p>
+      </div>
+      <div class="footer-links">
+        <h4>{{ currentLanguage === 'english' ? 'Quick Links' : 'விரைவு இணைப்புகள்' }}</h4>
+        <ul>
+          <li><a routerLink="/" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
+          <li><a routerLink="/schools" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
+          <li><a routerLink="/donate " routerLinkActive="active">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
+          <li><a routerLink="volunteer"routerLinkActive="active">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
+        <p>infotnschools.com</p>
+        <p>+91 9876543210</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {{ currentLanguage === 'english' ? '2023 Tamil Nadu School Renovation Initiative. All rights reserved.' : '2023 தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}</p>
+    </div>
+  </div>
+</footer>
