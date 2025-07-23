@@ -538,37 +538,82 @@ section {
 }
 
 /* Footer */
+/* Footer Styles */
 .footer {
   background-color: var(--dark-blue);
   color: var(--white);
-  padding: 3rem 0 1rem;
+  padding: 2.5rem 0 1rem;
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Align items to the top of the flex container */
   gap: 2rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Footer Logo Section */
+.footer-logo {
+  display: flex; /* Make footer-logo a flex container */
+  align-items: center; /* Vertically align logo and text */
+  gap: 20px; /* Space between logo and text content */
+  /* Ensure it takes appropriate width in the footer-content grid */
+  flex-basis: auto; /* Allow content to dictate initial size */
+  flex-shrink: 0; /* Prevent it from shrinking too much */
+}
+
+.logo-wrapper {
+ margin-right: 4px;
+}
+
+.govt-logo {
+  height: 100px; /* Adjust based on image_10c4fd.png for a good size */
+  width:150px;/* Maintain aspect ratio */
+  max-width: 100%;
+  margin-right: 50px;
+  margin-left: -90px; /* Ensure responsiveness */
+}
+
+.footer-logo-text {
+  /* This div contains the h3 and p for the initiative text */
+  margin-left: -80px;
+  display: flex;
+  flex-direction: column; /* Stack the h3 and p vertically */
+  align-items: flex-start; /* Align text content to the left */
 }
 
 .footer-logo h3 {
   font-size: 1.3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Space between title and slogan */
+  text-align: left; /* Explicitly align left */
 }
 
 .footer-logo p {
   opacity: 0.8;
   line-height: 1.6;
+  text-align: left; /* Explicitly align left */
 }
 
-.footer-links h4 {
+/* Footer Links and Contact sections */
+.footer-links,
+.footer-contact {
+  flex-grow: 1;
+  max-width: 250px; /* Keep consistent max-width for columns */
+  text-align: left; /* Ensure titles and lists are left-aligned */
+}
+
+.footer-links h4,
+.footer-contact h4 {
   font-size: 1.1rem;
   margin-bottom: 1rem;
   position: relative;
   display: inline-block;
 }
 
-.footer-links h4::after {
+.footer-links h4::after,
+.footer-contact h4::after {
   content: '';
   position: absolute;
   bottom: -5px;
@@ -580,6 +625,8 @@ section {
 
 .footer-links ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .footer-links li {
@@ -597,37 +644,49 @@ section {
   opacity: 1;
 }
 
-.footer-contact h4 {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  position: relative;
-  display: inline-block;
-}
-
-.footer-contact h4::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background-color: var(--accent-orange);
-}
-
 .footer-contact p {
   opacity: 0.8;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 
+/* Footer Bottom */
 .footer-bottom {
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 1rem;
   border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .footer-bottom p {
   opacity: 0.7;
   font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-logo,
+  .footer-links,
+  .footer-contact {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-logo {
+    flex-direction: column; /* Stack logo and text vertically on small screens */
+    align-items: center; /* Center logo and text within its div when stacked */
+  }
+
+  /* Center the underline for h4 in stacked layout */
+  .footer-links h4::after,
+  .footer-contact h4::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 /* Responsive Design */

@@ -12,7 +12,6 @@
     </div>
   </section>
 
-  <!-- About Initiative -->
   <section class="about-section">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'About the Initiative' : 'முயற்சி பற்றி' }}</h2>
@@ -28,7 +27,6 @@
     </div>
   </section>
 
-  <!-- How It Works -->
   <section class="how-it-works">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'How It Works' : 'இது எவ்வாறு செயல்படுகிறது' }}</h2>
@@ -42,32 +40,31 @@
     </div>
   </section>
 
-  <!-- Featured Schools -->
   <section class="featured-schools">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'Featured Schools in Need' : 'தேவையுள்ள முன்னிலைப் பள்ளிகள்' }}</h2>
       <div class="schools-grid">
-        <div class="school-card" *ngFor="let school of featuredSchools">
+        <div class="school-card" *ngFor="let school of fetchedSchools">
           <div class="school-image">
-            <img src="assets/images/ooty-school.jpeg" alt="School image">
-            <img src="assets/images/govt_logo.png" alt="School image">
+            <img [src]="getSchoolImageUrl(school)" alt="{{ currentLanguage === 'english' ? school.schoolNameEn : school.schoolNameTa }}">
           </div>
           <div class="school-info">
-            <h3>{{ currentLanguage === 'english' ? school.name : school.nameTa }}</h3>
-            <p class="location">{{ currentLanguage === 'english' ? school.location : school.locationTa }}</p>
-            <p class="needs">{{ currentLanguage === 'english' ? 'Needs: ' + school.needs : 'தேவைகள்: ' + school.needsTa }}</p>
-            <div class="progress-container">
-              <div class="progress-bar" [style.width.%]="school.progress"></div>
-              <span>{{ school.progress }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி திரட்டப்பட்டது' }}</span>
+            <h3>{{ currentLanguage === 'english' ? school.schoolNameEn : school.schoolNameTa }}</h3>
+            <p class="location">{{ currentLanguage === 'english' ? school.district + ', ' + school.block : school.district + ', ' + school.block }}</p>
+            <p class="needs">{{ getNeedsText(school) }}</p> <div class="progress-container">
+              <div class="progress-bar" [style]="getProgressBarStyle(school)"></div>
+              <span>{{ getDisplayProgress(school) }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி திரட்டப்பட்டது' }}</span>
             </div>
-            <a routerLink="/donate" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
+           <a routerLink="/donate" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
           </div>
+        </div>
+        <div *ngIf="fetchedSchools.length === 0" class="no-schools-message">
+          <p>{{ currentLanguage === 'english' ? 'No featured school projects available yet. Please check back later!' : 'சிறப்புப் பள்ளி திட்டங்கள் எதுவும் தற்போது இல்லை. பின்னர் சரிபார்க்கவும்!' }}</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Success Stories -->
   <section class="success-stories">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'Recent Success Stories' : 'சமீபத்திய வெற்றிக் கதைகள்' }}</h2>
@@ -87,7 +84,6 @@
     </div>
   </section>
 
-  <!-- Call to Action -->
   <section class="cta-section">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'Join Us in Transforming Schools' : 'பள்ளிகளை மாற்றுவதில் எங்களுடன் இணையுங்கள்' }}</h2>
@@ -103,8 +99,12 @@
   <div class="container">
     <div class="footer-content">
       <div class="footer-logo">
-        <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி' }}</h3>
-        <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம் சிறந்த எதிர்காலத்தை உருவாக்குதல்' }}</p>
+        <div class="logo-wrapper">
+          <img src="assets/images/govt_logo.jpeg" alt="Government of Tamil Nadu Logo" class="govt-logo">
+        </div>
+        <div class="footer-logo-text"> <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி' }}</h3>
+          <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம் சிறந்த எதிர்காலத்தை உருவாக்குதல்' }}</p>
+        </div>
       </div>
       <div class="footer-links">
         <h4>{{ currentLanguage === 'english' ? 'Quick Links' : 'விரைவு இணைப்புகள்' }}</h4>
@@ -117,12 +117,12 @@
       </div>
       <div class="footer-contact">
         <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
-        <p>infotnschools.com</p>
+        <p>infotnschools.in</p>
         <p>+91 9876543210</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {{ currentLanguage === 'english' ? '2023 Tamil Nadu School Renovation Initiative. All rights reserved.' : '2023 தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}</p>
+      <p>&copy; {{ currentYear }} {{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative. All rights reserved.' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}</p>
     </div>
   </div>
 </footer>

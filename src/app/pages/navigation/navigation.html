@@ -14,8 +14,8 @@
       <a routerLink="/contact" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Contact' : 'தொடர்பு' }}</a>
       
       <select class="language-toggle" (change)="toggleLanguage($event)">  
-        <option value="en" [selected]="currentLanguage === 'english'">{{ currentLanguage === 'english' ? 'English' : 'ஆங்கிலம்' }}</option>
-        <option value="ta" [selected]="currentLanguage === 'tamil'">{{ currentLanguage === 'english' ? 'Tamil' : 'தமிழ்' }}</option>
+        <option value="en" [selected]="currentLanguage === 'english'">{{ currentLanguage === 'english' ? 'English' : 'English' }}</option>
+        <option value="ta" [selected]="currentLanguage === 'தமிழ்'">{{ currentLanguage === 'english' ? 'தமிழ்' : 'தமிழ்' }}</option>
       </select>
       
       <div class="user-dropdown">

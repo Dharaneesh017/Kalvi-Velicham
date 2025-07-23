@@ -1,8 +1,9 @@
+// src/app/home/home.ts
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
-import { Volunteer } from '../volunteer/volunteer';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { RouterLink, RouterModule } from '@angular/router';
 import { LanguageService } from '../../services/language.service';
+import { SchoolService, FetchedSchool } from '../../services/school.service'; // SchoolService மற்றும் FetchedSchool ஐ இறக்குமதி செய்யவும்
 
 @Component({
   selector: 'app-home',
@@ -12,48 +13,15 @@ import { LanguageService } from '../../services/language.service';
   encapsulation: ViewEncapsulation.None,
   standalone: true
 })
-export class Home {
+export class Home implements OnInit {
   isMobileMenuOpen = false;
   currentLanguage = 'english';
+  currentYear: number = new Date().getFullYear();
 
-  constructor(private languageService: LanguageService) {}
+  fetchedSchools: FetchedSchool[] = []; // தரவுத்தளத்திலிருந்து பெறப்பட்ட பள்ளிகளை சேமிக்க
 
-  ngOnInit(): void {
-    this.languageService.language$.subscribe(lang => {
-      this.currentLanguage = lang;
-    });
-  }
-
-
-  featuredSchools = [
-    {
-      name: 'Ooty Hills Government School',
-      nameTa: 'ஊட்டி மலைப்பகுதி அரசு பள்ளி',
-      location: 'Ooty, Nilgiris District',
-      locationTa: 'ஊட்டி, நீலகிரி மாவட்டம்',
-      needs: 'Roof repair, new baseball field markings',
-      needsTa: 'கூரை பழுதுபார்ப்பு, புதிய பேஸ்பால் கோடுகள்',
-      progress: 35
-    },
-    {
-      name: 'Mahabalipuram Village School',
-      nameTa: 'மாமல்லபுரம் கிராமப் பள்ளி',
-      location: 'Mahabalipuram, Chengalpattu District',
-      locationTa: 'மாமல்லபுரம், செங்கல்பட்டு மாவட்டம்',
-      needs: 'New computer lab, library upgrade',
-      needsTa: 'புதிய கணினி ஆய்வகம், நூலக மேம்பாடு',
-      progress: 60
-    },
-    {
-      name: 'Kanyakumari Beachside School',
-      nameTa: 'கன்னியாகுமரி கடற்கரை பள்ளி',
-      location: 'Kanyakumari District',
-      locationTa: 'கன்னியாகுமரி மாவட்டம்',
-      needs: 'Sea-wind resistant windows, playground equipment',
-      needsTa: 'கடல் காற்று எதிர்ப்பு சாளரங்கள், விளையாட்டு மைதானம்',
-      progress: 20
-    }
-  ];
+  // முன்னதாக இருந்த hardcoded 'featuredSchools' வரிசை நீக்கப்பட்டுள்ளது.
+  // இப்போது தரவுத்தளத்திலிருந்து பெறும் பள்ளிகள் 'fetchedSchools' இல் சேமிக்கப்படும்.
 
   successStories = [
     {
@@ -112,8 +80,33 @@ export class Home {
     }
   ];
 
-    toggleLanguage() {
+  constructor(
+    private languageService: LanguageService,
+    private schoolService: SchoolService // SchoolService ஐ இன்ஜெக்ட் செய்யவும்
+  ) {}
+
+  ngOnInit(): void {
+    this.languageService.language$.subscribe(lang => {
+      this.currentLanguage = lang;
+    });
+
+    // தரவுத்தளத்திலிருந்து பள்ளிகளைப் பெறவும்
+    this.schoolService.getSchools().subscribe({
+      next: (schools) => {
+        this.fetchedSchools = schools;
+        console.log('Fetched schools:', this.fetchedSchools);
+      },
+      error: (error) => {
+        console.error('Error fetching schools:', error);
+        // பயனருக்கு ஒரு பிழை செய்தியைக் காட்டலாம்
+        alert('பள்ளி விவரங்களைப் பெறுவதில் சிக்கல் ஏற்பட்டது. பின்னர் முயற்சிக்கவும்.');
+      }
+    });
+  }
+
+  toggleLanguage() {
     this.currentLanguage = this.currentLanguage === 'english' ? 'tamil' : 'english';
+    this.languageService.setLanguage(this.currentLanguage); // மொழி மாற்றத்தை சேவை வழியாக அறிவிக்கவும்
   }
 
   toggleMobileMenu() {
@@ -122,5 +115,73 @@ export class Home {
 
   getText(english: string, tamil: string): string {
     return this.currentLanguage === 'english' ? english : tamil;
+  }
+
+  // முன்னேற்ற பட்டிக்கான (progress bar) பாணியை உருவாக்கும் உதவி முறை (helper method)
+  // `progress` தரவுத்தளத்திலிருந்து நேரடியாக வராததால், ஒரு தற்காலிக சீரற்ற மதிப்பை பயன்படுத்துகிறோம்.
+  getProgressBarStyle(school: FetchedSchool): string {
+    // தரவுத்தளத்தில் progress புலம் இருந்தால், school.progress ஐப் பயன்படுத்தவும்
+    // இல்லையெனில், ஒரு சீரற்ற மதிப்பை உருவாக்குகிறோம் (உதாரணமாக)
+    const progress = school.studentCount ? Math.min(100, Math.floor(school.studentCount / 10) * 5) : (Math.floor(Math.random() * 80) + 10);
+    return `width: ${progress}%;`;
+  }
+
+  getDisplayProgress(school: FetchedSchool): number {
+    // தரவுத்தளத்தில் progress புலம் இருந்தால், school.progress ஐப் பயன்படுத்தவும்
+    // இல்லையெனில், ஒரு சீரற்ற மதிப்பை உருவாக்குகிறோம் (உதாரணமாக)
+    return school.studentCount ? Math.min(100, Math.floor(school.studentCount / 10) * 5) : (Math.floor(Math.random() * 80) + 10);
+  }
+
+  // பள்ளி படத்திற்கான URL ஐ உருவாக்கும் முறை
+  // உங்கள் backend இல் படங்களை எவ்வாறு கையாளுகிறீர்கள் என்பதைப் பொறுத்தது.
+  // இப்போதைக்கு, ஒரு பொதுவான அல்லது placeholder படத்தைப் பயன்படுத்துவோம்.
+  // 'conditionPhotos' புலம் ஒரு கோப்பு பெயராக இருக்கலாம், அதை ஒரு படமாகக் காட்ட ஒரு backend endpoint தேவைப்படலாம்.
+  getSchoolImageUrl(school: FetchedSchool): string {
+    // இது ஒரு உதாரணம். உங்கள் backend கோப்புகளை எவ்வாறு வழங்குகிறது என்பதைப் பொறுத்து இது வேறுபடலாம்.
+    // உதாரணமாக: return `/api/uploads/${school.conditionPhotos}`;
+    // இப்போதைக்கு, பொதுவான படங்களை பயன்படுத்துகிறோம்.
+    const images = [
+      'assets/images/ooty-school.jpeg',
+      'assets/images/mahabalipuram-school.jpeg',
+      'assets/images/kanyakumari-school.jpeg',
+      'assets/images/success-1.jpg', // வேறு சில படங்கள்
+      'assets/images/success-2.jpg',
+      'assets/images/aboutschool.jpg'
+    ];
+    // deterministically pick an image based on school._id or udiseCode
+    const index = parseInt(school.udiseCode.slice(-1), 10) % images.length;
+    return images[index];
+  }
+
+  // தேவைகளை காட்டும் முறை (Renovation Areas)
+  getNeedsText(school: FetchedSchool): string {
+    if (this.currentLanguage === 'english') {
+      return school.renovationAreas && school.renovationAreas.length > 0
+        ? 'Needs: ' + school.renovationAreas.join(', ')
+        : 'No specific needs listed.';
+    } else {
+      // தமிழ் மொழிபெயர்ப்பு தேவைப்பட்டால் இங்கே சேர்க்கலாம்
+      // இப்போதைக்கு, ஆங்கில தலைப்புகளின் பட்டியலை அப்படியே காட்டுவோம்
+      return school.renovationAreas && school.renovationAreas.length > 0
+        ? 'தேவைகள்: ' + school.renovationAreas.map(area => this.getRenovationAreaTamil(area)).join(', ')
+        : 'குறிப்பிட்ட தேவைகள் இல்லை.';
+    }
+  }
+
+  // Renovation Area பெயர்களை தமிழுக்கு மாற்றுவதற்கான ஒரு மாதிரி முறை
+  getRenovationAreaTamil(englishArea: string): string {
+    switch (englishArea) {
+      case 'Classrooms': return 'வகுப்பறைகள்';
+      case 'Restrooms': return 'கழிப்பறைகள்';
+      case 'Library': return 'நூலகம்';
+      case 'Laboratory': return 'ஆய்வகம்';
+      case 'Playground': return 'விளையாட்டு மைதானம்';
+      case 'Drinking Water Facilities': return 'குடிநீர் வசதிகள்';
+      case 'Electricity & Lighting': return 'மின்சாரம் மற்றும் விளக்குகள்';
+      case 'Roofing & Structural Repairs': return 'கூரை மற்றும் கட்டமைப்பு பழுதுகள்';
+      case 'Boundary Wall': return 'சுவர்';
+      case 'Drainage System': return 'கழிவுநீர் அமைப்பு';
+      default: return englishArea; 
+    }
   }
 }
