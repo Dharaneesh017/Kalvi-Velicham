@@ -1,23 +1,24 @@
 // src/app/home/home.ts
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { LanguageService } from '../../services/language.service';
 import { SchoolService, FetchedSchool } from '../../services/school.service'; // SchoolService மற்றும் FetchedSchool ஐ இறக்குமதி செய்யவும்
-
+import { AuthModalComponent } from '../auth-modal/auth-modal';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterModule, RouterLink],
+  imports: [CommonModule, RouterModule, RouterLink,AuthModalComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
   encapsulation: ViewEncapsulation.None,
   standalone: true
 })
-export class Home implements OnInit {
+export class Home implements OnInit,OnDestroy{
   isMobileMenuOpen = false;
   currentLanguage = 'english';
   currentYear: number = new Date().getFullYear();
-
+  
   fetchedSchools: FetchedSchool[] = []; // தரவுத்தளத்திலிருந்து பெறப்பட்ட பள்ளிகளை சேமிக்க
 
   // முன்னதாக இருந்த hardcoded 'featuredSchools' வரிசை நீக்கப்பட்டுள்ளது.
@@ -79,17 +80,50 @@ export class Home implements OnInit {
       descriptionTa: 'பள்ளி வசதிகள் மேம்படுத்தப்பட்டு மாணவர்களுக்கு ஒப்படைக்கப்படுகின்றன'
     }
   ];
-
+   currentImageIndex: number = 0;
+   private imageInterval: any;
+   heroBackgroundImages: string[] = [
+    // Image 1: Before Renovation (e.g., Image 3 from previous outputs)
+    'assets/images/hero-slider/one.png',
+    // Image 2: During Renovation (e.g., Image 4 from previous outputs)
+    'assets/images/hero-slider/two.png',
+    // Image 3: After Renovation (e.g., Image 5 from previous outputs)
+    'assets/images/hero-slider/three.png',
+    // Image 4: Post-Renovation Classroom (e.g., Image 6 from previous outputs)
+    'assets/images/hero-slider/four.png',
+    // Image 5: Post-Renovation Extracurriculars/Play (e.g., Image 7 from previous outputs)
+    'assets/images/hero-slider/five.png',
+    // Image 6: Post-Renovation Modern Library/Computer Lab (e.g., Image 8 from previous outputs)
+    'assets/images/hero-slider/six.png',
+    // Image 7: Post-Renovation Community Event (e.g., Image 9 from previous outputs)
+    'assets/images/hero-slider/seven.png',
+    // Image 8: Post-Renovation Modern Exterior (e.g., Image 10 from previous outputs)
+    'assets/images/hero-slider/eight.png',
+    // Image 9: During Renovation - Active Construction (e.g., Image 11 from previous outputs)
+    'assets/images/hero-slider/nine.png',
+    // Image 10: During Renovation - Finishing Touches (e.g., Image 12 from previous outputs)
+    'assets/images/hero-slider/ten.png',
+    // Add one more image path if you have an 11th one, or remove this line if only 10
+    'assets/images/hero-slider/eleven.png' // Placeholder for your 11th image
+  ];
+  showAuthModal: boolean = false;
+  authModalInitialTab: 'login' | 'register' = 'login';
+  selectedSchoolForDonationId: string | null = null; 
+  private shouldRedirectAfterLogin: boolean = false;
+  showRegistrationSuccessMessage: boolean = false;
   constructor(
+
     private languageService: LanguageService,
-    private schoolService: SchoolService // SchoolService ஐ இன்ஜெக்ட் செய்யவும்
+    private schoolService: SchoolService ,
+    private authService: AuthService, // Inject AuthService
+    private router:Router
   ) {}
 
   ngOnInit(): void {
     this.languageService.language$.subscribe(lang => {
       this.currentLanguage = lang;
     });
-
+    this.startImageSlider();
     // தரவுத்தளத்திலிருந்து பள்ளிகளைப் பெறவும்
     this.schoolService.getSchools().subscribe({
       next: (schools) => {
@@ -101,9 +135,14 @@ export class Home implements OnInit {
         // பயனருக்கு ஒரு பிழை செய்தியைக் காட்டலாம்
         alert('பள்ளி விவரங்களைப் பெறுவதில் சிக்கல் ஏற்பட்டது. பின்னர் முயற்சிக்கவும்.');
       }
+      
     });
   }
-
+  ngOnDestroy(): void {
+    if (this.imageInterval) {
+      clearInterval(this.imageInterval);
+    }
+  }
   toggleLanguage() {
     this.currentLanguage = this.currentLanguage === 'english' ? 'tamil' : 'english';
     this.languageService.setLanguage(this.currentLanguage); // மொழி மாற்றத்தை சேவை வழியாக அறிவிக்கவும்
@@ -184,4 +223,49 @@ export class Home implements OnInit {
       default: return englishArea; 
     }
   }
+   startImageSlider(): void {
+   
+    this.imageInterval = setInterval(() => {
+      this.currentImageIndex = (this.currentImageIndex + 1) % this.heroBackgroundImages.length;
+    }, 4000); // Keep at 5000ms or adjust (e.g., 7000ms for slower transitions)
+  }
+   openAuthModal(initialTab: 'login' | 'register', schoolId: string | null = null): void {
+    // REMOVE THIS LINE: this.showRegistrationSuccessMessage = false;
+
+    if (this.authService.isLoggedIn() && schoolId) {
+      this.router.navigate(['/donate', schoolId]);
+      return;
+    }
+
+    this.authModalInitialTab = initialTab;
+    this.selectedSchoolForDonationId = schoolId;
+    this.showAuthModal = true;
+    this.shouldRedirectAfterLogin = (initialTab === 'login');
+
+    document.body.classList.add('modal-open');
+  }
+
+   onAuthModalClose(): void {
+    this.showAuthModal = false;
+    this.selectedSchoolForDonationId = null;
+    this.shouldRedirectAfterLogin = false;
+    document.body.classList.remove('modal-open');
+  }
+  onAuthSuccess(event: { type: 'login' | 'register', user: any }): void {
+    // This method will now ONLY be called for 'login' events from auth-modal.component.ts
+    // because we removed the emit for 'register' in auth-modal.component.ts.
+    this.showAuthModal = false; // Close the modal for successful login
+
+    if (event.type === 'login') {
+      if (this.selectedSchoolForDonationId) {
+        this.router.navigate(['/donate', this.selectedSchoolForDonationId]);
+      } else {
+        this.router.navigate(['/donate']);
+      }
+    }
+    // No else if (event.type === 'register') block needed here anymore as it won't be triggered
+    this.selectedSchoolForDonationId = null;
+  }
+
+  
 }

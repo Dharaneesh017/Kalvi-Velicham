@@ -14,6 +14,7 @@ export interface SchoolFormData {
   district: string;
   block: string;
   address: string;
+  addressTa: string;
   pincode: string;
   establishedYear: number;
   studentCount: number;

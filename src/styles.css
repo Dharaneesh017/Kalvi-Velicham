@@ -3,3 +3,7 @@ body
 {
     height: 100%;
 }
+body.modal-open {
+    overflow: hidden;
+    /* Prevents scrolling when modal is active */
+}

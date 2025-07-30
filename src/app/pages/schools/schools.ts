@@ -4,16 +4,18 @@ import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, ViewEnca
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl, FormsModule, ReactiveFormsModule, ValidatorFn, AbstractControl } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SchoolService, SchoolFormData } from '../../services/school.service'; // <-- Import SchoolFormData from SchoolService
-
+import { LanguageService } from '../../services/language.service';
 // Interfaces for dummy data structure (remains here)
 interface School {
   id: string;
   name: string;
+  nameTa: string; // Added Tamil name
   type: string;
   district: string;
   block: string;
   udiseCode: string;
   address?: string;
+  addressTa?: string; // Added Tamil address
   pincode?: string; // Added to interface for dummy data
   establishedYear?: number; // Added to interface for dummy data
   studentCount?: number; // Added to interface for dummy data
@@ -25,17 +27,20 @@ interface School {
 
 interface RenovationArea {
   id: string;
-  label: string;
+  labelEn: string; // English label
+  labelTa: string; // Tamil label
 }
 
 interface PriorityLevel {
   value: string;
-  label: string;
+  labelEn: string; // English label
+  labelTa: string; // Tamil label
 }
 
 interface BudgetRange {
   value: string;
-  label: string;
+  labelEn: string; // English label
+  labelTa: string; // Tamil label
 }
 
 @Component({
@@ -51,7 +56,7 @@ export class SchoolsComponent implements OnInit {
   schoolForm!: FormGroup;
   currentStep: number = 1;
   currentYear: number = new Date().getFullYear();
-  currentLanguage = 'english';
+  currentLanguage: 'english' | 'tamil' = 'english'; // Default language
 
   districts: string[] = [
     'Ariyalur', 'Chengalpattu', 'Chennai', 'Coimbatore', 'Cuddalore',
@@ -67,79 +72,80 @@ export class SchoolsComponent implements OnInit {
   // Enhanced dummy data for allSchools to include all fields for auto-population
   allSchools: School[] = [
     // Ariyalur
-    { id: 'ARL001', name: 'Govt. Higher Secondary School, Ariyalur', type: 'higher_secondary', district: 'Ariyalur', block: 'Ariyalur', udiseCode: '33123456789', address: 'Main Road, Ariyalur', pincode: '621704', establishedYear: 1985, studentCount: 500, teacherCount: 30, principalName: 'R. Kumar', principalContact: '9876500001', principalEmail: 'ariyalur.hss@example.com' },
-    { id: 'ARL002', name: 'Govt. Primary School, Jayankondam', type: 'primary', district: 'Ariyalur', block: 'Jayankondam', udiseCode: '33123456780', address: 'Near Bus Stand, Jayankondam', pincode: '621802', establishedYear: 1960, studentCount: 150, teacherCount: 8, principalName: 'S. Devi', principalContact: '9876500002', principalEmail: 'jayankondam.ps@example.com' },
+    { id: 'ARL001', name: 'Govt. Higher Secondary School, Ariyalur', nameTa: 'அரசு மேல்நிலைப் பள்ளி, அரியலூர்', type: 'higher_secondary', district: 'Ariyalur', block: 'Ariyalur', udiseCode: '33123456789', address: 'Main Road, Ariyalur', addressTa: 'முக்கிய சாலை, அரியலூர்', pincode: '621704', establishedYear: 1985, studentCount: 500, teacherCount: 30, principalName: 'R. Kumar', principalContact: '9876500001', principalEmail: 'ariyalur.hss@example.com' },
+    { id: 'ARL002', name: 'Govt. Primary School, Jayankondam', nameTa: 'அரசு தொடக்கப்பள்ளி, ஜெயங்கொண்டம்', type: 'primary', district: 'Ariyalur', block: 'Jayankondam', udiseCode: '33123456780', address: 'Near Bus Stand, Jayankondam', addressTa: 'பேருந்து நிலையம் அருகில், ஜெயங்கொண்டம்', pincode: '621802', establishedYear: 1960, studentCount: 150, teacherCount: 8, principalName: 'S. Devi', principalContact: '9876500002', principalEmail: 'jayankondam.ps@example.com' },
 
     // Chennai
-    { id: 'CHN001', name: 'Govt. Primary School, Mylapore', type: 'primary', district: 'Chennai', block: 'Mylapore', udiseCode: '33123456791', address: '12, Santhome High Road, Mylapore', pincode: '600004', establishedYear: 1955, studentCount: 200, teacherCount: 10, principalName: 'A. Rajan', principalContact: '9876510001', principalEmail: 'mylapore.ps@example.com' },
-    { id: 'CHN002', name: 'Govt. Middle School, Adyar', type: 'middle', district: 'Chennai', block: 'Adyar', udiseCode: '33123456792', address: 'Gandhi Nagar, Adyar', pincode: '600020', establishedYear: 1970, studentCount: 350, teacherCount: 15, principalName: 'B. Priya', principalContact: '9876510002', principalEmail: 'adyar.ms@example.com' },
-    { id: 'CHN003', name: 'Govt. High School, T. Nagar', type: 'high', district: 'Chennai', block: 'T. Nagar', udiseCode: '33123456793', address: 'Usman Road, T. Nagar', pincode: '600017', establishedYear: 1980, studentCount: 600, teacherCount: 25, principalName: 'C. Suresh', principalContact: '9876510003', principalEmail: 'tnagar.hs@example.com' },
-    { id: 'CHN004', name: 'Govt. Higher Secondary School, Anna Nagar', type: 'higher_secondary', district: 'Chennai', block: 'Anna Nagar', udiseCode: '33123456794', address: '4th Avenue, Anna Nagar', pincode: '600040', establishedYear: 1990, studentCount: 800, teacherCount: 40, principalName: 'D. Karthik', principalContact: '9876510004', principalEmail: 'annanagar.hss@example.com' },
-    { id: 'CHN005', name: 'Govt. Primary School, Velachery', type: 'primary', district: 'Chennai', block: 'Velachery', udiseCode: '33123456795', address: 'Velachery Main Road', pincode: '600042', establishedYear: 1965, studentCount: 220, teacherCount: 12, principalName: 'E. Lakshmi', principalContact: '9876510005', principalEmail: 'velachery.ps@example.com' },
-    { id: 'CHN006', name: 'Govt. Middle School, Perambur', type: 'middle', district: 'Chennai', block: 'Perambur', udiseCode: '33123456796', address: 'Perambur Barracks Road', pincode: '600011', establishedYear: 1975, studentCount: 380, teacherCount: 18, principalName: 'F. Vignesh', principalContact: '9876510006', principalEmail: 'perambur.ms@example.com' },
-    { id: 'CHN007', name: 'Govt. High School, Royapettah', type: 'high', district: 'Chennai', block: 'Royapettah', udiseCode: '33123456797', address: 'Peters Road, Royapettah', pincode: '600014', establishedYear: 1982, studentCount: 550, teacherCount: 28, principalName: 'G. Swetha', principalContact: '9876510007', principalEmail: 'royapettah.hs@example.com' },
-    { id: 'CHN008', name: 'Govt. Higher Secondary School, Tambaram', type: 'higher_secondary', district: 'Chennai', block: 'Tambaram', udiseCode: '33123456798', address: 'GST Road, Tambaram', pincode: '600045', establishedYear: 1995, studentCount: 750, teacherCount: 35, principalName: 'H. Anand', principalContact: '9876510008', principalEmail: 'tambaram.hss@example.com' },
-    { id: 'CHN009', name: 'Govt. Primary School, Ambattur', type: 'primary', district: 'Chennai', block: 'Ambattur', udiseCode: '33123456799', address: 'Ambattur Old Town', pincode: '600053', establishedYear: 1962, studentCount: 180, teacherCount: 9, principalName: 'I. Meena', principalContact: '9876510009', principalEmail: 'ambattur.ps@example.com' },
-    { id: 'CHN010', name: 'Govt. Middle School, Guindy', type: 'middle', district: 'Chennai', block: 'Guindy', udiseCode: '33123456800', address: 'Mount Road, Guindy', pincode: '600032', establishedYear: 1978, studentCount: 320, teacherCount: 14, principalName: 'J. Bala', principalContact: '9876510010', principalEmail: 'guindy.ms@example.com' },
+    { id: 'CHN001', name: 'Govt. Primary School, Mylapore', nameTa: 'அரசு தொடக்கப்பள்ளி, மயிலாப்பூர்', type: 'primary', district: 'Chennai', block: 'Mylapore', udiseCode: '33123456791', address: '12, Santhome High Road, Mylapore', addressTa: '12, சாந்தோம் உயர் சாலை, மயிலாப்பூர்', pincode: '600004', establishedYear: 1955, studentCount: 200, teacherCount: 10, principalName: 'A. Rajan', principalContact: '9876510001', principalEmail: 'mylapore.ps@example.com' },
+    { id: 'CHN002', name: 'Govt. Middle School, Adyar', nameTa: 'அரசு நடுநிலைப் பள்ளி, அடையாறு', type: 'middle', district: 'Chennai', block: 'Adyar', udiseCode: '33123456792', address: 'Gandhi Nagar, Adyar', addressTa: 'காந்தி நகர், அடையாறு', pincode: '600020', establishedYear: 1970, studentCount: 350, teacherCount: 15, principalName: 'B. Priya', principalContact: '9876510002', principalEmail: 'adyar.ms@example.com' },
+    { id: 'CHN003', name: 'Govt. High School, T. Nagar', nameTa: 'அரசு உயர்நிலைப் பள்ளி, தி. நகர்', type: 'high', district: 'Chennai', block: 'T. Nagar', udiseCode: '33123456793', address: 'Usman Road, T. Nagar', addressTa: 'உஸ்மான் சாலை, தி. நகர்', pincode: '600017', establishedYear: 1980, studentCount: 600, teacherCount: 25, principalName: 'C. Suresh', principalContact: '9876510003', principalEmail: 'tnagar.hs@example.com' },
+    { id: 'CHN004', name: 'Govt. Higher Secondary School, Anna Nagar', nameTa: 'அரசு மேல்நிலைப் பள்ளி, அண்ணா நகர்', type: 'higher_secondary', district: 'Chennai', block: 'Anna Nagar', udiseCode: '33123456794', address: '4th Avenue, Anna Nagar', addressTa: '4வது அவென்யூ, அண்ணா நகர்', pincode: '600040', establishedYear: 1990, studentCount: 800, teacherCount: 40, principalName: 'D. Karthik', principalContact: '9876510004', principalEmail: 'annanagar.hss@example.com' },
+    { id: 'CHN005', name: 'Govt. Primary School, Velachery', nameTa: 'அரசு தொடக்கப்பள்ளி, வேளச்சேரி', type: 'primary', district: 'Chennai', block: 'Velachery', udiseCode: '33123456795', address: 'Velachery Main Road', addressTa: 'வேளச்சேரி முக்கிய சாலை', pincode: '600042', establishedYear: 1965, studentCount: 220, teacherCount: 12, principalName: 'E. Lakshmi', principalContact: '9876510005', principalEmail: 'velachery.ps@example.com' },
+    { id: 'CHN006', name: 'Govt. Middle School, Perambur', nameTa: 'அரசு நடுநிலைப் பள்ளி, பெரம்பூர்', type: 'middle', district: 'Chennai', block: 'Perambur', udiseCode: '33123456796', address: 'Perambur Barracks Road', addressTa: 'பெரம்பூர் பாராக்ஸ் சாலை', pincode: '600011', establishedYear: 1975, studentCount: 380, teacherCount: 18, principalName: 'F. Vignesh', principalContact: '9876510006', principalEmail: 'perambur.ms@example.com' },
+    { id: 'CHN007', name: 'Govt. High School, Royapettah', nameTa: 'அரசு உயர்நிலைப் பள்ளி, ராயப்பேட்டை', type: 'high', district: 'Chennai', block: 'Royapettah', udiseCode: '33123456797', address: 'Peters Road, Royapettah', addressTa: 'பீட்டர்ஸ் சாலை, ராயப்பேட்டை', pincode: '600014', establishedYear: 1982, studentCount: 550, teacherCount: 28, principalName: 'G. Swetha', principalContact: '9876510007', principalEmail: 'royapettah.hs@example.com' },
+    { id: 'CHN008', name: 'Govt. Higher Secondary School, Tambaram', nameTa: 'அரசு மேல்நிலைப் பள்ளி, தாம்பரம்', type: 'higher_secondary', district: 'Chennai', block: 'Tambaram', udiseCode: '33123456798', address: 'GST Road, Tambaram', addressTa: 'ஜி.எஸ்.டி சாலை, தாம்பரம்', pincode: '600045', establishedYear: 1995, studentCount: 750, teacherCount: 35, principalName: 'H. Anand', principalContact: '9876510008', principalEmail: 'tambaram.hss@example.com' },
+    { id: 'CHN009', name: 'Govt. Primary School, Ambattur', nameTa: 'அரசு தொடக்கப்பள்ளி, அம்பத்தூர்', type: 'primary', district: 'Chennai', block: 'Ambattur', udiseCode: '33123456799', address: 'Ambattur Old Town', addressTa: 'அம்பத்தூர் பழைய டவுன்', pincode: '600053', establishedYear: 1962, studentCount: 180, teacherCount: 9, principalName: 'I. Meena', principalContact: '9876510009', principalEmail: 'ambattur.ps@example.com' },
+    { id: 'CHN010', name: 'Govt. Middle School, Guindy', nameTa: 'அரசு நடுநிலைப் பள்ளி, கிண்டி', type: 'middle', district: 'Chennai', block: 'Guindy', udiseCode: '33123456800', address: 'Mount Road, Guindy', addressTa: 'மவுண்ட் சாலை, கிண்டி', pincode: '600032', establishedYear: 1978, studentCount: 320, teacherCount: 14, principalName: 'J. Bala', principalContact: '9876510010', principalEmail: 'guindy.ms@example.com' },
 
     // Coimbatore
-    { id: 'CBE001', name: 'Govt. Primary School, Gandhipuram', type: 'primary', district: 'Coimbatore', block: 'Gandhipuram', udiseCode: '33123456801', address: 'Cross Cut Road, Gandhipuram', pincode: '641012', establishedYear: 1958, studentCount: 210, teacherCount: 11, principalName: 'K. Raja', principalContact: '9876520001', principalEmail: 'gandhipuram.ps@example.com' },
-    { id: 'CBE002', name: 'Govt. Middle School, Peelamedu', type: 'middle', district: 'Coimbatore', block: 'Peelamedu', udiseCode: '33123456802', address: 'Avinashi Road, Peelamedu', pincode: '641004', establishedYear: 1972, studentCount: 360, teacherCount: 16, principalName: 'L. Deviya', principalContact: '9876520002', principalEmail: 'peelamedu.ms@example.com' },
-    { id: 'CBE003', name: 'Govt. High School, Saibaba Colony', type: 'high', district: 'Coimbatore', block: 'Saibaba Colony', udiseCode: '33123456803', address: 'Mettupalayam Road', pincode: '641011', establishedYear: 1988, studentCount: 580, teacherCount: 27, principalName: 'M. Ganesh', principalContact: '9876520003', principalEmail: 'saibaba.hs@example.com' },
-    { id: 'CBE004', name: 'Govt. Higher Secondary School, R.S. Puram', type: 'higher_secondary', district: 'Coimbatore', block: 'R.S. Puram', udiseCode: '33123456804', address: 'DB Road, R.S. Puram', pincode: '641002', establishedYear: 1992, studentCount: 780, teacherCount: 38, principalName: 'N. Sarala', principalContact: '9876520004', principalEmail: 'rspuram.hss@example.com' },
-    { id: 'CBE005', name: 'Govt. Primary School, Podanur', type: 'primary', district: 'Coimbatore', block: 'Podanur', udiseCode: '33123456805', address: 'Podanur Main Road', pincode: '641023', establishedYear: 1968, studentCount: 190, teacherCount: 10, principalName: 'O. Velu', principalContact: '9876520005', principalEmail: 'podanur.ps@example.com' },
-    { id: 'CBE006', name: 'Govt. Middle School, Singanallur', type: 'middle', district: 'Coimbatore', block: 'Singanallur', udiseCode: '33123456806', address: 'Trichy Road, Singanallur', pincode: '641005', establishedYear: 1977, studentCount: 330, teacherCount: 15, principalName: 'P. Kavitha', principalContact: '9876520006', principalEmail: 'singanallur.ms@example.com' },
-    { id: 'CBE007', name: 'Govt. High School, Kuniyamuthur', type: 'high', district: 'Coimbatore', block: 'Kuniyamuthur', udiseCode: '33123456807', address: 'Palakkad Main Road, Kuniyamuthur', pincode: '641008', establishedYear: 1985, studentCount: 520, teacherCount: 25, principalName: 'Q. Murugan', principalContact: '9876520007', principalEmail: 'kuniyamuthur.hs@example.com' },
-    { id: 'CBE008', name: 'Govt. Higher Secondary School, Pollachi', type: 'higher_secondary', district: 'Coimbatore', block: 'Pollachi', udiseCode: '33123456808', address: 'Coimbatore Road, Pollachi', pincode: '642001', establishedYear: 1998, studentCount: 700, teacherCount: 33, principalName: 'R. Gayathri', principalContact: '9876520008', principalEmail: 'pollachi.hss@example.com' },
-    { id: 'CBE009', name: 'Govt. Primary School, Mettupalayam', type: 'primary', district: 'Coimbatore', block: 'Mettupalayam', udiseCode: '33123456809', address: 'Ooty Road, Mettupalayam', pincode: '641301', establishedYear: 1963, studentCount: 200, teacherCount: 10, principalName: 'S. Ramu', principalContact: '9876520009', principalEmail: 'mettupalayam.ps@example.com' },
-    { id: 'CBE010', name: 'Govt. Middle School, Sulur', type: 'middle', district: 'Coimbatore', block: 'Sulur', udiseCode: '33123456810', address: 'Kangeyam Road, Sulur', pincode: '641401', establishedYear: 1979, studentCount: 300, teacherCount: 13, principalName: 'T. Indu', principalContact: '9876520010', principalEmail: 'sulur.ms@example.com' },
+    { id: 'CBE001', name: 'Govt. Primary School, Gandhipuram', nameTa: 'அரசு தொடக்கப்பள்ளி, காந்திபுரம்', type: 'primary', district: 'Coimbatore', block: 'Gandhipuram', udiseCode: '33123456801', address: 'Cross Cut Road, Gandhipuram', addressTa: 'கிராஸ் கட் ரோடு, காந்திபுரம்', pincode: '641012', establishedYear: 1958, studentCount: 210, teacherCount: 11, principalName: 'K. Raja', principalContact: '9876520001', principalEmail: 'gandhipuram.ps@example.com' },
+    { id: 'CBE002', name: 'Govt. Middle School, Peelamedu', nameTa: 'அரசு நடுநிலைப் பள்ளி, பீளமேடு', type: 'middle', district: 'Coimbatore', block: 'Peelamedu', udiseCode: '33123456802', address: 'Avinashi Road, Peelamedu', addressTa: 'அவினாசி சாலை, பீளமேடு', pincode: '641004', establishedYear: 1972, studentCount: 360, teacherCount: 16, principalName: 'L. Deviya', principalContact: '9876520002', principalEmail: 'peelamedu.ms@example.com' },
+    { id: 'CBE003', name: 'Govt. High School, Saibaba Colony', nameTa: 'அரசு உயர்நிலைப் பள்ளி, சாய்பாபா காலனி', type: 'high', district: 'Coimbatore', block: 'Saibaba Colony', udiseCode: '33123456803', address: 'Mettupalayam Road', addressTa: 'மேட்டுப்பாளையம் சாலை', pincode: '641011', establishedYear: 1988, studentCount: 580, teacherCount: 27, principalName: 'M. Ganesh', principalContact: '9876520003', principalEmail: 'saibaba.hs@example.com' },
+    { id: 'CBE004', name: 'Govt. Higher Secondary School, R.S. Puram', nameTa: 'அரசு மேல்நிலைப் பள்ளி, ஆர்.எஸ். புரம்', type: 'higher_secondary', district: 'Coimbatore', block: 'R.S. Puram', udiseCode: '33123456804', address: 'DB Road, R.S. Puram', addressTa: 'டி.பி சாலை, ஆர்.எஸ். புரம்', pincode: '641002', establishedYear: 1992, studentCount: 780, teacherCount: 38, principalName: 'N. Sarala', principalContact: '9876520004', principalEmail: 'rspuram.hss@example.com' },
+    { id: 'CBE005', name: 'Govt. Primary School, Podanur', nameTa: 'அரசு தொடக்கப்பள்ளி, போத்தனூர்', type: 'primary', district: 'Coimbatore', block: 'Podanur', udiseCode: '33123456805', address: 'Podanur Main Road', addressTa: 'போத்தனூர் முக்கிய சாலை', pincode: '641023', establishedYear: 1968, studentCount: 190, teacherCount: 10, principalName: 'O. Velu', principalContact: '9876520005', principalEmail: 'podanur.ps@example.com' },
+    { id: 'CBE006', name: 'Govt. Middle School, Singanallur', nameTa: 'அரசு நடுநிலைப் பள்ளி, சிங்காநல்லூர்', type: 'middle', district: 'Coimbatore', block: 'Singanallur', udiseCode: '33123456806', address: 'Trichy Road, Singanallur', addressTa: 'திருச்சி சாலை, சிங்காநல்லூர்', pincode: '641005', establishedYear: 1977, studentCount: 330, teacherCount: 15, principalName: 'P. Kavitha', principalContact: '9876520006', principalEmail: 'singanallur.ms@example.com' },
+    { id: 'CBE007', name: 'Govt. High School, Kuniyamuthur', nameTa: 'அரசு உயர்நிலைப் பள்ளி, குனியமுத்தூர்', type: 'high', district: 'Coimbatore', block: 'Kuniyamuthur', udiseCode: '33123456807', address: 'Palakkad Main Road, Kuniyamuthur', addressTa: 'பாலக்காடு முக்கிய சாலை, குனியமுத்தூர்', pincode: '641008', establishedYear: 1985, studentCount: 520, teacherCount: 25, principalName: 'Q. Murugan', principalContact: '9876520007', principalEmail: 'kuniyamuthur.hs@example.com' },
+    { id: 'CBE008', name: 'Govt. Higher Secondary School, Pollachi', nameTa: 'அரசு மேல்நிலைப் பள்ளி, பொள்ளாச்சி', type: 'higher_secondary', district: 'Coimbatore', block: 'Pollachi', udiseCode: '33123456808', address: 'Coimbatore Road, Pollachi', addressTa: 'கோயம்புத்தூர் சாலை, பொள்ளாச்சி', pincode: '642001', establishedYear: 1998, studentCount: 700, teacherCount: 33, principalName: 'R. Gayathri', principalContact: '9876520008', principalEmail: 'pollachi.hss@example.com' },
+    { id: 'CBE009', name: 'Govt. Primary School, Mettupalayam', nameTa: 'அரசு தொடக்கப்பள்ளி, மேட்டுப்பாளையம்', type: 'primary', district: 'Coimbatore', block: 'Mettupalayam', udiseCode: '33123456809', address: 'Ooty Road, Mettupalayam', addressTa: 'ஊட்டி சாலை, மேட்டுப்பாளையம்', pincode: '641301', establishedYear: 1963, studentCount: 200, teacherCount: 10, principalName: 'S. Ramu', principalContact: '9876520009', principalEmail: 'mettupalayam.ps@example.com' },
+    { id: 'CBE010', name: 'Govt. Middle School, Sulur', nameTa: 'அரசு நடுநிலைப் பள்ளி, சூலூர்', type: 'middle', district: 'Coimbatore', block: 'Sulur', udiseCode: '33123456810', address: 'Kangeyam Road, Sulur', addressTa: 'காங்கேயம் சாலை, சூலூர்', pincode: '641401', establishedYear: 1979, studentCount: 300, teacherCount: 13, principalName: 'T. Indu', principalContact: '9876520010', principalEmail: 'sulur.ms@example.com' },
 
     // Cuddalore
-    { id: 'CDL001', name: 'Govt. Primary School, Cuddalore Port', type: 'primary', district: 'Cuddalore', block: 'Cuddalore Port', udiseCode: '33123456811', address: 'Port Road, Cuddalore', pincode: '607001', establishedYear: 1950, studentCount: 250, teacherCount: 12, principalName: 'U. Gopal', principalContact: '9876530001', principalEmail: 'cuddaloreport.ps@example.com' },
-    { id: 'CDL002', name: 'Govt. Middle School, Chidambaram', type: 'middle', district: 'Cuddalore', block: 'Chidambaram', udiseCode: '33123456812', address: 'East Car Street, Chidambaram', pincode: '608001', establishedYear: 1970, studentCount: 400, teacherCount: 18, principalName: 'V. Sundari', principalContact: '9876530002', principalEmail: 'chidambaram.ms@example.com' },
-    { id: 'CDL003', name: 'Govt. High School, Neyveli', type: 'high', district: 'Cuddalore', block: 'Neyveli', udiseCode: '33123456813', address: 'Block 1, Neyveli', pincode: '607801', establishedYear: 1980, studentCount: 650, teacherCount: 30, principalName: 'W. Prakash', principalContact: '9876530003', principalEmail: 'neyveli.hs@example.com' },
-    { id: 'CDL004', name: 'Govt. Higher Secondary School, Virudhachalam', type: 'higher_secondary', district: 'Cuddalore', block: 'Virudhachalam', udiseCode: '33123456814', address: 'Salem Main Road, Virudhachalam', pincode: '606001', establishedYear: 1990, studentCount: 850, teacherCount: 42, principalName: 'X. Revathi', principalContact: '9876530004', principalEmail: 'virudhachalam.hss@example.com' },
-    { id: 'CDL005', name: 'Govt. Primary School, Panruti', type: 'primary', district: 'Cuddalore', block: 'Panruti', udiseCode: '33123456815', address: 'Panruti Town', pincode: '607106', establishedYear: 1960, studentCount: 230, teacherCount: 11, principalName: 'Y. Sakthi', principalContact: '9876530005', principalEmail: 'panruti.ps@example.com' },
-    { id: 'CDL006', name: 'Govt. Middle School, Kurinjipadi', type: 'middle', district: 'Cuddalore', block: 'Kurinjipadi', udiseCode: '33123456816', address: 'Near Railway Station, Kurinjipadi', pincode: '607302', establishedYear: 1975, studentCount: 390, teacherCount: 16, principalName: 'Z. Bala', principalContact: '9876530006', principalEmail: 'kurinjipadi.ms@example.com' },
-    { id: 'CDL007', name: 'Govt. High School, Parangipettai', type: 'high', district: 'Cuddalore', block: 'Parangipettai', udiseCode: '33123456817', address: 'Parangipettai Coastal Area', pincode: '608502', establishedYear: 1983, studentCount: 560, teacherCount: 27, principalName: 'AA. Devi', principalContact: '9876530007', principalEmail: 'parangipettai.hs@example.com' },
-    { id: 'CDL008', name: 'Govt. Higher Secondary School, Kattumannarkoil', type: 'higher_secondary', district: 'Cuddalore', block: 'Kattumannarkoil', udiseCode: '33123456818', address: 'Kattumannarkoil Town', pincode: '608301', establishedYear: 1993, studentCount: 720, teacherCount: 34, principalName: 'BB. Kumar', principalContact: '9876530008', principalEmail: 'kattumannarkoil.hss@example.com' },
-    { id: 'CDL009', name: 'Govt. Primary School, Sethiyathope', type: 'primary', district: 'Cuddalore', block: 'Sethiyathope', udiseCode: '33123456819', address: 'Sethiyathope Village', pincode: '608102', establishedYear: 1968, studentCount: 210, teacherCount: 10, principalName: 'CC. Anitha', principalContact: '9876530009', principalEmail: 'sethiyathope.ps@example.com' },
-    { id: 'CDL010', name: 'Govt. Middle School, Bhuvanagiri', type: 'middle', district: 'Cuddalore', block: 'Bhuvanagiri', udiseCode: '33123456820', address: 'Bhuvanagiri Town', pincode: '608601', establishedYear: 1979, studentCount: 350, teacherCount: 15, principalName: 'DD. Prabhu', principalContact: '9876530010', principalEmail: 'bhuvanagiri.ms@example.com' }
+    { id: 'CDL001', name: 'Govt. Primary School, Cuddalore Port', nameTa: 'அரசு தொடக்கப்பள்ளி, கடலூர் துறைமுகம்', type: 'primary', district: 'Cuddalore', block: 'Cuddalore Port', udiseCode: '33123456811', address: 'Port Road, Cuddalore', addressTa: 'துறைமுக சாலை, கடலூர்', pincode: '607001', establishedYear: 1950, studentCount: 250, teacherCount: 12, principalName: 'U. Gopal', principalContact: '9876530001', principalEmail: 'cuddaloreport.ps@example.com' },
+    { id: 'CDL002', name: 'Govt. Middle School, Chidambaram', nameTa: 'அரசு நடுநிலைப் பள்ளி, சிதம்பரம்', type: 'middle', district: 'Cuddalore', block: 'Chidambaram', udiseCode: '33123456812', address: 'East Car Street, Chidambaram', addressTa: 'கிழக்கு கார் வீதி, சிதம்பரம்', pincode: '608001', establishedYear: 1970, studentCount: 400, teacherCount: 18, principalName: 'V. Sundari', principalContact: '9876530002', principalEmail: 'chidambaram.ms@example.com' },
+    { id: 'CDL003', name: 'Govt. High School, Neyveli', nameTa: 'அரசு உயர்நிலைப் பள்ளி, நெய்வேலி', type: 'high', district: 'Cuddalore', block: 'Neyveli', udiseCode: '33123456813', address: 'Block 1, Neyveli', addressTa: 'பிளாக் 1, நெய்வேலி', pincode: '607801', establishedYear: 1980, studentCount: 650, teacherCount: 30, principalName: 'W. Prakash', principalContact: '9876530003', principalEmail: 'neyveli.hs@example.com' },
+    { id: 'CDL004', name: 'Govt. Higher Secondary School, Virudhachalam', nameTa: 'அரசு மேல்நிலைப் பள்ளி, விருத்தாச்சலம்', type: 'higher_secondary', district: 'Cuddalore', block: 'Virudhachalam', udiseCode: '33123456814', address: 'Salem Main Road, Virudhachalam', addressTa: 'சேலம் முக்கிய சாலை, விருத்தாச்சலம்', pincode: '606001', establishedYear: 1990, studentCount: 850, teacherCount: 42, principalName: 'X. Revathi', principalContact: '9876530004', principalEmail: 'virudhachalam.hss@example.com' },
+    { id: 'CDL005', name: 'Govt. Primary School, Panruti', nameTa: 'அரசு தொடக்கப்பள்ளி, பண்ருட்டி', type: 'primary', district: 'Cuddalore', block: 'Panruti', udiseCode: '33123456815', address: 'Panruti Town', addressTa: 'பண்ருட்டி நகரம்', pincode: '607106', establishedYear: 1960, studentCount: 230, teacherCount: 11, principalName: 'Y. Sakthi', principalContact: '9876530005', principalEmail: 'panruti.ps@example.com' },
+    { id: 'CDL006', name: 'Govt. Middle School, Kurinjipadi', nameTa: 'அரசு நடுநிலைப் பள்ளி, குறிஞ்சிப்பாடி', type: 'middle', district: 'Cuddalore', block: 'Kurinjipadi', udiseCode: '33123456816', address: 'Near Railway Station, Kurinjipadi', addressTa: 'ரயில் நிலையம் அருகில், குறிஞ்சிப்பாடி', pincode: '607302', establishedYear: 1975, studentCount: 390, teacherCount: 16, principalName: 'Z. Bala', principalContact: '9876530006', principalEmail: 'kurinjipadi.ms@example.com' },
+    { id: 'CDL007', name: 'Govt. High School, Parangipettai', nameTa: 'அரசு உயர்நிலைப் பள்ளி, பரங்கிப்பேட்டை', type: 'high', district: 'Cuddalore', block: 'Parangipettai', udiseCode: '33123456817', address: 'Parangipettai Coastal Area', addressTa: 'பரங்கிப்பேட்டை கடலோரப் பகுதி', pincode: '608502', establishedYear: 1983, studentCount: 560, teacherCount: 27, principalName: 'AA. Devi', principalContact: '9876530007', principalEmail: 'parangipettai.hs@example.com' },
+    { id: 'CDL008', name: 'Govt. Higher Secondary School, Kattumannarkoil', nameTa: 'அரசு மேல்நிலைப் பள்ளி, காட்டுமன்னார்கோயில்', type: 'higher_secondary', district: 'Cuddalore', block: 'Kattumannarkoil', udiseCode: '33123456818', address: 'Kattumannarkoil Town', addressTa: 'காட்டுமன்னார்கோயில் நகரம்', pincode: '608301', establishedYear: 1993, studentCount: 720, teacherCount: 34, principalName: 'BB. Kumar', principalContact: '9876530008', principalEmail: 'kattumannarkoil.hss@example.com' },
+    { id: 'CDL009', name: 'Govt. Primary School, Sethiyathope', nameTa: 'அரசு தொடக்கப்பள்ளி, சேத்தியாதோப்பு', type: 'primary', district: 'Cuddalore', block: 'Sethiyathope', udiseCode: '33123456819', address: 'Sethiyathope Village', addressTa: 'சேத்தியாதோப்பு கிராமம்', pincode: '608102', establishedYear: 1968, studentCount: 210, teacherCount: 10, principalName: 'CC. Anitha', principalContact: '9876530009', principalEmail: 'sethiyathope.ps@example.com' },
+    { id: 'CDL010', name: 'Govt. Middle School, Bhuvanagiri', nameTa: 'அரசு நடுநிலைப் பள்ளி, புவனகிரி', type: 'middle', district: 'Cuddalore', block: 'Bhuvanagiri', udiseCode: '33123456820', address: 'Bhuvanagiri Town', addressTa: 'புவனகிரி நகரம்', pincode: '608601', establishedYear: 1979, studentCount: 350, teacherCount: 15, principalName: 'DD. Prabhu', principalContact: '9876530010', principalEmail: 'bhuvanagiri.ms@example.com' }
   ];
 
   filteredSchools: School[] = []; // Stores schools filtered by district
   selectedSchoolDetails: School | null = null; // Holds the full details of the selected school
 
   renovationAreas: RenovationArea[] = [
-    { id: 'classrooms', label: 'Classrooms' },
-    { id: 'restrooms', label: 'Restrooms' },
-    { id: 'library', label: 'Library' },
-    { id: 'laboratory', label: 'Laboratory' },
-    { id: 'playground', label: 'Playground' },
-    { id: 'drinking_water', label: 'Drinking Water Facilities' },
-    { id: 'electricity', label: 'Electricity & Lighting' },
-    { id: 'roofing', label: 'Roofing & Structural Repairs' },
-    { id: 'boundary_wall', label: 'Boundary Wall' },
-    { id: 'drainage', label: 'Drainage System' }
+    { id: 'classrooms', labelEn: 'Classrooms', labelTa: 'வகுப்பறைகள்' },
+    { id: 'restrooms', labelEn: 'Restrooms', labelTa: 'கழிப்பறைகள்' },
+    { id: 'library', labelEn: 'Library', labelTa: 'நூலகம்' },
+    { id: 'laboratory', labelEn: 'Laboratory', labelTa: 'ஆய்வகம்' },
+    { id: 'playground', labelEn: 'Playground', labelTa: 'விளையாட்டு மைதானம்' },
+    { id: 'drinking_water', labelEn: 'Drinking Water Facilities', labelTa: 'குடிநீர் வசதிகள்' },
+    { id: 'electricity', labelEn: 'Electricity & Lighting', labelTa: 'மின்சாரம் மற்றும் விளக்குகள்' },
+    { id: 'roofing', labelEn: 'Roofing & Structural Repairs', labelTa: 'கூரை மற்றும் கட்டமைப்பு பழுதுகள்' },
+    { id: 'boundary_wall', labelEn: 'Boundary Wall', labelTa: 'சுவர்' },
+    { id: 'drainage', labelEn: 'Drainage System', labelTa: 'கழிவுநீர் அமைப்பு' }
   ];
 
   priorityLevels: PriorityLevel[] = [
-    { value: 'high', label: 'High' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'low', label: 'Low' }
+    { value: 'high', labelEn: 'High', labelTa: 'உயர்' },
+    { value: 'medium', labelEn: 'Medium', labelTa: 'நடுத்தர' },
+    { value: 'low', labelEn: 'Low', labelTa: 'குறைந்த' }
   ];
 
   budgetRanges: BudgetRange[] = [
-    { value: 'below_1lakh', label: 'Below ₹1 Lakh' },
-    { value: '1-5lakhs', label: '₹1 Lakh - ₹5 Lakhs' },
-    { value: '5-10lakhs', label: '₹5 Lakhs - ₹10 Lakhs' },
-    { value: 'above_10lakhs', label: 'Above ₹10 Lakhs' }
+    { value: 'below_1lakh', labelEn: 'Below ₹1 Lakh', labelTa: '₹1 லட்சத்திற்கும் குறைவானது' },
+    { value: '1-5lakhs', labelEn: '₹1 Lakh - ₹5 Lakhs', labelTa: '₹1 லட்சம் - ₹5 லட்சம்' },
+    { value: '5-10lakhs', labelEn: '₹5 Lakhs - ₹10 Lakhs', labelTa: '₹5 லட்சம் - ₹10 லட்சம்' },
+    { value: 'above_10lakhs', labelEn: 'Above ₹10 Lakhs', labelTa: '₹10 லட்சத்திற்கும் மேலானது' }
   ];
 
   constructor(
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef, // Inject ChangeDetectorRef
-    private schoolService: SchoolService // Inject SchoolService
+    private schoolService: SchoolService, // Inject SchoolService
+    private languageService: LanguageService 
   ) {
     this.initializeForm();
   }
@@ -159,6 +165,7 @@ export class SchoolsComponent implements OnInit {
         district: ['', Validators.required],
         block: ['', Validators.required],
         address: ['', Validators.required],
+        addressTa: ['', Validators.required], // Add addressTa to the form group
 
         // These fields are user-entered
         pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
@@ -214,7 +221,13 @@ export class SchoolsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // Subscribe to language changes from the service
+    this.languageService.currentLanguage$.subscribe(lang => {
+      this.currentLanguage = lang as 'english' | 'tamil';
+      this.cdRef.detectChanges(); // Important: Trigger change detection
+    });
+  }
 
   // Validator to ensure at least 'min' checkboxes are selected in a FormArray
   minSelectedCheckboxes(min: number): ValidatorFn {
@@ -245,7 +258,8 @@ export class SchoolsComponent implements OnInit {
       schoolType: '',
       district: selectedDistrictValue, // Update district in basicInfo
       block: '', // Clear block
-      address: '' // Clear address
+      address: '', // Clear address
+      addressTa: '' // Clear Tamil address
     });
 
     if (selectedDistrictValue) {
@@ -269,12 +283,13 @@ export class SchoolsComponent implements OnInit {
     if (basicInfoGroup && this.selectedSchoolDetails) {
       basicInfoGroup.patchValue({
         schoolNameEn: this.selectedSchoolDetails.name,
-        schoolNameTa: this.selectedSchoolDetails.name, // Assuming Tamil name is same or handled differently
+        schoolNameTa: this.selectedSchoolDetails.nameTa, // Use Tamil name here
         udiseCode: this.selectedSchoolDetails.udiseCode,
         schoolType: this.selectedSchoolDetails.type,
         district: this.selectedSchoolDetails.district,
         block: this.selectedSchoolDetails.block,
         address: this.selectedSchoolDetails.address || '',
+        addressTa: this.selectedSchoolDetails.addressTa || '', // Populate Tamil address
         pincode: this.selectedSchoolDetails.pincode || '', // Populate pincode
         establishedYear: this.selectedSchoolDetails.establishedYear || '', // Populate establishedYear
         studentCount: this.selectedSchoolDetails.studentCount || '', // Populate studentCount
@@ -288,7 +303,7 @@ export class SchoolsComponent implements OnInit {
       basicInfoGroup.patchValue({
         schoolNameEn: '', schoolNameTa: '', udiseCode: '', schoolType: '',
         // Do NOT clear district here as it's selected independently by onDistrictChange
-        block: '', address: '', pincode: '', establishedYear: '',
+        block: '', address: '', addressTa: '', pincode: '', establishedYear: '',
         studentCount: '', teacherCount: '', principalName: '',
         principalContact: '', principalEmail: ''
       });
@@ -304,16 +319,29 @@ export class SchoolsComponent implements OnInit {
     this.schoolForm.get('infrastructure.priority')?.setValue(value);
   }
 
-  onFileChange(event: Event, controlName: string, groupName: string): void {
+   onFileChange(event: Event, controlName: string, groupName: string): void {
     const input = event.target as HTMLInputElement;
+    const formControl = this.schoolForm.get(`${groupName}.${controlName}`);
+
     if (input.files && input.files.length > 0) {
-      this.schoolForm.get(`${groupName}.${controlName}`)?.setValue(input.files[0]);
+      if (controlName === 'conditionPhotos') {
+        // Handle multiple files for 'conditionPhotos'
+        const filesArray: File[] = Array.from(input.files);
+        formControl?.setValue(filesArray);
+      } else {
+        // Handle single file for other fields like 'recognitionCertificate'
+        formControl?.setValue(input.files[0]);
+      }
     } else {
-      this.schoolForm.get(`${groupName}.${controlName}`)?.setValue(null);
+      // If no files are selected (e.g., user opens dialog and cancels)
+      formControl?.setValue(null);
     }
-    // Manually mark as touched to show validation feedback immediately
-    this.schoolForm.get(`${groupName}.${controlName}`)?.markAsTouched();
-    this.cdRef.detectChanges(); // Trigger change detection for file input validation
+
+    // Mark the control as touched to show validation feedback immediately
+    formControl?.markAsTouched();
+
+    // Trigger change detection to update the file input label (e.g., "3 files selected")
+    this.cdRef.detectChanges();
   }
 
   getSelectedRenovationAreas(): string[] {
@@ -322,7 +350,7 @@ export class SchoolsComponent implements OnInit {
 
     this.renovationAreas.forEach((area, index) => {
       if (renovationFormArray.controls[index] && renovationFormArray.controls[index].value) {
-        selectedAreas.push(area.label);
+        selectedAreas.push(this.getTranslatedText(area.labelEn, area.labelTa));
       }
     });
     return selectedAreas;
@@ -342,7 +370,7 @@ export class SchoolsComponent implements OnInit {
           console.log(`Control ${key} is invalid. Errors:`, control.errors);
         }
       });
-      alert('Please complete all required fields in the current section before proceeding.');
+      alert(this.getTranslatedText('Please complete all required fields in the current section before proceeding.', 'தற்போதைய பிரிவில் உள்ள அனைத்து கட்டாயப் புலங்களையும் பூர்த்தி செய்யவும்.'));
       return;
     }
 
@@ -358,9 +386,41 @@ export class SchoolsComponent implements OnInit {
   }
 
   getBudgetRangeLabel(value: string): string {
-    if (!value) return 'Not specified';
+    if (!value) return this.getTranslatedText('Not specified', 'குறிப்பிடப்படவில்லை');
     const range = this.budgetRanges.find(r => r.value === value);
-    return range ? range.label : 'Not specified';
+    return range ? this.getTranslatedText(range.labelEn, range.labelTa) : this.getTranslatedText('Not specified', 'குறிப்பிடப்படவில்லை');
+  }
+
+  getPriorityLevelLabel(value: string): string {
+    if (!value) return this.getTranslatedText('Not specified', 'குறிப்பிடப்படவில்லை');
+    const level = this.priorityLevels.find(p => p.value === value);
+    return level ? this.getTranslatedText(level.labelEn, level.labelTa) : this.getTranslatedText('Not specified', 'குறிப்பிடப்படவில்லை');
+  }
+
+  getSchoolTypeTranslated(englishType: string): string {
+    switch (englishType.toLowerCase()) {
+      case 'primary': return this.getTranslatedText('Primary School', 'தொடக்கப்பள்ளி');
+      case 'middle': return this.getTranslatedText('Middle School', 'நடுநிலைப் பள்ளி');
+      case 'high': return this.getTranslatedText('High School', 'உயர்நிலைப் பள்ளி');
+      case 'higher_secondary': return this.getTranslatedText('Higher Secondary School', 'மேல்நிலைப் பள்ளி');
+      default: return this.getTranslatedText(englishType, englishType); // Fallback
+    }
+  }
+
+  // New method to get the translated school address for display
+    getSchoolAddressTranslated(englishAddress: string): string {
+    // This function should return the Tamil address from the selectedSchoolDetails
+    // or fallback to the English address if not found.
+    // The selectedSchoolDetails should already contain addressTa if populated.
+    if (this.selectedSchoolDetails && this.selectedSchoolDetails.address === englishAddress) {
+      return this.selectedSchoolDetails.addressTa || englishAddress;
+    }
+    // If selectedSchoolDetails is not available or doesn't match,
+    // you might want to perform a lookup or just return the English address.
+    // For simplicity, we'll return the form's addressTa value if available,
+    // otherwise the English address.
+    const addressTaFromForm = this.schoolForm.get('basicInfo.addressTa')?.value;
+    return addressTaFromForm || englishAddress;
   }
 
   getCurrentSection(): FormGroup | null {
@@ -392,8 +452,9 @@ export class SchoolsComponent implements OnInit {
         udiseCode: rawFormData.basicInfo.udiseCode,
         schoolType: rawFormData.basicInfo.schoolType,
         district: rawFormData.basicInfo.district, // Now included from disabled field
-        block: rawFormData.basicInfo.block,       // Now included from disabled field
+        block: rawFormData.basicInfo.block,      // Now included from disabled field
         address: rawFormData.basicInfo.address,
+        addressTa: rawFormData.basicInfo.addressTa, // Include Tamil address
         pincode: rawFormData.basicInfo.pincode,
         establishedYear: rawFormData.basicInfo.establishedYear,
         studentCount: rawFormData.basicInfo.studentCount,
@@ -418,18 +479,18 @@ export class SchoolsComponent implements OnInit {
       this.schoolService.submitSchool(dataToSend).subscribe({
         next: (response) => {
           console.log('Server response:', response);
-          alert('School registration submitted successfully!');
+          alert(this.getTranslatedText('School registration submitted successfully!', 'பள்ளி பதிவு வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!'));
           this.resetForm();
         },
         error: (error) => {
           console.error('Error submitting form:', error);
-          let errorMessage = 'An unexpected error occurred. Please try again.';
+          let errorMessage = this.getTranslatedText('An unexpected error occurred. Please try again.', 'எதிர்பாராத பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.');
           if (error.error && error.error.message) {
             errorMessage = error.error.message;
           } else if (error.statusText) {
-            errorMessage = `Error ${error.status}: ${error.statusText}`;
+            errorMessage = this.getTranslatedText(`Error ${error.status}: ${error.statusText}`, `பிழை ${error.status}: ${error.statusText}`);
           }
-          alert(`Submission failed: ${errorMessage}`);
+          alert(this.getTranslatedText(`Submission failed: ${errorMessage}`, `சமர்ப்பிப்பு தோல்வியடைந்தது: ${errorMessage}`));
         }
       });
     } else {
@@ -444,7 +505,7 @@ export class SchoolsComponent implements OnInit {
       } else if (this.schoolForm.get('documentation')?.invalid) {
         this.currentStep = 3;
       }
-      alert('Please complete all required fields correctly before submitting.');
+      alert(this.getTranslatedText('Please complete all required fields correctly before submitting.', 'சமர்ப்பிக்கும் முன் அனைத்து கட்டாயப் புலங்களையும் சரியாகப் பூர்த்தி செய்யவும்.'));
     }
   }
 
@@ -469,7 +530,12 @@ export class SchoolsComponent implements OnInit {
     this.cdRef.detectChanges(); // Force change detection if UI doesn't update immediately
   }
 
-  switchLanguage(lang: string): void {
-    this.currentLanguage = lang;
+  toggleLanguage(): void {
+    this.currentLanguage = this.currentLanguage === 'english' ? 'tamil' : 'english';
+    this.cdRef.detectChanges(); // Trigger change detection to update UI labels
+  }
+
+ getTranslatedText(englishText: string, tamilText: string): string {
+    return this.currentLanguage === 'english' ? englishText : tamilText;
   }
 }

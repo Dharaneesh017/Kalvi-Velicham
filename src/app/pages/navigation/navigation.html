@@ -8,7 +8,8 @@
     <nav class="nav-links" [class.mobile-open]="isMobileMenuOpen">
       <a routerLink="/" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a>
       <a routerLink="/schools" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Schools Registration' : 'பள்ளிகள் பதிவு' }}</a>
-      <a routerLink="/donate" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a>
+      <li><a (click)="openAuthModalForDonate()" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Donate' :
+          'நன்கொடை' }}</a></li>
       <a routerLink="/volunteer" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a>
       <a routerLink="/successstories" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Success Stories' : 'வெற்றிக் கதைகள்' }}</a>
       <a routerLink="/contact" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Contact' : 'தொடர்பு' }}</a>

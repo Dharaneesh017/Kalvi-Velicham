@@ -64,6 +64,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  cursor: pointer;
 }
 
 .nav-links a {
@@ -208,7 +209,22 @@ body {
   transition: all 0.3s ease;
   display: inline-block;
 }
+nav ul {
+  list-style-type: none;
+  /* Removes the bullet points */
+  padding: 0;
+  /* Removes default padding */
+  margin: 0;
+  /* Removes default margin */
+}
 
+nav li {
+  display: inline-block;
+  /* Makes list items appear side-by-side */
+  /* Add padding or margin here to space out the links */
+  margin-right: 20px;
+  /* Example spacing */
+}
 .btn-primary {
   background-color: var(--primary-blue);
   color: var(--white);

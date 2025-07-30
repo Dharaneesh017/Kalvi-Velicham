@@ -1,1 +1,162 @@
-<p>volunteer works!</p>
+<main class="volunteer-page-main">
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ getTranslatedText('Become a Volunteer', 'தன்னார்வலராகுங்கள்') }}</h1>
+      <p class="hero-subtitle">{{ getTranslatedText('Your time and skills can transform government schools in Tamil Nadu. Join our mission!', 'உங்கள் நேரமும் திறமைகளும் தமிழ்நாட்டின் அரசுப் பள்ளிகளை மாற்றியமைக்கலாம். எங்கள் பணியில் இணையுங்கள்!') }}</p>
+      <button (click)="openFormModal()" class="btn btn-primary hero-btn">{{ getTranslatedText('Register Now', 'இப்போதே பதிவு செய்யவும்') }}</button>
+    </div>
+  </section>
+
+  <section class="why-volunteer-section fade-in">
+    <div class="container">
+      <h2 class="section-heading">{{ getTranslatedText('Why Volunteer with Us?', 'ஏன் எங்களுடன் தன்னார்வத் தொண்டு செய்ய வேண்டும்?') }}</h2>
+      <div class="why-volunteer-grid">
+        <div class="why-volunteer-card" *ngFor="let item of whyVolunteerItems">
+          <div class="icon-wrapper">
+            <i class="fas fa-{{ item.icon }}"></i>
+          </div>
+          <h3>{{ getTranslatedText(item.titleEn, item.titleTa) }}</h3>
+          <p>{{ getTranslatedText(item.descriptionEn, item.descriptionTa) }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="opportunities-section fade-in">
+    <div class="container">
+      <h2 class="section-heading">{{ getTranslatedText('Available Opportunities', 'கிடைக்கக்கூடிய வாய்ப்புகள்') }}</h2>
+      <div class="opportunities-grid">
+        <div class="opportunity-card" *ngFor="let opp of opportunities">
+          <div class="icon-wrapper">
+            <i class="fas fa-{{ opp.icon }}"></i>
+          </div>
+          <h3>{{ getTranslatedText(opp.titleEn, opp.titleTa) }}</h3>
+          <p>{{ getTranslatedText(opp.descriptionEn, opp.descriptionTa) }}</p>
+          <button class="btn btn-secondary-outline" (click)="openFormModal()">{{ getTranslatedText('Learn More & Apply', 'மேலும் அறிக & விண்ணப்பிக்கவும்') }}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" *ngIf="isFormModalOpen">
+    <div class="modal-content volunteer-form-modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ getTranslatedText('Volunteer Registration', 'தன்னார்வலர் பதிவு') }}</h3>
+        <button class="close-button" (click)="closeFormModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="showSubmissionSuccess; else showForm" class="submission-success-message">
+          <p>{{ submissionMessage }}</p>
+          <button class="btn btn-primary" (click)="closeFormModal()">{{ getTranslatedText('Close', 'மூடு') }}</button>
+        </div>
+
+        <ng-template #showForm>
+          <p *ngIf="submissionMessage && !volunteerForm.valid" class="form-error-summary">{{ submissionMessage }}</p>
+          <form [formGroup]="volunteerForm" (ngSubmit)="onSubmit()" class="volunteer-form">
+            <div class="form-group">
+              <label for="fullName" class="form-label">{{ getTranslatedText('Full Name', 'முழு பெயர்') }} <span class="required">*</span></label>
+              <input type="text" id="fullName" formControlName="fullName" class="form-control" placeholder="{{ getTranslatedText('Enter your full name', 'உங்கள் முழு பெயரை உள்ளிடவும்') }}">
+              <div *ngIf="volunteerForm.get('fullName')?.invalid && (volunteerForm.get('fullName')?.dirty || volunteerForm.get('fullName')?.touched)" class="error-message">
+                <div *ngIf="volunteerForm.get('fullName')?.errors?.['required']">{{ getTranslatedText('Full Name is required.', 'முழு பெயர் தேவை.') }}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">{{ getTranslatedText('Email', 'மின்னஞ்சல்') }} <span class="required">*</span></label>
+              <input type="email" id="email" formControlName="email" class="form-control" placeholder="{{ getTranslatedText('Enter your email address', 'உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும்') }}">
+              <div *ngIf="volunteerForm.get('email')?.invalid && (volunteerForm.get('email')?.dirty || volunteerForm.get('email')?.touched)" class="error-message">
+                <div *ngIf="volunteerForm.get('email')?.errors?.['required']">{{ getTranslatedText('Email is required.', 'மின்னஞ்சல் தேவை.') }}</div>
+                <div *ngIf="volunteerForm.get('email')?.errors?.['email']">{{ getTranslatedText('Please enter a valid email address.', 'சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்.') }}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="phone" class="form-label">{{ getTranslatedText('Phone Number', 'தொலைபேசி எண்') }} <span class="required">*</span></label>
+              <input type="tel" id="phone" formControlName="phone" class="form-control" placeholder="{{ getTranslatedText('e.g., 9876543210', 'உதாரணம்: 9876543210') }}">
+              <div *ngIf="volunteerForm.get('phone')?.invalid && (volunteerForm.get('phone')?.dirty || volunteerForm.get('phone')?.touched)" class="error-message">
+                <div *ngIf="volunteerForm.get('phone')?.errors?.['required']">{{ getTranslatedText('Phone Number is required.', 'தொலைபேசி எண் தேவை.') }}</div>
+                <div *ngIf="volunteerForm.get('phone')?.errors?.['pattern']">{{ getTranslatedText('Please enter a valid 10-digit phone number.', 'சரியான 10 இலக்க தொலைபேசி எண்ணை உள்ளிடவும்.') }}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="district" class="form-label">{{ getTranslatedText('District', 'மாவட்டம்') }} <span class="required">*</span></label>
+              <select id="district" formControlName="district" class="form-control">
+                <option [ngValue]="''" disabled>{{ getTranslatedText('Select your district', 'உங்கள் மாவட்டத்தைத் தேர்ந்தெடுக்கவும்') }}</option>
+                <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+              </select>
+              <div *ngIf="volunteerForm.get('district')?.invalid && (volunteerForm.get('district')?.dirty || volunteerForm.get('district')?.touched)" class="error-message">
+                <div *ngIf="volunteerForm.get('district')?.errors?.['required']">{{ getTranslatedText('District is required.', 'மாவட்டம் தேவை.') }}</div>
+              </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label class="form-label">{{ getTranslatedText('Areas of Interest', 'ஆர்வம் உள்ள பகுதிகள்') }} <span class="required">*</span></label>
+              <div formArrayName="areasOfInterest" class="checkbox-options">
+                <div *ngFor="let area of areasOfInterest; let i = index" class="checkbox-item">
+                  <input type="checkbox" [id]="'area' + area.id" [formControl]="getAreaOfInterestControl(i)">
+                  <label [for]="'area' + area.id">{{ getTranslatedText(area.labelEn, area.labelTa) }}</label>
+                </div>
+              </div>
+              <div *ngIf="volunteerForm.get('areasOfInterest')?.invalid && (volunteerForm.get('areasOfInterest')?.dirty || volunteerForm.get('areasOfInterest')?.touched)" class="error-message">
+                <div *ngIf="volunteerForm.get('areasOfInterest')?.errors?.['required']">{{ getTranslatedText('Please select at least one area of interest.', 'குறைந்தது ஒரு ஆர்வமுள்ள பகுதியையாவது தேர்ந்தெடுக்கவும்.') }}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="availability" class="form-label">{{ getTranslatedText('Availability', 'கிடைக்கும் நேரம்') }} <span class="required">*</span></label>
+              <select id="availability" formControlName="availability" class="form-control">
+                <option [ngValue]="''" disabled>{{ getTranslatedText('Select your availability', 'உங்கள் கிடைக்கும் நேரத்தைத் தேர்ந்தெடுக்கவும்') }}</option>
+                <option value="weekdays">{{ getTranslatedText('Weekdays', 'வார நாட்கள்') }}</option>
+                <option value="weekends">{{ getTranslatedText('Weekends', 'வார இறுதி நாட்கள்') }}</option>
+                <option value="flexible">{{ getTranslatedText('Flexible', 'நெகிழ்வானது') }}</option>
+              </select>
+              <div *ngIf="volunteerForm.get('availability')?.invalid && (volunteerForm.get('availability')?.dirty || volunteerForm.get('availability')?.touched)" class="error-message">
+                <div *ngIf="volunteerForm.get('availability')?.errors?.['required']">{{ getTranslatedText('Availability is required.', 'கிடைக்கும் நேரம் தேவை.') }}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-label">{{ getTranslatedText('Message (Optional)', 'செய்தி (விரும்பினால்)') }}</label>
+              <textarea id="message" formControlName="message" class="form-control" rows="4" placeholder="{{ getTranslatedText('Tell us more about yourself or your interests...', 'உங்களைப் பற்றியோ அல்லது உங்கள் ஆர்வங்களைப் பற்றியோ மேலும் சொல்லுங்கள்...') }}"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn" [disabled]="volunteerForm.invalid">{{ getTranslatedText('Submit Application', 'விண்ணப்பத்தை சமர்ப்பிக்கவும்') }}</button>
+          </form>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <div class="logo-wrapper">
+          <img src="assets/images/govt_logo.jpeg" alt="Government of Tamil Nadu Logo" class="govt-logo">
+        </div>
+        <div class="footer-logo-text"> <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி' }}</h3>
+          <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம் சிறந்த எதிர்காலத்தை உருவாக்குதல்' }}</p>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>{{ currentLanguage === 'english' ? 'Quick Links' : 'விரைவு இணைப்புகள்' }}</h4>
+        <ul>
+          <li><a routerLink="/">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
+          <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
+          <li><a routerLink="/donate">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
+          <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
+        <p>infotnschools.in</p>
+        <p>+91 9876543210</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {{ currentYear }} {{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative. All rights reserved.' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}</p>
+    </div>
+  </div>
+</footer>

@@ -1,2 +1,15 @@
-<app-navigation></app-navigation>
+<!-- src/app/app.html -->
+
+<!-- Your main navigation component -->
+<!-- It emits `openAuthModalRequest` when the "Donate" link is clicked -->
+<app-navigation (openAuthModalRequest)="openAuthModalHandler($event)"></app-navigation>
+
+<!-- This is where your routed components (like Home, Schools, Donate, Volunteer) will be displayed -->
 <router-outlet></router-outlet>
+
+<!-- Your authentication modal, which will be shown/hidden based on showAuthModal -->
+<app-auth-modal *ngIf="showAuthModal" [initialTab]="authModalInitialTab" (closeModalEvent)="onAuthModalClose()"
+    (authSuccess)="onAuthSuccess($event)">
+</app-auth-modal>
+
+<!-- You might have a footer component here as well, e.g., <app-footer></app-footer> -->

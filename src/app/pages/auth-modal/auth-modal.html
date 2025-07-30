@@ -1,0 +1,83 @@
+<div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="close-button" (click)="closeModal()">&times;</button>
+        <div class="modal-header">
+            <h2>{{ currentLanguage === 'english' ? 'Donor Access' : 'நன்கொடையாளர் உள்நுழைவு' }}</h2>
+        </div>
+
+        <div class="tabs">
+            <button [class.active]="activeTab === 'login'" (click)="setActiveTab('login')">
+                {{ currentLanguage === 'english' ? 'Login' : 'உள்நுழை' }}
+            </button>
+            <button [class.active]="activeTab === 'register'" (click)="setActiveTab('register')">
+                {{ currentLanguage === 'english' ? 'Register' : 'பதிவுசெய்' }}
+            </button>
+        </div>
+
+        <div *ngIf="activeTab === 'login'" class="form-container">
+            <form (ngSubmit)="onLogin()">
+                <div class="form-group">
+                    <label for="loginEmail">{{ currentLanguage === 'english' ? 'Email Address' : 'மின்னஞ்சல் முகவரி'
+                        }}:</label>
+                    <input type="email" id="loginEmail" name="email" [(ngModel)]="loginForm.email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">{{ currentLanguage === 'english' ? 'Password' : 'கடவுச்சொல்' }}:</label>
+                    <input type="password" id="loginPassword" name="password" [(ngModel)]="loginForm.password" required>
+                </div>
+                <a href="#" class="forgot-password">{{ currentLanguage === 'english' ? 'Forgot Password?' :
+                    'கடவுச்சொல்லை மறந்துவிட்டீர்களா?' }}</a>
+                <button type="submit" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Login' : 'உள்நுழை'
+                    }}</button>
+            </form>
+            <p *ngIf="loginError" class="error-message">{{ loginError }}</p>
+        </div>
+
+        <div *ngIf="activeTab === 'register'" class="form-container">
+            <form (ngSubmit)="onRegister()">
+                <div class="form-group">
+                    <label for="registerName">{{ currentLanguage === 'english' ? 'Full Name' : 'முழு பெயர்' }}:</label>
+                    <input type="text" id="registerName" name="fullName" [(ngModel)]="registerForm.fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">{{ currentLanguage === 'english' ? 'Email Address' : 'மின்னஞ்சல் முகவரி'
+                        }}:</label>
+                    <input type="email" id="registerEmail" name="email" [(ngModel)]="registerForm.email" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">{{ currentLanguage === 'english' ? 'Password' : 'கடவுச்சொல்'
+                        }}:</label>
+                    <input type="password" id="registerPassword" name="password" [(ngModel)]="registerForm.password"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">{{ currentLanguage === 'english' ? 'Confirm Password' :
+                        'கடவுச்சொல்லைஉறுதிப்படுத்து' }}:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword"
+                        [(ngModel)]="registerForm.confirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone"> {{ currentLanguage === 'english' ? 'Phone Number (Optional)' :
+                        'தொலைபேசிஎண் (விரும்பினால்)' }}:</label>
+                    <input type="tel" id="registerPhone" name="phoneNumber" [(ngModel)]="registerForm.phoneNumber">
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="termsAgree" name="termsAgree" [(ngModel)]="registerForm.termsAgree"
+                        required>
+                    <label for="termsAgree">
+                        {{ currentLanguage === 'english' ? 'I agree to the' : 'நான் ஒப்புக்கொள்கிறேன்' }}
+                        <a href="/terms" target="_blank">{{ currentLanguage === 'english' ? 'Terms and Conditions' :
+                            'விதிமுறைகள் மற்றும் நிபந்தனைகள்' }}</a>
+                        {{ currentLanguage === 'english' ? 'and' : 'மற்றும்' }}
+                        <a href="/privacy" target="_blank">{{ currentLanguage === 'english' ? 'Privacy Policy' :
+                            'தனியுரிமைக் கொள்கை' }}</a>.
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Register' :
+                    'பதிவுசெய்' }}</button>
+                <p *ngIf="registrationSuccessMessage" class="success-message">{{ registrationSuccessMessage }}</p>
+            </form>
+            <p *ngIf="registerError" class="error-message">{{ registerError }}</p>
+        </div>
+    </div>
+</div>

@@ -1,16 +1,26 @@
 <main>
-  <section class="hero-banner">
-    <div class="container">
-      <div class="hero-content">
-        <h1>{{ currentLanguage === 'english' ? 'Transforming Tamil Nadu\'s Government Schools' : 'தமிழ்நாடு அரசு பள்ளிகளின் மாற்றம்' }}</h1>
-        <p>{{ currentLanguage === 'english' ? 'Join us in creating better learning environments for over 1 million students across 45,000 government schools' : '45,000 அரசு பள்ளிகளில் 10 லட்சம் மாணவர்களுக்கு சிறந்த கற்றல் சூழலை உருவாக்க எங்களுடன் இணையுங்கள்' }}</p>
-        <div class="hero-buttons">
-          <a routerLink="/donate" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போது நன்கொடை அளிக்கவும்' }}</a>
-          <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Become a Volunteer' : 'தன்னார்வலராக இணையுங்கள்' }}</a>
-        </div>
+ <section class="hero-banner">
+  <div class="hero-backgrounds">
+    <div
+      *ngFor="let image of heroBackgroundImages; let i = index"
+      class="hero-background-image"
+      [class.active]="i === currentImageIndex"
+      [style.background-image]="'url(' + image + ')'"
+    ></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <h1>{{ currentLanguage === 'english' ? 'Transforming Tamil Nadu\'s Government Schools' : 'தமிழ்நாடு அரசு பள்ளிகளின் மாற்றம்' }}</h1>
+      <p>{{ currentLanguage === 'english' ? 'Join us in creating better learning environments for over 1 million students across 45,000 government schools' : '45,000 அரசு பள்ளிகளில் 10 லட்சம் மாணவர்களுக்கு சிறந்த கற்றல் சூழலை உருவாக்க எங்களுடன் இணையுங்கள்' }}</p>
+      <div class="hero-buttons">
+        <a (click)="openAuthModal('login')" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போது நன்கொடை அளிக்கவும்' }}</a>
+        <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Become a Volunteer' :
+          'தன்னார்வலராக இணையுங்கள்' }}</a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <section class="about-section">
     <div class="container">
@@ -55,7 +65,8 @@
               <div class="progress-bar" [style]="getProgressBarStyle(school)"></div>
               <span>{{ getDisplayProgress(school) }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி திரட்டப்பட்டது' }}</span>
             </div>
-           <a routerLink="/donate" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
+            
+            <a (click)="openAuthModal('login')" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
           </div>
         </div>
         <div *ngIf="fetchedSchools.length === 0" class="no-schools-message">
@@ -83,13 +94,13 @@
       </div>
     </div>
   </section>
-
+  
   <section class="cta-section">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'Join Us in Transforming Schools' : 'பள்ளிகளை மாற்றுவதில் எங்களுடன் இணையுங்கள்' }}</h2>
       <p>{{ currentLanguage === 'english' ? 'Your support can make a lasting difference in the lives of thousands of students' : 'ஆயிரக்கணக்கான மாணவர்களின் வாழ்க்கையில் உங்கள் ஆதரவு நீடித்த மாற்றத்தை ஏற்படுத்தும்' }}</p>
       <div class="cta-buttons">
-        <a routerLink="/donate" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போது நன்கொடை அளிக்கவும்' }}</a>
+        <a (click)="openAuthModal('login')" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போதுநன்கொடை அளிக்கவும்' }}</a>
         <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Volunteer Today' : 'இன்றே தன்னார்வலராகுங்கள்' }}</a>
       </div>
     </div>
@@ -111,7 +122,7 @@
         <ul>
           <li><a routerLink="/">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
           <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
-          <li><a routerLink="/donate">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
+          <li><a (click)="openAuthModal('login')" >{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
           <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a></li>
         </ul>
       </div>
@@ -126,3 +137,6 @@
     </div>
   </div>
 </footer>
+<app-auth-modal *ngIf="showAuthModal" [initialTab]="authModalInitialTab" (closeModalEvent)="onAuthModalClose()"
+  (authSuccess)="onAuthSuccess($event)">
+</app-auth-modal>
