@@ -1,34 +1,40 @@
 <main>
- <section class="hero-banner">
-  <div class="hero-backgrounds">
-    <div
-      *ngFor="let image of heroBackgroundImages; let i = index"
-      class="hero-background-image"
-      [class.active]="i === currentImageIndex"
-      [style.background-image]="'url(' + image + ')'"
-    ></div>
-  </div>
+  <section class="hero-banner">
+    <div class="hero-backgrounds">
+      <div *ngFor="let image of heroBackgroundImages; let i = index" class="hero-background-image"
+        [class.active]="i === currentImageIndex" [style.background-image]="'url(' + image + ')'"></div>
+    </div>
 
-  <div class="container">
-    <div class="hero-content">
-      <h1>{{ currentLanguage === 'english' ? 'Transforming Tamil Nadu\'s Government Schools' : 'தமிழ்நாடு அரசு பள்ளிகளின் மாற்றம்' }}</h1>
-      <p>{{ currentLanguage === 'english' ? 'Join us in creating better learning environments for over 1 million students across 45,000 government schools' : '45,000 அரசு பள்ளிகளில் 10 லட்சம் மாணவர்களுக்கு சிறந்த கற்றல் சூழலை உருவாக்க எங்களுடன் இணையுங்கள்' }}</p>
-      <div class="hero-buttons">
-        <a (click)="openAuthModal('login')" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போது நன்கொடை அளிக்கவும்' }}</a>
-        <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Become a Volunteer' :
-          'தன்னார்வலராக இணையுங்கள்' }}</a>
+    <div class="container">
+      <div class="hero-content">
+        <h1>{{ currentLanguage === 'english' ? 'Transforming Tamil Nadu\'s Government Schools' : 'தமிழ்நாடு அரசு
+          பள்ளிகளின் மாற்றம்' }}</h1>
+        <p>{{ currentLanguage === 'english' ? 'Join us in creating better learning environments for over 1 million
+          students across 45,000 government schools' : '45,000 அரசு பள்ளிகளில் 10 லட்சம் மாணவர்களுக்கு சிறந்த கற்றல்
+          சூழலை உருவாக்க எங்களுடன் இணையுங்கள்' }}</p>
+        <div class="hero-buttons">
+          <a (click)="openAuthModal('login')" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' :
+            'இப்போது நன்கொடை அளிக்கவும்' }}</a>
+          <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Become a Volunteer' :
+            'தன்னார்வலராக இணையுங்கள்' }}</a>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <section class="about-section">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'About the Initiative' : 'முயற்சி பற்றி' }}</h2>
       <div class="about-content">
         <div class="about-text">
-          <p>{{ currentLanguage === 'english' ? 'Our mission is to improve the infrastructure and learning environment of government schools across Tamil Nadu. We believe every child deserves access to quality education in a safe and conducive environment.' : 'தமிழ்நாடு முழுவதும் உள்ள அரசு பள்ளிகளின் உள்கட்டமைப்பு மற்றும் கற்றல் சூழலை மேம்படுத்துவதே எங்கள் பணி. பாதுகாப்பான மற்றும் சாதகமான சூழலில் ஒவ்வொரு குழந்தையும் தரமான கல்வியை அணுக வேண்டும் என்று நாங்கள் நம்புகிறோம்.' }}</p>
-          <p>{{ currentLanguage === 'english' ? 'Since 2018, we\'ve renovated over 1,200 schools, impacting more than 350,000 students.' : '2018 முதல், நாங்கள் 1,200 க்கும் மேற்பட்ட பள்ளிகளை புதுப்பித்துள்ளோம், இது 350,000 க்கும் மேற்பட்ட மாணவர்களை பாதித்துள்ளது.' }}</p>
+          <p>{{ currentLanguage === 'english' ? 'Our mission is to improve the infrastructure and learning environment
+            of government schools across Tamil Nadu. We believe every child deserves access to quality education in a
+            safe and conducive environment.' : 'தமிழ்நாடு முழுவதும் உள்ள அரசு பள்ளிகளின் உள்கட்டமைப்பு மற்றும் கற்றல்
+            சூழலை மேம்படுத்துவதே எங்கள் பணி. பாதுகாப்பான மற்றும் சாதகமான சூழலில் ஒவ்வொரு குழந்தையும் தரமான கல்வியை அணுக
+            வேண்டும் என்று நாங்கள் நம்புகிறோம்.' }}</p>
+          <p>{{ currentLanguage === 'english' ? 'Since 2018, we\'ve renovated over 1,200 schools, impacting more than
+            350,000 students.' : '2018 முதல், நாங்கள் 1,200 க்கும் மேற்பட்ட பள்ளிகளை புதுப்பித்துள்ளோம், இது 350,000
+            க்கும் மேற்பட்ட மாணவர்களை பாதித்துள்ளது.' }}</p>
         </div>
         <div class="about-image">
           <img src="assets/images/aboutschool.jpg" alt="asdf">
@@ -56,52 +62,70 @@
       <div class="schools-grid">
         <div class="school-card" *ngFor="let school of fetchedSchools">
           <div class="school-image">
-            <img [src]="getSchoolImageUrl(school)" alt="{{ currentLanguage === 'english' ? school.schoolNameEn : school.schoolNameTa }}">
+            <img [src]="getSchoolImageUrl(school)"
+              alt="{{ currentLanguage === 'english' ? school.schoolNameEn : school.schoolNameTa }}">
           </div>
           <div class="school-info">
             <h3>{{ currentLanguage === 'english' ? school.schoolNameEn : school.schoolNameTa }}</h3>
-            <p class="location">{{ currentLanguage === 'english' ? school.district + ', ' + school.block : school.district + ', ' + school.block }}</p>
-            <p class="needs">{{ getNeedsText(school) }}</p> <div class="progress-container">
+            <p class="location">{{ currentLanguage === 'english' ? school.district + ', ' + school.block :
+              school.district + ', ' + school.block }}</p>
+            <p class="needs">{{ getNeedsText(school) }}</p>
+            <div class="progress-container">
               <div class="progress-bar" [style]="getProgressBarStyle(school)"></div>
-              <span>{{ getDisplayProgress(school) }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி திரட்டப்பட்டது' }}</span>
+              <span>{{ getDisplayProgress(school) }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி
+                திரட்டப்பட்டது' }}</span>
             </div>
-            
-            <a (click)="openAuthModal('login')" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
+
+            <a (click)="openAuthModal('login')" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This
+              School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
+            <a (click)="showMapForSchool(school)" class="btn btn-small">View School Location</a>
           </div>
         </div>
         <div *ngIf="fetchedSchools.length === 0" class="no-schools-message">
-          <p>{{ currentLanguage === 'english' ? 'No featured school projects available yet. Please check back later!' : 'சிறப்புப் பள்ளி திட்டங்கள் எதுவும் தற்போது இல்லை. பின்னர் சரிபார்க்கவும்!' }}</p>
+          <p>{{ currentLanguage === 'english' ? 'No featured school projects available yet. Please check back later!' :
+            'சிறப்புப் பள்ளி திட்டங்கள் எதுவும் தற்போது இல்லை. பின்னர் சரிபார்க்கவும்!' }}</p>
         </div>
       </div>
     </div>
   </section>
-
+<div class="modal" [ngClass]="{ 'show': showMap }">
+  <div class="modal-content">
+    <span class="close" (click)="closeMap()">&times;</span>
+    <h3>Location of: {{ selectedSchoolName }}</h3>
+    <div id="schoolMap" style="height: 400px; margin-top: 20px;"></div>
+  </div>
+</div>
   <section class="success-stories">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'Recent Success Stories' : 'சமீபத்திய வெற்றிக் கதைகள்' }}</h2>
       <div class="stories-grid">
         <div class="story-card" *ngFor="let story of successStories">
           <div class="story-image">
-            <img [src]="story.image" alt="Success story">
+
           </div>
           <div class="story-content">
             <h3>{{ currentLanguage === 'english' ? story.title : story.titleTa }}</h3>
             <p>{{ currentLanguage === 'english' ? story.description : story.descriptionTa }}</p>
             <p class="date">{{ story.date }}</p>
-            <a routerLink="/successstories" class="btn btn-small">{{ currentLanguage === 'english' ? 'Read More' : 'மேலும் படிக்க' }}</a>
+            <a routerLink="/successstories" class="btn btn-small">{{ currentLanguage === 'english' ? 'Read More' :
+              'மேலும் படிக்க' }}</a>
           </div>
         </div>
       </div>
     </div>
   </section>
-  
+
   <section class="cta-section">
     <div class="container">
-      <h2>{{ currentLanguage === 'english' ? 'Join Us in Transforming Schools' : 'பள்ளிகளை மாற்றுவதில் எங்களுடன் இணையுங்கள்' }}</h2>
-      <p>{{ currentLanguage === 'english' ? 'Your support can make a lasting difference in the lives of thousands of students' : 'ஆயிரக்கணக்கான மாணவர்களின் வாழ்க்கையில் உங்கள் ஆதரவு நீடித்த மாற்றத்தை ஏற்படுத்தும்' }}</p>
+      <h2>{{ currentLanguage === 'english' ? 'Join Us in Transforming Schools' : 'பள்ளிகளை மாற்றுவதில் எங்களுடன்
+        இணையுங்கள்' }}</h2>
+      <p>{{ currentLanguage === 'english' ? 'Your support can make a lasting difference in the lives of thousands of
+        students' : 'ஆயிரக்கணக்கான மாணவர்களின் வாழ்க்கையில் உங்கள் ஆதரவு நீடித்த மாற்றத்தை ஏற்படுத்தும்' }}</p>
       <div class="cta-buttons">
-        <a (click)="openAuthModal('login')" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' : 'இப்போதுநன்கொடை அளிக்கவும்' }}</a>
-        <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Volunteer Today' : 'இன்றே தன்னார்வலராகுங்கள்' }}</a>
+        <a (click)="openAuthModal('login')" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' :
+          'இப்போதுநன்கொடை அளிக்கவும்' }}</a>
+        <a routerLink="/volunteer" class="btn btn-secondary">{{ currentLanguage === 'english' ? 'Volunteer Today' :
+          'இன்றே தன்னார்வலராகுங்கள்' }}</a>
       </div>
     </div>
   </section>
@@ -113,8 +137,11 @@
         <div class="logo-wrapper">
           <img src="assets/images/govt_logo.jpeg" alt="Government of Tamil Nadu Logo" class="govt-logo">
         </div>
-        <div class="footer-logo-text"> <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி' }}</h3>
-          <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம் சிறந்த எதிர்காலத்தை உருவாக்குதல்' }}</p>
+        <div class="footer-logo-text">
+          <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி
+            புதுப்பித்தல் முயற்சி' }}</h3>
+          <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம் சிறந்த
+            எதிர்காலத்தை உருவாக்குதல்' }}</p>
         </div>
       </div>
       <div class="footer-links">
@@ -122,7 +149,7 @@
         <ul>
           <li><a routerLink="/">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
           <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
-          <li><a (click)="openAuthModal('login')" >{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
+          <li><a (click)="openAuthModal('login')">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
           <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a></li>
         </ul>
       </div>
@@ -133,7 +160,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {{ currentYear }} {{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative. All rights reserved.' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}</p>
+      <p>&copy; {{ currentYear }} {{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative. All
+        rights reserved.' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}</p>
     </div>
   </div>
 </footer>

@@ -68,7 +68,7 @@ export class App implements OnInit { // Your root component class is named App
     // This method should only be called for 'login' events from auth-modal.component.ts
     // (because we removed the emit for 'register' in auth-modal.component.ts)
     this.showAuthModal = false; // Close the modal for successful login
-
+    document.body.classList.remove('modal-open');
     if (event.type === 'login') {
       // Redirect to the donate page after successful login
       if (this.selectedSchoolForDonationId) {

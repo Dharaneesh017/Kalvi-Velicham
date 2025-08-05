@@ -39,7 +39,7 @@ interface WhyVolunteerItem {
   templateUrl: './volunteer.html',
   styleUrls: ['./volunteer.css'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  
 })
 export class VolunteerComponent implements OnInit {
   volunteerForm!: FormGroup;

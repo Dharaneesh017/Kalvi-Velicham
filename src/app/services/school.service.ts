@@ -3,9 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// --- Define Interfaces Here ---
-// This interface defines the structure of the data that will be sent TO your Node.js backend
-// It should match your Mongoose Schema fields exactly.
+
 export interface SchoolFormData {
   schoolNameEn: string;
   schoolNameTa: string;
@@ -61,6 +59,7 @@ export interface FetchedSchool {
   conditionPhotos?: string;
   budgetEstimates?: string;
   submittedAt: Date; // From your backend schema
+  image?: string; // Added optional image property to fix the error
 }
 // --- End Interfaces ---
 

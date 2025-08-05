@@ -76,11 +76,18 @@
             "assets": [
             "src/assets",
             "src/assets/images",
-            "src/favicon.ico"
+            "src/favicon.ico",
+    {
+    "glob": "**/*",
+    "input": "node_modules/leaflet/dist/images/",
+    "output": "assets/leaflet/" 
+  }
 ],
 
             "styles": [
+              "node_modules/leaflet/dist/leaflet.css",
               "src/styles.css"
+
             ]
     
 

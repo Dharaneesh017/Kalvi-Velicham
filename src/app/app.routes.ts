@@ -5,7 +5,7 @@ import { Contact } from './pages/contact/contact';
 import {  SchoolsComponent } from './pages/schools/schools';
 import {  VolunteerComponent } from './pages/volunteer/volunteer';
 import { Successstories } from './pages/successstories/successstories';
-import { Donate } from './pages/donate/donate';
+import { DonateComponent } from './pages/donate/donate';
 
 export const routes: Routes = [
   { path: '',component:Home },
@@ -14,6 +14,6 @@ export const routes: Routes = [
   { path: 'schools', component:SchoolsComponent },
   { path: 'volunteer',  component: VolunteerComponent},
   { path: 'successstories', component: Successstories },
-  { path: 'donate', component: Donate },
+  { path: 'donate', component:DonateComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

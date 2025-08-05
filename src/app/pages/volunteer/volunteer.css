@@ -28,7 +28,7 @@ body {
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--light-gray);
-  /* The 'overflow: hidden' for body will be handled by TypeScript now */
+  
 }
 
 
@@ -342,14 +342,14 @@ textarea.form-control {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+background-color: rgb(6 4 2 / 27%);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1050;
   animation: fadeInOverlay 0.3s ease-out;
   /* Removed overflow-y: auto from here to prevent double scrollbars if modal-content also scrolls */
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
 }
 
@@ -361,7 +361,7 @@ textarea.form-control {
   width: 90%; /* Increased width for more space */
   max-width: 800px; /* Increased max-width for larger screens */
   /* min-height: 60vh; /* Ensure a minimum height for the modal */
-  max-height: 90vh; /* Allow modal to take up more vertical space but still fit */
+  max-height: 88vh; /* Allow modal to take up more vertical space but still fit */
   overflow-y: auto; /* IMPORTANT: Allow scrolling *inside* the modal content if it overflows */
   animation: slideInModal 0.4s ease-out forwards;
   opacity: 0;

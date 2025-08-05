@@ -8,7 +8,7 @@
     <nav class="nav-links" [class.mobile-open]="isMobileMenuOpen">
       <a routerLink="/" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a>
       <a routerLink="/schools" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Schools Registration' : 'பள்ளிகள் பதிவு' }}</a>
-      <li><a (click)="openAuthModalForDonate()" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Donate' :
+      <li><a (click)="openAuthModal('login')" >{{ currentLanguage === 'english' ? 'Donate' :
           'நன்கொடை' }}</a></li>
       <a routerLink="/volunteer" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a>
       <a routerLink="/successstories" routerLinkActive="active">{{ currentLanguage === 'english' ? 'Success Stories' : 'வெற்றிக் கதைகள்' }}</a>
@@ -32,3 +32,6 @@
     </button>
   </div>
 </header>
+<app-auth-modal *ngIf="showAuthModal" [initialTab]="authModalInitialTab" (closeModalEvent)="onAuthModalClose()"
+  (authSuccess)="onAuthSuccess($event)">
+</app-auth-modal>

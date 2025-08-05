@@ -6,7 +6,10 @@
       <button (click)="openFormModal()" class="btn btn-primary hero-btn">{{ getTranslatedText('Register Now', 'இப்போதே பதிவு செய்யவும்') }}</button>
     </div>
   </section>
-
+  <div class="modal-overlay" *ngIf="isFormModalOpen" (click)="closeFormModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+    </div>
+  </div>
   <section class="why-volunteer-section fade-in">
     <div class="container">
       <h2 class="section-heading">{{ getTranslatedText('Why Volunteer with Us?', 'ஏன் எங்களுடன் தன்னார்வத் தொண்டு செய்ய வேண்டும்?') }}</h2>
