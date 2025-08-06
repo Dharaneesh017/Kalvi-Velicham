@@ -17,7 +17,6 @@
         </div>
     </div>
 
-    <!-- Featured Schools Section -->
     <div class="schools-section" *ngIf="!selectedSchool">
         <h2 class="section-title">Featured Government Schools in Need</h2>
         <p class="section-subtitle">You are about to make a difference in the lives of students at a Tamil Nadu
@@ -44,218 +43,151 @@
         </div>
     </div>
 
-    <!-- Modal for Donation Form -->
-<div class="modal" [class.show]="selectedSchool">
-    <div class="modal-content">
-        <span class="close-btn" (click)="closeModal()">&times;</span>
-        <div class="donation-form-section">
-            <form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
-                <div class="form-header">
-                    <h2>Support {{selectedSchool?.schoolNameEn}}</h2>
-                    <p>You are about to make a difference in the lives of students at
-                        {{selectedSchool?.schoolNameEn}}. Your
-                        support will help renovate their classrooms, provide better learning tools, and build a
-                        brighter tomorrow.</p>
-                </div>
+    <div class="modal" [class.show]="selectedSchool">
+        <div class="modal-content">
+            <span class="close-btn" (click)="closeModal()">×</span>
+            <div class="donation-form-section">
+                <form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
+                    <div class="form-header">
+                        <h2>Support {{selectedSchool?.schoolNameEn}}</h2>
+                        <p>You are about to make a difference in the lives of students at
+                            {{selectedSchool?.schoolNameEn}}. Your
+                            support will help renovate their classrooms, provide better learning tools, and build a
+                            brighter tomorrow.</p>
+                    </div>
 
-                <div class="form-steps-indicator">
-                    <div class="step" [class.active]="currentStep === 1">
-                        <div class="step-circle">1</div>
-                        <div class="step-label">Personal Info</div>
-                    </div>
-                    <div class="step-line"></div>
-                    <div class="step" [class.active]="currentStep === 2">
-                        <div class="step-circle">2</div>
-                        <div class="step-label">Donation Amount</div>
-                    </div>
-                    <div class="step-line"></div>
-                    <div class="step" [class.active]="currentStep === 3">
-                        <div class="step-circle">3</div>
-                        <div class="step-label">Payment</div>
-                    </div>
-                </div>
-
-                <div class="step-content" *ngIf="currentStep === 1">
-                    <div class="form-group" [class.focused]="donationForm.get('name')?.value"
-                        [class.has-value]="donationForm.get('name')?.value">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" formControlName="name" placeholder="Enter your full name" required
-                            (focus)="donationForm.get('name')?.markAsTouched()"
-                            (blur)="donationForm.get('name')?.markAsTouched()">
-                        <div *ngIf="donationForm.get('name')?.invalid && donationForm.get('name')?.touched"
-                            class="error-message">
-                            Name is required.
+                    <div class="form-steps-indicator">
+                        <div class="step" [class.active]="currentStep === 1">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">Personal Info</div>
                         </div>
-                    </div>
-                    <div class="form-group" [class.focused]="donationForm.get('email')?.value"
-                        [class.has-value]="donationForm.get('email')?.value">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" formControlName="email" placeholder="Enter your email" required
-                            (focus)="donationForm.get('email')?.markAsTouched()"
-                            (blur)="donationForm.get('email')?.markAsTouched()">
-                        <div *ngIf="donationForm.get('email')?.invalid && donationForm.get('email')?.touched"
-                            class="error-message">
-                            <span *ngIf="donationForm.get('email')?.errors?.['required']">Email is required.</span>
-                            <span *ngIf="donationForm.get('email')?.errors?.['email']">Please enter a valid email
-                                address.</span>
+                        <div class="step-line"></div>
+                        <div class="step" [class.active]="currentStep === 2">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Donation Amount</div>
                         </div>
-                    </div>
-                    <div class="form-group" [class.focused]="donationForm.get('phone')?.value"
-                        [class.has-value]="donationForm.get('phone')?.value">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" formControlName="phone" placeholder="Enter your phone number"
-                            (focus)="donationForm.get('phone')?.markAsTouched()"
-                            (blur)="donationForm.get('phone')?.markAsTouched()">
-                        <div *ngIf="donationForm.get('phone')?.invalid && donationForm.get('phone')?.touched"
-                            class="error-message">
-                            Please enter a valid 10-digit phone number.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step-content" *ngIf="currentStep === 2">
-                    <div class="form-group">
-                        <label>Donation Amount (₹)</label>
-                        <div class="quick-amounts">
-                            <button type="button" *ngFor="let option of quickAmounts"
-                                [class.selected]="donationForm.value.amount === option" (click)="selectAmount(option)">
-                                ₹{{option | number}}
-                            </button>
-                        </div>
-                        <div class="custom-amount">
-                            <span class="currency-symbol">₹</span>
-                            <input type="number" id="amount" formControlName="amount" placeholder="Enter custom amount"
-                                min="100" step="100" required (focus)="donationForm.get('amount')?.markAsTouched()"
-                                (blur)="donationForm.get('amount')?.markAsTouched()">
-                        </div>
-                        <div *ngIf="donationForm.get('amount')?.invalid && donationForm.get('amount')?.touched"
-                            class="error-message">
-                            <span *ngIf="donationForm.get('amount')?.errors?.['required']">Donation amount is
-                                required.</span>
-                            <span *ngIf="donationForm.get('amount')?.errors?.['min']">Amount must be at least
-                                ₹100.</span>
+                        <div class="step-line"></div>
+                        <div class="step" [class.active]="currentStep === 3">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Payment</div>
                         </div>
                     </div>
 
-                    <div class="form-group" [class.focused]="donationForm.get('dedication')?.value">
-                        <label>Dedication (Optional)</label>
-                        <textarea formControlName="dedication" placeholder="In honor/memory of someone special?"
-                            (focus)="donationForm.get('dedication')?.markAsTouched()"
-                            (blur)="donationForm.get('dedication')?.markAsTouched()"></textarea>
-                    </div>
-                </div>
-
-                <div class="step-content" *ngIf="currentStep === 3">
-                    <div class="form-group">
-                        <label>Choose a Payment Method</label>
-                        <div class="payment-methods-grid">
-                            <div class="payment-method-card" *ngFor="let method of paymentMethods"
-                                [class.selected]="selectedPayment === method.id"
-                                (click)="selectPaymentMethod(method.id)">
-                                <div class="method-icon"><i class="{{ method.icon }}"></i></div>
-                                <div class="method-info">
-                                    <h4>{{method.name}}</h4>
-                                    <p>{{method.description}}</p>
-                                </div>
+                    <div class="step-content" *ngIf="currentStep === 1">
+                        <div class="form-group" [class.focused]="donationForm.get('name')?.value"
+                            [class.has-value]="donationForm.get('name')?.value">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" formControlName="name" placeholder="Enter your full name"
+                                required>
+                            <div *ngIf="donationForm.get('name')?.invalid && donationForm.get('name')?.touched"
+                                class="error-message">
+                                Name is required.
                             </div>
                         </div>
-                        <div *ngIf="donationForm.get('paymentMethod')?.invalid && donationForm.get('paymentMethod')?.touched"
-                            class="error-message">
-                            Please select a payment method.
-                        </div>
-                    </div>
-
-                    <div class="card-payment-details" *ngIf="selectedPayment === 'credit_card'">
-                        <div class="form-row">
-                            <div class="form-group half-width" [class.focused]="donationForm.get('cardNumber')?.value"
-                                [class.has-value]="donationForm.get('cardNumber')?.value">
-                                <label for="cardNumber">Card Number</label>
-                                <input type="text" id="cardNumber" formControlName="cardNumber"
-                                    placeholder="1234 5678 9012 3456" maxlength="19"
-                                    (focus)="donationForm.get('cardNumber')?.markAsTouched()"
-                                    (blur)="donationForm.get('cardNumber')?.markAsTouched()">
-                                <div *ngIf="donationForm.get('cardNumber')?.invalid && donationForm.get('cardNumber')?.touched"
-                                    class="error-message">
-                                    Card number is required.
-                                </div>
-                            </div>
-                            <div class="form-group half-width" [class.focused]="donationForm.get('cardName')?.value"
-                                [class.has-value]="donationForm.get('cardName')?.value">
-                                <label for="cardName">Name on Card</label>
-                                <input type="text" id="cardName" formControlName="cardName"
-                                    placeholder="Name as shown on card"
-                                    (focus)="donationForm.get('cardName')?.markAsTouched()"
-                                    (blur)="donationForm.get('cardName')?.markAsTouched()">
-                                <div *ngIf="donationForm.get('cardName')?.invalid && donationForm.get('cardName')?.touched"
-                                    class="error-message">
-                                    Name on card is required.
-                                </div>
+                        <div class="form-group" [class.focused]="donationForm.get('email')?.value"
+                            [class.has-value]="donationForm.get('email')?.value">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" formControlName="email" placeholder="Enter your email"
+                                required>
+                            <div *ngIf="donationForm.get('email')?.invalid && donationForm.get('email')?.touched"
+                                class="error-message">
+                                <span *ngIf="donationForm.get('email')?.errors?.['required']">Email is required.</span>
+                                <span *ngIf="donationForm.get('email')?.errors?.['email']">Please enter a valid email
+                                    address.</span>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group third-width" [class.focused]="donationForm.get('expiry')?.value"
-                                [class.has-value]="donationForm.get('expiry')?.value">
-                                <label for="expiry">Expiry</label>
-                                <input type="text" id="expiry" formControlName="expiry" placeholder="MM/YY"
-                                    maxlength="5" (focus)="donationForm.get('expiry')?.markAsTouched()"
-                                    (blur)="donationForm.get('expiry')?.markAsTouched()">
-                                <div *ngIf="donationForm.get('expiry')?.invalid && donationForm.get('expiry')?.touched"
-                                    class="error-message">
-                                    Expiry is required (MM/YY format).
-                                </div>
-                            </div>
-                            <div class="form-group third-width" [class.focused]="donationForm.get('cvv')?.value"
-                                [class.has-value]="donationForm.get('cvv')?.value">
-                                <label for="cvv">CVV</label>
-                                <input type="text" id="cvv" formControlName="cvv" placeholder="123" maxlength="3"
-                                    (focus)="donationForm.get('cvv')?.markAsTouched()"
-                                    (blur)="donationForm.get('cvv')?.markAsTouched()">
-                                <div *ngIf="donationForm.get('cvv')?.invalid && donationForm.get('cvv')?.touched"
-                                    class="error-message">
-                                    CVV is required (3-4 digits).
-                                </div>
+                        <div class="form-group" [class.focused]="donationForm.get('phone')?.value"
+                            [class.has-value]="donationForm.get('phone')?.value">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" formControlName="phone" placeholder="Enter your phone number">
+                            <div *ngIf="donationForm.get('phone')?.invalid && donationForm.get('phone')?.touched"
+                                class="error-message">
+                                Please enter a valid 10-digit phone number.
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" formControlName="coverFees">
-                            Add ₹{{feeAmount | number}} to cover payment processing fees
-                        </label>
+                    <div class="step-content" *ngIf="currentStep === 2">
+                        <div class="form-group">
+                            <label>Donation Amount (₹)</label>
+                            <div class="quick-amounts">
+                                <button type="button" *ngFor="let option of quickAmounts"
+                                    [class.selected]="donationForm.value.amount === option"
+                                    (click)="selectAmount(option)">
+                                    ₹{{option | number}}
+                                </button>
+                            </div>
+                            <div class="custom-amount">
+                                <span class="currency-symbol">₹</span>
+                                <input type="number" id="amount" formControlName="amount"
+                                    placeholder="Enter custom amount" min="100" step="100" required>
+                            </div>
+                            <div *ngIf="donationForm.get('amount')?.invalid && donationForm.get('amount')?.touched"
+                                class="error-message">
+                                <span *ngIf="donationForm.get('amount')?.errors?.['required']">Donation amount is
+                                    required.</span>
+                                <span *ngIf="donationForm.get('amount')?.errors?.['min']">Amount must be at least
+                                    ₹100.</span>
+                            </div>
+                        </div>
+                        <div class="form-group" [class.focused]="donationForm.get('dedication')?.value">
+                            <label>Dedication (Optional)</label>
+                            <textarea formControlName="dedication"
+                                placeholder="In honor/memory of someone special?"></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Form Navigation and Loading State -->
-                <div class="form-navigation">
-                    <button type="button" class="btn-secondary" *ngIf="currentStep > 1" (click)="prevStep()">
-                        Back
-                    </button>
-                    <button type="button" class="btn-primary" *ngIf="currentStep < 3" (click)="nextStep()"
-                        [disabled]="!isCurrentStepValid()">
-                        Continue
-                    </button>
-                    <button type="submit" class="btn-primary" *ngIf="currentStep === 3"
-                        [disabled]="!donationForm.valid || isProcessing">
-                        <span *ngIf="!isProcessing">Complete Donation</span>
-                        <span *ngIf="isProcessing">
-                            <i class="fas fa-spinner fa-spin"></i> Processing...
-                        </span>
-                    </button>
-                </div>
-            </form>
-            <p class="bottom-info">All donations directly support infrastructure and learning resources for the
-                selected school.</p>
+                    <div class="step-content" *ngIf="currentStep === 3">
+                        <div class="form-group">
+                            <label>Choose a Payment Method</label>
+                            <div class="payment-methods-grid">
+                                <div class="payment-method-card" *ngFor="let method of paymentMethods"
+                                    [class.selected]="selectedPayment === method.id"
+                                    (click)="selectPaymentMethod(method.id)">
+                                    <div class="method-icon"><i class="{{ method.icon }}"></i></div>
+                                    <div class="method-info">
+                                        <h4>{{method.name}}</h4>
+                                        <p>{{method.description}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="donationForm.get('paymentMethod')?.invalid && donationForm.get('paymentMethod')?.touched"
+                                class="error-message">
+                                Please select a payment method.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" formControlName="coverFees">
+                                Add ₹{{feeAmount | number}} to cover payment processing fees
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" class="btn-secondary" *ngIf="currentStep > 1" (click)="prevStep()">
+                            Back
+                        </button>
+                        <button type="button" class="btn-primary" *ngIf="currentStep < 3" (click)="nextStep()"
+                            [disabled]="!isCurrentStepValid()">
+                            Continue
+                        </button>
+                        <button type="submit" class="btn-primary" *ngIf="currentStep === 3"
+                            [disabled]="!donationForm.valid || isProcessing">
+                            <span *ngIf="!isProcessing">Proceed to Pay</span>
+                            <span *ngIf="isProcessing">
+                                <i class="fas fa-spinner fa-spin"></i> Processing...
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-                <p class="bottom-info">All donations directly support infrastructure and learning resources for the
-                    selected
-                    school.</p>
-            </div>
-        
 
-
+    <p class="bottom-info">All donations directly support infrastructure and learning resources for the selected school.
+    </p>
 
     <div class="impact-gallery">
         <h2 class="section-title">See Your Impact</h2>
@@ -318,3 +250,4 @@
             </div>
         </div>
     </footer>
+</div>

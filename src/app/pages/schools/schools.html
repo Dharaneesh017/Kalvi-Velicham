@@ -1,9 +1,12 @@
 <main class="main-content">
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">{{ getTranslatedText('School Renovation Application', 'பள்ளி புதுப்பித்தல் விண்ணப்பம்') }}</h1>
+      <h1 class="page-title">{{ getTranslatedText('School Renovation Application', 'பள்ளி புதுப்பித்தல் விண்ணப்பம்') }}
+      </h1>
       <p class="page-subtitle">
-        {{ getTranslatedText('Apply for government school renovation under the Tamil Nadu School Infrastructure Development Program.', 'தமிழ்நாடு பள்ளி உட்கட்டமைப்பு மேம்பாட்டுத் திட்டத்தின் கீழ் அரசுப் பள்ளி புதுப்பித்தலுக்கு விண்ணப்பிக்கவும்.') }}
+        {{ getTranslatedText('Apply for government school renovation under the Tamil Nadu School Infrastructure
+        Development Program.', 'தமிழ்நாடு பள்ளி உட்கட்டமைப்பு மேம்பாட்டுத் திட்டத்தின் கீழ் அரசுப் பள்ளி
+        புதுப்பித்தலுக்கு விண்ணப்பிக்கவும்.') }}
       </p>
     </div>
 
@@ -32,46 +35,52 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label class="form-label">
-              {{ getTranslatedText('Select District', 'மாவட்டத்தைத் தேர்ந்தெடுக்கவும்') }} <span class="required">*</span>
+              {{ getTranslatedText('Select District', 'மாவட்டத்தைத் தேர்ந்தெடுக்கவும்') }} <span
+                class="required">*</span>
             </label>
-            <select
-              class="form-control"
-              formControlName="selectedDistrict"
+            <select class="form-control" formControlName="selectedDistrict"
               [class.is-invalid]="schoolForm.get('basicInfo.selectedDistrict')?.invalid && schoolForm.get('basicInfo.selectedDistrict')?.touched">
               <option value="">{{ getTranslatedText('Choose District', 'மாவட்டத்தைத் தேர்வு செய்க') }}</option>
               <option *ngFor="let district of districts" [value]="district">
                 {{district}}
               </option>
             </select>
-            <div *ngIf="schoolForm.get('basicInfo.selectedDistrict')?.invalid && schoolForm.get('basicInfo.selectedDistrict')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.selectedDistrict')?.invalid && schoolForm.get('basicInfo.selectedDistrict')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('District selection is required', 'மாவட்டம் தேர்வு செய்வது அவசியம்') }}
             </div>
           </div>
 
           <div class="form-group col-md-6">
             <label class="form-label">
-              {{ getTranslatedText('Select Government School', 'அரசுப் பள்ளியைத் தேர்ந்தெடுக்கவும்') }} <span class="required">*</span>
+              {{ getTranslatedText('Select Government School', 'அரசுப் பள்ளியைத் தேர்ந்தெடுக்கவும்') }} <span
+                class="required">*</span>
             </label>
-            <select
-              class="form-control"
-              formControlName="selectedSchoolId"
+            <select class="form-control" formControlName="selectedSchoolId"
               [class.is-invalid]="schoolForm.get('basicInfo.selectedSchoolId')?.invalid && schoolForm.get('basicInfo.selectedSchoolId')?.touched">
               <option value="">{{ getTranslatedText('Choose School', 'பள்ளியைத் தேர்வு செய்க') }}</option>
               <option *ngFor="let school of filteredSchools" [value]="school.id">
                 {{ getTranslatedText(school.name, school.nameTa) }} ({{school.udiseCode}})
               </option>
             </select>
-            <div *ngIf="schoolForm.get('basicInfo.selectedSchoolId')?.invalid && schoolForm.get('basicInfo.selectedSchoolId')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.selectedSchoolId')?.invalid && schoolForm.get('basicInfo.selectedSchoolId')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('School selection is required', 'பள்ளி தேர்வு செய்வது அவசியம்') }}
             </div>
-            <div *ngIf="schoolForm.get('basicInfo.selectedDistrict')?.value && filteredSchools.length === 0" class="alert alert-info mt-2">
-              {{ getTranslatedText('No government schools found in', 'அரசுப் பள்ளிகள் எதுவும் இல்லை') }} {{schoolForm.get('basicInfo.selectedDistrict')?.value}} {{ getTranslatedText('district.', 'மாவட்டத்தில்.') }}
+            <div *ngIf="schoolForm.get('basicInfo.selectedDistrict')?.value && filteredSchools.length === 0"
+              class="alert alert-info mt-2">
+              {{ getTranslatedText('No government schools found in', 'அரசுப் பள்ளிகள் எதுவும் இல்லை') }}
+              {{schoolForm.get('basicInfo.selectedDistrict')?.value}} {{ getTranslatedText('district.', 'மாவட்டத்தில்.')
+              }}
             </div>
           </div>
         </div>
 
         <hr class="form-divider">
-        <h3 class="section-subtitle">{{ getTranslatedText('Auto-populated School Details', 'தானாக நிரப்பப்பட்ட பள்ளி விவரங்கள்') }}</h3>
+        <h3 class="section-subtitle">{{ getTranslatedText('Auto-populated School Details', 'தானாக நிரப்பப்பட்ட பள்ளி
+          விவரங்கள்') }}</h3>
 
         <div class="form-row">
           <div class="form-group col-md-6">
@@ -80,7 +89,9 @@
             </label>
             <input type="text" class="form-control" formControlName="schoolNameEn" readonly
               [class.is-invalid]="schoolForm.get('basicInfo.schoolNameEn')?.invalid && schoolForm.get('basicInfo.schoolNameEn')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.schoolNameEn')?.invalid && schoolForm.get('basicInfo.schoolNameEn')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.schoolNameEn')?.invalid && schoolForm.get('basicInfo.schoolNameEn')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('School name in English is required', 'ஆங்கிலத்தில் பள்ளி பெயர் அவசியம்') }}
             </div>
           </div>
@@ -91,7 +102,9 @@
             </label>
             <input type="text" class="form-control" formControlName="schoolNameTa" readonly
               [class.is-invalid]="schoolForm.get('basicInfo.schoolNameTa')?.invalid && schoolForm.get('basicInfo.schoolNameTa')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.schoolNameTa')?.invalid && schoolForm.get('basicInfo.schoolNameTa')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.schoolNameTa')?.invalid && schoolForm.get('basicInfo.schoolNameTa')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('School name in Tamil is required', 'தமிழில் பள்ளி பெயர் அவசியம்') }}
             </div>
           </div>
@@ -104,10 +117,13 @@
             </label>
             <input type="text" class="form-control" formControlName="udiseCode" readonly
               [class.is-invalid]="schoolForm.get('basicInfo.udiseCode')?.invalid && schoolForm.get('basicInfo.udiseCode')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.udiseCode')?.invalid && schoolForm.get('basicInfo.udiseCode')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.udiseCode')?.invalid && schoolForm.get('basicInfo.udiseCode')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('11-digit UDISE code is required', '11 இலக்க யு.டி.ஐ.எஸ்.இ குறியீடு அவசியம்') }}
             </div>
-            <small class="form-text text-muted">{{ getTranslatedText('Auto-populated from school selection', 'பள்ளித் தேர்வில் இருந்து தானாக நிரப்பப்பட்டது') }}</small>
+            <small class="form-text text-muted">{{ getTranslatedText('Auto-populated from school selection', 'பள்ளித்
+              தேர்வில் இருந்து தானாக நிரப்பப்பட்டது') }}</small>
           </div>
 
           <div class="form-group col-md-6">
@@ -116,7 +132,9 @@
             </label>
             <input type="text" class="form-control" formControlName="schoolType" readonly
               [class.is-invalid]="schoolForm.get('basicInfo.schoolType')?.invalid && schoolForm.get('basicInfo.schoolType')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.schoolType')?.invalid && schoolForm.get('basicInfo.schoolType')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.schoolType')?.invalid && schoolForm.get('basicInfo.schoolType')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('School type is required', 'பள்ளி வகை அவசியம்') }}
             </div>
           </div>
@@ -129,7 +147,8 @@
             </label>
             <input type="text" class="form-control" formControlName="district" readonly
               [class.is-invalid]="schoolForm.get('basicInfo.district')?.invalid && schoolForm.get('basicInfo.district')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.district')?.invalid && schoolForm.get('basicInfo.district')?.touched" class="invalid-feedback">
+            <div *ngIf="schoolForm.get('basicInfo.district')?.invalid && schoolForm.get('basicInfo.district')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('District is required', 'மாவட்டம் அவசியம்') }}
             </div>
           </div>
@@ -140,7 +159,8 @@
             </label>
             <input type="text" class="form-control" formControlName="block" readonly
               [class.is-invalid]="schoolForm.get('basicInfo.block')?.invalid && schoolForm.get('basicInfo.block')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.block')?.invalid && schoolForm.get('basicInfo.block')?.touched" class="invalid-feedback">
+            <div *ngIf="schoolForm.get('basicInfo.block')?.invalid && schoolForm.get('basicInfo.block')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('Block/Taluk is required', 'வட்டம்/தாலுகா அவசியம்') }}
             </div>
           </div>
@@ -152,7 +172,8 @@
           </label>
           <textarea class="form-control" formControlName="address" rows="3" readonly
             [class.is-invalid]="schoolForm.get('basicInfo.address')?.invalid && schoolForm.get('basicInfo.address')?.touched"></textarea>
-          <div *ngIf="schoolForm.get('basicInfo.address')?.invalid && schoolForm.get('basicInfo.address')?.touched" class="invalid-feedback">
+          <div *ngIf="schoolForm.get('basicInfo.address')?.invalid && schoolForm.get('basicInfo.address')?.touched"
+            class="invalid-feedback">
             {{ getTranslatedText('Address is required', 'முகவரி அவசியம்') }}
           </div>
         </div>
@@ -167,7 +188,8 @@
             </label>
             <input type="text" class="form-control" formControlName="pincode"
               [class.is-invalid]="schoolForm.get('basicInfo.pincode')?.invalid && schoolForm.get('basicInfo.pincode')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.pincode')?.invalid && schoolForm.get('basicInfo.pincode')?.touched" class="invalid-feedback">
+            <div *ngIf="schoolForm.get('basicInfo.pincode')?.invalid && schoolForm.get('basicInfo.pincode')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('6-digit pincode is required', '6 இலக்க பின்கோடு அவசியம்') }}
             </div>
           </div>
@@ -178,8 +200,11 @@
             </label>
             <input type="number" class="form-control" formControlName="establishedYear"
               [class.is-invalid]="schoolForm.get('basicInfo.establishedYear')?.invalid && schoolForm.get('basicInfo.establishedYear')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.establishedYear')?.invalid && schoolForm.get('basicInfo.establishedYear')?.touched" class="invalid-feedback">
-              {{ getTranslatedText('Valid year (1900-current year) is required', 'சரியான ஆண்டு (1900-தற்போதைய ஆண்டு) அவசியம்') }}
+            <div
+              *ngIf="schoolForm.get('basicInfo.establishedYear')?.invalid && schoolForm.get('basicInfo.establishedYear')?.touched"
+              class="invalid-feedback">
+              {{ getTranslatedText('Valid year (1900-current year) is required', 'சரியான ஆண்டு (1900-தற்போதைய ஆண்டு)
+              அவசியம்') }}
             </div>
           </div>
         </div>
@@ -187,12 +212,16 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label class="form-label">
-              {{ getTranslatedText('Current Student Enrollment', 'தற்போதைய மாணவர் சேர்க்கை') }} <span class="required">*</span>
+              {{ getTranslatedText('Current Student Enrollment', 'தற்போதைய மாணவர் சேர்க்கை') }} <span
+                class="required">*</span>
             </label>
             <input type="number" class="form-control" formControlName="studentCount"
               [class.is-invalid]="schoolForm.get('basicInfo.studentCount')?.invalid && schoolForm.get('basicInfo.studentCount')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.studentCount')?.invalid && schoolForm.get('basicInfo.studentCount')?.touched" class="invalid-feedback">
-              {{ getTranslatedText('Student count must be at least 1', 'மாணவர் எண்ணிக்கை குறைந்தது 1 ஆக இருக்க வேண்டும்') }}
+            <div
+              *ngIf="schoolForm.get('basicInfo.studentCount')?.invalid && schoolForm.get('basicInfo.studentCount')?.touched"
+              class="invalid-feedback">
+              {{ getTranslatedText('Student count must be at least 1', 'மாணவர் எண்ணிக்கை குறைந்தது 1 ஆக இருக்க
+              வேண்டும்') }}
             </div>
           </div>
 
@@ -202,8 +231,11 @@
             </label>
             <input type="number" class="form-control" formControlName="teacherCount"
               [class.is-invalid]="schoolForm.get('basicInfo.teacherCount')?.invalid && schoolForm.get('basicInfo.teacherCount')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.teacherCount')?.invalid && schoolForm.get('basicInfo.teacherCount')?.touched" class="invalid-feedback">
-              {{ getTranslatedText('Teacher count must be at least 1', 'ஆசிரியர் எண்ணிக்கை குறைந்தது 1 ஆக இருக்க வேண்டும்') }}
+            <div
+              *ngIf="schoolForm.get('basicInfo.teacherCount')?.invalid && schoolForm.get('basicInfo.teacherCount')?.touched"
+              class="invalid-feedback">
+              {{ getTranslatedText('Teacher count must be at least 1', 'ஆசிரியர் எண்ணிக்கை குறைந்தது 1 ஆக இருக்க
+              வேண்டும்') }}
             </div>
           </div>
         </div>
@@ -215,18 +247,23 @@
             </label>
             <input type="text" class="form-control" formControlName="principalName"
               [class.is-invalid]="schoolForm.get('basicInfo.principalName')?.invalid && schoolForm.get('basicInfo.principalName')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.principalName')?.invalid && schoolForm.get('basicInfo.principalName')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.principalName')?.invalid && schoolForm.get('basicInfo.principalName')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('Principal name is required', 'முதல்வர் பெயர் அவசியம்') }}
             </div>
           </div>
 
           <div class="form-group col-md-4">
             <label class="form-label">
-              {{ getTranslatedText('Principal Contact Number', 'முதல்வர் தொடர்பு எண்') }} <span class="required">*</span>
+              {{ getTranslatedText('Principal Contact Number', 'முதல்வர் தொடர்பு எண்') }} <span
+                class="required">*</span>
             </label>
             <input type="tel" class="form-control" formControlName="principalContact"
               [class.is-invalid]="schoolForm.get('basicInfo.principalContact')?.invalid && schoolForm.get('basicInfo.principalContact')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.principalContact')?.invalid && schoolForm.get('basicInfo.principalContact')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.principalContact')?.invalid && schoolForm.get('basicInfo.principalContact')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('10-digit contact number is required', '10 இலக்க தொடர்பு எண் அவசியம்') }}
             </div>
           </div>
@@ -237,7 +274,9 @@
             </label>
             <input type="email" class="form-control" formControlName="principalEmail"
               [class.is-invalid]="schoolForm.get('basicInfo.principalEmail')?.invalid && schoolForm.get('basicInfo.principalEmail')?.touched">
-            <div *ngIf="schoolForm.get('basicInfo.principalEmail')?.invalid && schoolForm.get('basicInfo.principalEmail')?.touched" class="invalid-feedback">
+            <div
+              *ngIf="schoolForm.get('basicInfo.principalEmail')?.invalid && schoolForm.get('basicInfo.principalEmail')?.touched"
+              class="invalid-feedback">
               {{ getTranslatedText('Valid email is required', 'சரியான மின்னஞ்சல் அவசியம்') }}
             </div>
           </div>
@@ -252,20 +291,22 @@
 
         <div class="form-group">
           <label class="form-label">
-            {{ getTranslatedText('Areas Requiring Renovation', 'புதுப்பிக்க வேண்டிய பகுதிகள்') }} <span class="required">*</span>
+            {{ getTranslatedText('Areas Requiring Renovation', 'புதுப்பிக்க வேண்டிய பகுதிகள்') }} <span
+              class="required">*</span>
           </label>
           <div class="checkbox-grid">
             <div class="form-check" *ngFor="let area of renovationAreas; let i = index">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                [id]="area.id"
+              <input class="form-check-input" type="checkbox" [id]="area.id"
                 [formControl]="getRenovationAreaControl(i)">
-              <label class="form-check-label" [for]="area.id">{{ getTranslatedText(area.labelEn, area.labelTa) }}</label>
+              <label class="form-check-label" [for]="area.id">{{ getTranslatedText(area.labelEn, area.labelTa)
+                }}</label>
             </div>
           </div>
-          <div *ngIf="schoolForm.get('infrastructure.renovationAreas')?.invalid && schoolForm.get('infrastructure.renovationAreas')?.touched" class="invalid-feedback d-block">
-            {{ getTranslatedText('At least one area must be selected', 'குறைந்தது ஒரு பகுதியாவது தேர்ந்தெடுக்கப்பட வேண்டும்') }}
+          <div
+            *ngIf="schoolForm.get('infrastructure.renovationAreas')?.invalid && schoolForm.get('infrastructure.renovationAreas')?.touched"
+            class="invalid-feedback d-block">
+            {{ getTranslatedText('At least one area must be selected', 'குறைந்தது ஒரு பகுதியாவது தேர்ந்தெடுக்கப்பட
+            வேண்டும்') }}
           </div>
         </div>
 
@@ -276,16 +317,14 @@
             </label>
             <div class="priority-levels">
               <div *ngFor="let level of priorityLevels" class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  [id]="'priority-' + level.value"
-                  name="priority"
-                  [value]="level.value"
-                  formControlName="priority">
-                <label class="form-check-label" [for]="'priority-' + level.value">{{ getTranslatedText(level.labelEn, level.labelTa) }}</label>
+                <input class="form-check-input" type="radio" [id]="'priority-' + level.value" name="priority"
+                  [value]="level.value" formControlName="priority">
+                <label class="form-check-label" [for]="'priority-' + level.value">{{ getTranslatedText(level.labelEn,
+                  level.labelTa) }}</label>
               </div>
-              <div *ngIf="schoolForm.get('infrastructure.priority')?.invalid && schoolForm.get('infrastructure.priority')?.touched" class="invalid-feedback d-block">
+              <div
+                *ngIf="schoolForm.get('infrastructure.priority')?.invalid && schoolForm.get('infrastructure.priority')?.touched"
+                class="invalid-feedback d-block">
                 {{ getTranslatedText('Priority level is required', 'முன்னுரிமை நிலை அவசியம்') }}
               </div>
             </div>
@@ -296,26 +335,32 @@
               {{ getTranslatedText('Estimated Budget Range', 'மதிப்பீடு செய்யப்பட்ட பட்ஜெட் வரம்பு') }}
             </label>
             <select class="form-control" formControlName="budgetRange">
-              <option value="">{{ getTranslatedText('Select Budget Range', 'பட்ஜெட் வரம்பைத் தேர்ந்தெடுக்கவும்') }}</option>
-              <option *ngFor="let range of budgetRanges" [value]="range.value">{{ getTranslatedText(range.labelEn, range.labelTa) }}</option>
+              <option value="">{{ getTranslatedText('Select Budget Range', 'பட்ஜெட் வரம்பைத் தேர்ந்தெடுக்கவும்') }}
+              </option>
+              <option *ngFor="let range of budgetRanges" [value]="range.value">{{ getTranslatedText(range.labelEn,
+                range.labelTa) }}</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">
-            {{ getTranslatedText('Current Condition of Infrastructure', 'உள்கட்டமைப்பின் தற்போதைய நிலை') }} <span class="required">*</span>
+            {{ getTranslatedText('Current Condition of Infrastructure', 'உள்கட்டமைப்பின் தற்போதைய நிலை') }} <span
+              class="required">*</span>
           </label>
           <textarea class="form-control" formControlName="currentCondition" rows="4"
             [class.is-invalid]="schoolForm.get('infrastructure.currentCondition')?.invalid && schoolForm.get('infrastructure.currentCondition')?.touched"></textarea>
-          <div *ngIf="schoolForm.get('infrastructure.currentCondition')?.invalid && schoolForm.get('infrastructure.currentCondition')?.touched" class="invalid-feedback">
+          <div
+            *ngIf="schoolForm.get('infrastructure.currentCondition')?.invalid && schoolForm.get('infrastructure.currentCondition')?.touched"
+            class="invalid-feedback">
             {{ getTranslatedText('Current condition description is required', 'தற்போதைய நிலை விளக்கம் அவசியம்') }}
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">
-            {{ getTranslatedText('Expected Outcome After Renovation', 'புதுப்பித்தலுக்குப் பிறகு எதிர்பார்க்கப்படும் விளைவு') }}
+            {{ getTranslatedText('Expected Outcome After Renovation', 'புதுப்பித்தலுக்குப் பிறகு எதிர்பார்க்கப்படும்
+            விளைவு') }}
           </label>
           <textarea class="form-control" formControlName="expectedOutcome" rows="4"></textarea>
         </div>
@@ -330,36 +375,35 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label class="form-label">
-              {{ getTranslatedText('School Recognition Certificate', 'பள்ளி அங்கீகார சான்றிதழ்') }} <span class="required">*</span>
+              {{ getTranslatedText('School Recognition Certificate', 'பள்ளி அங்கீகார சான்றிதழ்') }} <span
+                class="required">*</span>
             </label>
             <div class="custom-file">
-              <input
-                type="file"
-                class="custom-file-input"
-                id="recognitionCert"
-                (change)="onFileChange($event, 'recognitionCert', 'documentation')"
-                required>
+              <input type="file" class="custom-file-input" id="recognitionCert"
+                (change)="onFileChange($event, 'recognitionCert', 'documentation')" required>
               <label class="custom-file-label" for="recognitionCert">
-                {{ schoolForm.get('documentation.recognitionCert')?.value?.name || getTranslatedText('Choose file', 'கோப்பைத் தேர்வு செய்க') }}
+                {{ (schoolForm.get('documentation.recognitionCert')?.value)?.name || getTranslatedText('Choose file',
+                'கோப்பைத் தேர்வு செய்க') }}
               </label>
             </div>
-            <div *ngIf="schoolForm.get('documentation.recognitionCert')?.invalid && schoolForm.get('documentation.recognitionCert')?.touched" class="invalid-feedback d-block">
+            <div
+              *ngIf="schoolForm.get('documentation.recognitionCert')?.invalid && schoolForm.get('documentation.recognitionCert')?.touched"
+              class="invalid-feedback d-block">
               {{ getTranslatedText('Recognition certificate is required', 'அங்கீகார சான்றிதழ் அவசியம்') }}
             </div>
           </div>
 
           <div class="form-group col-md-6">
             <label class="form-label">
-              {{ getTranslatedText('Previous Assessment Report (if any)', 'முந்தைய மதிப்பீட்டு அறிக்கை (ஏதேனும் இருந்தால்)') }}
+              {{ getTranslatedText('Previous Assessment Report (if any)', 'முந்தைய மதிப்பீட்டு அறிக்கை (ஏதேனும்
+              இருந்தால்)') }}
             </label>
             <div class="custom-file">
-              <input
-                type="file"
-                class="custom-file-input"
-                id="assessmentReport"
+              <input type="file" class="custom-file-input" id="assessmentReport"
                 (change)="onFileChange($event, 'assessmentReport', 'documentation')">
               <label class="custom-file-label" for="assessmentReport">
-                {{ schoolForm.get('documentation.assessmentReport')?.value?.name || getTranslatedText('Choose file', 'கோப்பைத் தேர்வு செய்க') }}
+                {{ (schoolForm.get('documentation.assessmentReport')?.value)?.name || getTranslatedText('Choose file',
+                'கோப்பைத் தேர்வு செய்க') }}
               </label>
             </div>
           </div>
@@ -368,41 +412,57 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label class="form-label">
-              {{ getTranslatedText('Current Condition Photos', 'தற்போதைய நிலை புகைப்படங்கள்') }} <span class="required">*</span>
+              {{ getTranslatedText('Current Condition Photos', 'தற்போதைய நிலை புகைப்படங்கள்') }} <span
+                class="required">*</span>
             </label>
             <div class="custom-file">
-              <input
-                type="file"
-                class="custom-file-input"
-                id="conditionPhotos"
-                (change)="onFileChange($event, 'conditionPhotos', 'documentation')"
-                required multiple>
+              <input type="file" class="custom-file-input" id="conditionPhotos"
+                (change)="onFileChange($event, 'conditionPhotos', 'documentation')" required multiple>
               <label class="custom-file-label" for="conditionPhotos">
                 <ng-container *ngIf="schoolForm.get('documentation.conditionPhotos')?.value?.length > 0">
-                  {{ schoolForm.get('documentation.conditionPhotos')?.value.length }} {{ getTranslatedText('files selected', 'கோப்புகள் தேர்ந்தெடுக்கப்பட்டன') }}
+                  {{ schoolForm.get('documentation.conditionPhotos')?.value.length }}
+                  <ng-container *ngIf="schoolForm.get('documentation.conditionPhotos')?.value.length === 1">
+                    {{ getTranslatedText(' file selected', ' கோப்பு தேர்ந்தெடுக்கப்பட்டது') }}
+                  </ng-container>
+                  <ng-container *ngIf="schoolForm.get('documentation.conditionPhotos')?.value.length > 1">
+                    {{ getTranslatedText(' files selected', ' கோப்புகள் தேர்ந்தெடுக்கப்பட்டன') }}
+                  </ng-container>
                 </ng-container>
-                <ng-container *ngIf="!schoolForm.get('documentation.conditionPhotos')?.value || schoolForm.get('documentation.conditionPhotos')?.value?.length === 0">
+                <ng-container
+                  *ngIf="!schoolForm.get('documentation.conditionPhotos')?.value || schoolForm.get('documentation.conditionPhotos')?.value?.length === 0">
                   {{ getTranslatedText('Choose file(s)', 'கோப்பு(களை) தேர்வு செய்க') }}
                 </ng-container>
               </label>
             </div>
-            <div *ngIf="schoolForm.get('documentation.conditionPhotos')?.invalid && schoolForm.get('documentation.conditionPhotos')?.touched" class="invalid-feedback d-block">
-              {{ getTranslatedText('At least one condition photo is required', 'குறைந்தது ஒரு நிலை புகைப்படம் அவசியம்') }}
+            <div
+              *ngIf="schoolForm.get('documentation.conditionPhotos')?.hasError('required') && schoolForm.get('documentation.conditionPhotos')?.touched"
+              class="invalid-feedback d-block">
+              {{ getTranslatedText('At least one condition photo is required', 'குறைந்தது ஒரு நிலை புகைப்படம் அவசியம்')
+              }}
+            </div>
+            <div *ngIf="schoolForm.get('documentation.conditionPhotos')?.hasError('maxCount')"
+              class="invalid-feedback d-block">
+              {{ getTranslatedText('You can upload a maximum of 5 photos.', 'நீங்கள் அதிகபட்சம் 5 புகைப்படங்களைப்
+              பதிவேற்றலாம்.') }}
+            </div>
+            <div *ngIf="schoolForm.get('documentation.conditionPhotos')?.hasError('maxSize')"
+              class="invalid-feedback d-block">
+              {{ getTranslatedText('Each photo must be less than 5MB.', 'ஒவ்வொரு புகைப்படமும் 5MB க்கும் குறைவாக இருக்க
+              வேண்டும்.') }}
             </div>
           </div>
 
           <div class="form-group col-md-6">
             <label class="form-label">
-              {{ getTranslatedText('Detailed Budget Estimates (if available)', 'விரிவான பட்ஜெட் மதிப்பீடுகள் (கிடைத்தால்)') }}
+              {{ getTranslatedText('Detailed Budget Estimates (if available)', 'விரிவான பட்ஜெட் மதிப்பீடுகள்
+              (கிடைத்தால்)') }}
             </label>
             <div class="custom-file">
-              <input
-                type="file"
-                class="custom-file-input"
-                id="budgetEstimates"
+              <input type="file" class="custom-file-input" id="budgetEstimates"
                 (change)="onFileChange($event, 'budgetEstimates', 'documentation')">
               <label class="custom-file-label" for="budgetEstimates">
-                {{ schoolForm.get('documentation.budgetEstimates')?.value?.name || getTranslatedText('Choose file', 'கோப்பைத் தேர்வு செய்க') }}
+                {{ (schoolForm.get('documentation.budgetEstimates')?.value)?.name || getTranslatedText('Choose file',
+                'கோப்பைத் தேர்வு செய்க') }}
               </label>
             </div>
           </div>
@@ -419,87 +479,123 @@
           <h3 class="review-header">{{ getTranslatedText('Basic School Information', 'அடிப்படை பள்ளித் தகவல்') }}</h3>
           <div class="review-section-content">
             <div class="review-item">
-              <strong>{{ getTranslatedText('Selected District:', 'தேர்ந்தெடுக்கப்பட்ட மாவட்டம்:') }}</strong> {{ schoolForm.get('basicInfo.selectedDistrict')?.value }}
+              <strong>{{ getTranslatedText('Selected District:', 'தேர்ந்தெடுக்கப்பட்ட மாவட்டம்:') }}</strong> {{
+              schoolForm.get('basicInfo.selectedDistrict')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Selected School:', 'தேர்ந்தெடுக்கப்பட்ட பள்ளி:') }}</strong> {{ getTranslatedText(schoolForm.get('basicInfo.schoolNameEn')?.value, schoolForm.get('basicInfo.schoolNameTa')?.value) }} ({{ schoolForm.get('basicInfo.udiseCode')?.value }})
+              <strong>{{ getTranslatedText('Selected School:', 'தேர்ந்தெடுக்கப்பட்ட பள்ளி:') }}</strong> {{
+              getTranslatedText(schoolForm.get('basicInfo.schoolNameEn')?.value,
+              schoolForm.get('basicInfo.schoolNameTa')?.value) }} ({{ schoolForm.get('basicInfo.udiseCode')?.value }})
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('School Name (Tamil):', 'பள்ளி பெயர் (தமிழ்):') }}</strong> {{ schoolForm.get('basicInfo.schoolNameTa')?.value }}
+              <strong>{{ getTranslatedText('School Name (Tamil):', 'பள்ளி பெயர் (தமிழ்):') }}</strong> {{
+              schoolForm.get('basicInfo.schoolNameTa')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('School Type:', 'பள்ளி வகை:') }}</strong> {{ getTranslatedText(schoolForm.get('basicInfo.schoolType')?.value, getTranslatedText(schoolForm.get('basicInfo.schoolType')?.value, getSchoolTypeTranslated(schoolForm.get('basicInfo.schoolType')?.value))) }} {{ getTranslatedText('School', 'பள்ளி') }}
+              <strong>{{ getTranslatedText('School Type:', 'பள்ளி வகை:') }}</strong> {{
+              getTranslatedText(schoolForm.get('basicInfo.schoolType')?.value,
+              getTranslatedText(schoolForm.get('basicInfo.schoolType')?.value,
+              getSchoolTypeTranslated(schoolForm.get('basicInfo.schoolType')?.value))) }} {{ getTranslatedText('School',
+              'பள்ளி') }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('District (Auto):', 'மாவட்டம் (தானாக):') }}</strong> {{ schoolForm.get('basicInfo.district')?.value }}
+              <strong>{{ getTranslatedText('District (Auto):', 'மாவட்டம் (தானாக):') }}</strong> {{
+              schoolForm.get('basicInfo.district')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Block/Taluk (Auto):', 'வட்டம்/தாலுகா (தானாக):') }}</strong> {{ schoolForm.get('basicInfo.block')?.value }}
+              <strong>{{ getTranslatedText('Block/Taluk (Auto):', 'வட்டம்/தாலுகா (தானாக):') }}</strong> {{
+              schoolForm.get('basicInfo.block')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Address:', 'முகவரி:') }}</strong> {{ getTranslatedText(schoolForm.get('basicInfo.address')?.value, getSchoolAddressTranslated(schoolForm.get('basicInfo.address')?.value)) }}
+              <strong>{{ getTranslatedText('Address:', 'முகவரி:') }}</strong> {{
+              getTranslatedText(schoolForm.get('basicInfo.address')?.value,
+              getSchoolAddressTranslated(schoolForm.get('basicInfo.address')?.value)) }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Pincode:', 'பின்கோடு:') }}</strong> {{ schoolForm.get('basicInfo.pincode')?.value }}
+              <strong>{{ getTranslatedText('Pincode:', 'பின்கோடு:') }}</strong> {{
+              schoolForm.get('basicInfo.pincode')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Established Year:', 'நிறுவப்பட்ட ஆண்டு:') }}</strong> {{ schoolForm.get('basicInfo.establishedYear')?.value }}
+              <strong>{{ getTranslatedText('Established Year:', 'நிறுவப்பட்ட ஆண்டு:') }}</strong> {{
+              schoolForm.get('basicInfo.establishedYear')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Student Enrollment:', 'மாணவர் சேர்க்கை:') }}</strong> {{ schoolForm.get('basicInfo.studentCount')?.value }}
+              <strong>{{ getTranslatedText('Student Enrollment:', 'மாணவர் சேர்க்கை:') }}</strong> {{
+              schoolForm.get('basicInfo.studentCount')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Number of Teachers:', 'ஆசிரியர்களின் எண்ணிக்கை:') }}</strong> {{ schoolForm.get('basicInfo.teacherCount')?.value }}
+              <strong>{{ getTranslatedText('Number of Teachers:', 'ஆசிரியர்களின் எண்ணிக்கை:') }}</strong> {{
+              schoolForm.get('basicInfo.teacherCount')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Principal Name:', 'முதல்வர் பெயர்:') }}</strong> {{ schoolForm.get('basicInfo.principalName')?.value }}
+              <strong>{{ getTranslatedText('Principal Name:', 'முதல்வர் பெயர்:') }}</strong> {{
+              schoolForm.get('basicInfo.principalName')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Principal Contact:', 'முதல்வர் தொடர்பு:') }}</strong> {{ schoolForm.get('basicInfo.principalContact')?.value }}
+              <strong>{{ getTranslatedText('Principal Contact:', 'முதல்வர் தொடர்பு:') }}</strong> {{
+              schoolForm.get('basicInfo.principalContact')?.value }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Principal Email:', 'முதல்வர் மின்னஞ்சல்:') }}</strong> {{ schoolForm.get('basicInfo.principalEmail')?.value }}
+              <strong>{{ getTranslatedText('Principal Email:', 'முதல்வர் மின்னஞ்சல்:') }}</strong> {{
+              schoolForm.get('basicInfo.principalEmail')?.value }}
             </div>
           </div>
 
           <h3 class="review-header mt-4">{{ getTranslatedText('Infrastructure Needs', 'உள்கட்டமைப்பு தேவைகள்') }}</h3>
           <div class="review-section-content">
             <div class="review-item">
-              <strong>{{ getTranslatedText('Areas for Renovation:', 'புதுப்பிக்க வேண்டிய பகுதிகள்:') }}</strong> {{ getSelectedRenovationAreas().join(', ') || getTranslatedText('None selected', 'எதுவும் தேர்ந்தெடுக்கப்படவில்லை') }}
+              <strong>{{ getTranslatedText('Areas for Renovation:', 'புதுப்பிக்க வேண்டிய பகுதிகள்:') }}</strong> {{
+              getSelectedRenovationAreas().join(', ') || getTranslatedText('None selected', 'எதுவும்
+              தேர்ந்தெடுக்கப்படவில்லை') }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Priority Level:', 'முன்னுரிமை நிலை:') }}</strong> {{ getTranslatedText(getPriorityLevelLabel(schoolForm.get('infrastructure.priority')?.value), getPriorityLevelLabel(schoolForm.get('infrastructure.priority')?.value)) }}
+              <strong>{{ getTranslatedText('Priority Level:', 'முன்னுரிமை நிலை:') }}</strong> {{
+              getTranslatedText(getPriorityLevelLabel(schoolForm.get('infrastructure.priority')?.value),
+              getPriorityLevelLabel(schoolForm.get('infrastructure.priority')?.value)) }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Budget Range:', 'பட்ஜெட் வரம்பு:') }}</strong> {{ getBudgetRangeLabel(schoolForm.get('infrastructure.budgetRange')?.value) }}
+              <strong>{{ getTranslatedText('Budget Range:', 'பட்ஜெட் வரம்பு:') }}</strong> {{
+              getBudgetRangeLabel(schoolForm.get('infrastructure.budgetRange')?.value) }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Current Condition:', 'தற்போதைய நிலை:') }}</strong> {{ schoolForm.get('infrastructure.currentCondition')?.value || getTranslatedText('Not provided', 'வழங்கப்படவில்லை') }}
+              <strong>{{ getTranslatedText('Current Condition:', 'தற்போதைய நிலை:') }}</strong> {{
+              schoolForm.get('infrastructure.currentCondition')?.value || getTranslatedText('Not provided',
+              'வழங்கப்படவில்லை') }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Expected Outcome:', 'எதிர்பார்க்கப்படும் விளைவு:') }}</strong> {{ schoolForm.get('infrastructure.expectedOutcome')?.value || getTranslatedText('Not provided', 'வழங்கப்படவில்லை') }}
+              <strong>{{ getTranslatedText('Expected Outcome:', 'எதிர்பார்க்கப்படும் விளைவு:') }}</strong> {{
+              schoolForm.get('infrastructure.expectedOutcome')?.value || getTranslatedText('Not provided',
+              'வழங்கப்படவில்லை') }}
             </div>
           </div>
 
           <h3 class="review-header mt-4">{{ getTranslatedText('Documentation', 'ஆவணங்கள்') }}</h3>
           <div class="review-section-content">
             <div class="review-item">
-              <strong>{{ getTranslatedText('Recognition Certificate:', 'அங்கீகார சான்றிதழ்:') }}</strong> {{ schoolForm.get('documentation.recognitionCert')?.value?.name || getTranslatedText('Not uploaded', 'பதிவேற்றப்படவில்லை') }}
+              <strong>{{ getTranslatedText('Recognition Certificate:', 'அங்கீகார சான்றிதழ்:') }}</strong> {{
+              (schoolForm.get('documentation.recognitionCert')?.value)?.name || getTranslatedText('Not uploaded',
+              'பதிவேற்றப்படவில்லை') }}
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Assessment Report:', 'மதிப்பீட்டு அறிக்கை:') }}</strong> {{ schoolForm.get('documentation.assessmentReport')?.value?.name || getTranslatedText('Not uploaded', 'பதிவேற்றப்படவில்லை') }}
+              <strong>{{ getTranslatedText('Assessment Report:', 'மதிப்பீட்டு அறிக்கை:') }}</strong> {{
+              (schoolForm.get('documentation.assessmentReport')?.value)?.name || getTranslatedText('Not uploaded',
+              'பதிவேற்றப்படவில்லை') }}
             </div>
             <div class="review-item">
               <strong>{{ getTranslatedText('Condition Photos:', 'நிலை புகைப்படங்கள்:') }}</strong>
-              <ng-container *ngIf="schoolForm.get('documentation.conditionPhotos')?.value?.length > 0">
-                {{ schoolForm.get('documentation.conditionPhotos')?.value.length }} {{ getTranslatedText('files selected', 'கோப்புகள் தேர்ந்தெடுக்கப்பட்டன') }}
+              <ng-container *ngIf="schoolForm.get('documentation.conditionPhotos')?.value?.length > 0" >
+                {{ schoolForm.get('documentation.conditionPhotos')?.value.length }} {{ getTranslatedText('file(s)
+                selected', 'கோப்பு(கள்) தேர்ந்தெடுக்கப்பட்டன') }}
               </ng-container>
-              <ng-container *ngIf="!schoolForm.get('documentation.conditionPhotos')?.value || schoolForm.get('documentation.conditionPhotos')?.value?.length === 0">
+              <ng-container
+                *ngIf="!schoolForm.get('documentation.conditionPhotos')?.value || schoolForm.get('documentation.conditionPhotos')?.value?.length === 0">
                 {{ getTranslatedText('Not uploaded', 'பதிவேற்றப்படவில்லை') }}
               </ng-container>
             </div>
             <div class="review-item">
-              <strong>{{ getTranslatedText('Budget Estimates:', 'பட்ஜெட் மதிப்பீடுகள்:') }}</strong> {{ schoolForm.get('documentation.budgetEstimates')?.value?.name || getTranslatedText('Not uploaded', 'பதிவேற்றப்படவில்லை') }}
+              <strong>{{ getTranslatedText('Budget Estimates:', 'பட்ஜெட் மதிப்பீடுகள்:') }}</strong> {{
+              (schoolForm.get('documentation.budgetEstimates')?.value)?.name || getTranslatedText('Not uploaded',
+              'பதிவேற்றப்படவில்லை') }}
             </div>
           </div>
         </div>
@@ -527,11 +623,14 @@
     <div class="footer-content">
       <div class="footer-logo">
         <div class="logo-wrapper">
-          <img src="assets/images/govt_logo.jpeg" alt="{{ getTranslatedText('Government of Tamil Nadu Logo', 'தமிழ்நாடு அரசு சின்னம்') }}" class="govt-logo">
+          <img src="assets/images/govt_logo.jpeg"
+            alt="{{ getTranslatedText('Government of Tamil Nadu Logo', 'தமிழ்நாடு அரசு சின்னம்') }}" class="govt-logo">
         </div>
         <div class="footer-logo-text">
-          <h3>{{ getTranslatedText('Tamil Nadu School Renovation Initiative', 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி') }}</h3>
-          <p>{{ getTranslatedText('Building better futures through education', 'கல்வி மூலம் சிறந்த எதிர்காலத்தை உருவாக்குதல்') }}</p>
+          <h3>{{ getTranslatedText('Tamil Nadu School Renovation Initiative', 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி')
+            }}</h3>
+          <p>{{ getTranslatedText('Building better futures through education', 'கல்வி மூலம் சிறந்த எதிர்காலத்தை
+            உருவாக்குதல்') }}</p>
         </div>
       </div>
       <div class="footer-links">
@@ -550,7 +649,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {{ currentYear }} {{ getTranslatedText('Tamil Nadu School Renovation Initiative. All rights reserved.', 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.') }}</p>
+      <p>&copy; {{ currentYear }} {{ getTranslatedText('Tamil Nadu School Renovation Initiative. All rights reserved.',
+        'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.') }}</p>
     </div>
   </div>
 </footer>

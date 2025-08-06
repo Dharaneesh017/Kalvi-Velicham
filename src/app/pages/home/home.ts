@@ -5,6 +5,7 @@ import { LanguageService } from '../../services/language.service';
 import { SchoolService, FetchedSchool } from '../../services/school.service';
 import { AuthModalComponent } from '../auth-modal/auth-modal';
 import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
 import * as L from 'leaflet';
 import { Icon } from 'leaflet';
 
@@ -12,6 +13,9 @@ import { Icon } from 'leaflet';
 interface SchoolWithCoords extends FetchedSchool {
   lat: number;
   lng: number;
+  conditionPhotos?: string[]; 
+  hovering?: boolean;
+  currentPhotoIndex?: number;
 }
 
 @Component({
@@ -28,29 +32,30 @@ export class Home implements OnInit, OnDestroy {
   currentYear: number = new Date().getFullYear();
   showMap = false;
   fetchedSchools: SchoolWithCoords[] = [];
-
+  private languageSubscription!: Subscription;
   selectedSchoolName = '';
   private map: any;
 
-  successStories = [
-    {
-      title: 'Salem Village School Transformation',
-      titleTa: 'சேலம் கிராமப் பள்ளியின் மாற்றம்',
-      description: '200% increase in student enrollment after complete renovation',
-      descriptionTa: 'முழுமையான புதுப்பிப்புக்குப் பிறகு வெற்றிகரமான மாணவர் சேர்க்கை 200% அதிகரித்துள்ளது',
-      image: 'assets/images/salem-school.jpeg',
-      date: '15 January 2023'
-    },
-    {
-      title: 'Madurai Urban School Renewal',
-      titleTa: 'மதுரை நகர்ப்புற பள்ளி புதுப்பிப்பு',
-      description: 'New science lab and library enhanced student learning experience',
-      descriptionTa: 'புதிய அறிவியல் ஆய்வகம் மற்றும் நூலகம் மாணவர்களின் கற்றல் அனுபவத்தை மேம்படுத்தியது',
-      image: 'assets/images/success-2.jpg',
-      date: '2 March 2023'
-    }
-  ];
-
+successStories = [
+  {
+    title: 'Salem Village School Transformation',
+    titleTa: 'சேலம் கிராமப் பள்ளியின் மாற்றம்',
+    description: '200% increase in student enrollment after complete renovation',
+    descriptionTa: 'முழுமையான புதுப்பிப்புக்குப் பிறகு வெற்றிகரமான மாணவர் சேர்க்கை 200% அதிகரித்துள்ளது',
+    // Point to the image for the Salem school
+    image: 'assets/images/salem-village.jpeg', 
+    date: '15 January 2023'
+  },
+  {
+    title: 'Madurai Urban School Renewal',
+    titleTa: 'மதுரை நகர்ப்புற பள்ளி புதுப்பிப்பு',
+    description: 'New science lab and library enhanced student learning experience',
+    descriptionTa: 'புதிய அறிவியல் ஆய்வகம் மற்றும் நூலகம் மாணவர்களின் கற்றல் அனுபவத்தை மேம்படுத்தியது',
+    // Point to the image for the Madurai school
+    image: 'assets/images/madurai-urban.jpeg', 
+    date: '2 March 2023'
+  }
+];
   howItWorks = [
     {
       step: 1,
@@ -117,26 +122,36 @@ export class Home implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.languageService.language$.subscribe(lang => {
-      this.currentLanguage = lang;
-    });
-    this.startImageSlider();
+    this.languageSubscription = this.languageService.language$.subscribe(lang => {
+    this.currentLanguage = lang;
+  });
+  this.schoolService.getSchools().subscribe({
+  next: (schools) => {
+    this.fetchedSchools = schools.map(school => {
+      // Define the base URL for your images
+      const serverUrl = 'http://localhost:3000/uploads/';
 
-    this.schoolService.getSchools().subscribe({
-      next: (schools) => {
-        this.fetchedSchools = schools.map(school => ({
-          ...school,
-          // Assign random lat/lng if the data doesn't have it
-          lat: (school as any).lat || (11.1271 + (Math.random() - 0.5) * 0.5),
-          lng: (school as any).lng || (78.6569 + (Math.random() - 0.5) * 0.5)
-        }));
-        console.log('Fetched schools:', this.fetchedSchools);
-      },
-      error: (error) => {
-        console.error('Error fetching schools:', error);
-        alert('பள்ளி விவரங்களைப் பெறுவதில் சிக்கல் ஏற்பட்டது. பின்னர் முயற்சிக்கவும்.');
-      }
+      // Use the actual photo filenames from the school object
+      const realConditionPhotos = school.conditionPhotos
+        ? school.conditionPhotos.map(photoName => serverUrl + photoName)
+        : [];
+
+      return {
+        ...school,
+        lat: (school as any).lat || (11.1271 + (Math.random() - 0.5) * 0.5),
+        lng: (school as any).lng || (78.6569 + (Math.random() - 0.5) * 0.5),
+        conditionPhotos: realConditionPhotos, // <-- FIX: Use the real photo URLs
+        hovering: false,
+        currentPhotoIndex: 0
+      };
     });
+    console.log('Fetched schools with correct photo URLs:', this.fetchedSchools);
+  },
+  error: (error) => {
+    console.error('Error fetching schools:', error);
+    alert('An error occurred while fetching school details. Please try again later.');
+  }
+});
 
     const defaultIcon = Icon.Default;
     defaultIcon.mergeOptions({
@@ -169,44 +184,38 @@ export class Home implements OnInit, OnDestroy {
     return this.currentLanguage === 'english' ? english : tamil;
   }
 
- showMapForSchool(school: SchoolWithCoords): void {
-  this.selectedSchoolName = this.getText(school.schoolNameEn, school.schoolNameTa);
-  this.showMap = true;
-
-  // This is the critical part.
-  setTimeout(() => {
-    if (this.map) {
-      this.map.remove();
+  onSchoolHover(school: SchoolWithCoords, hovering: boolean): void {
+    school.hovering = hovering;
+    if (!hovering) {
+        school.currentPhotoIndex = 0; 
     }
+  }
 
-    this.map = L.map('schoolMap').setView([school.lat, school.lng], 10);
+  previousPhoto(school: SchoolWithCoords, event: Event): void {
+      event.stopPropagation(); 
+      if (school.conditionPhotos && school.conditionPhotos.length > 0) {
+          school.currentPhotoIndex = (school.currentPhotoIndex === 0)
+              ? school.conditionPhotos.length - 1
+              : school.currentPhotoIndex! - 1;
+      }
+  }
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
+  nextPhoto(school: SchoolWithCoords, event: Event): void {
+      event.stopPropagation(); // Prevent card click event
+      if (school.conditionPhotos && school.conditionPhotos.length > 0) {
+          school.currentPhotoIndex = (school.currentPhotoIndex === school.conditionPhotos.length - 1)
+              ? 0
+              : school.currentPhotoIndex! + 1;
+      }
+  }
 
-    L.marker([school.lat, school.lng])
-      .addTo(this.map)
-      .bindPopup(`<b>${this.selectedSchoolName}</b>`)
-      .openPopup();
-
-    this.map.invalidateSize();
-  }, 500); // You can increase this delay to 700 or 1000 if needed
-}
 
   getProgressBarStyle(school: FetchedSchool): string {
     const progress = school.studentCount ? Math.min(100, Math.floor(school.studentCount / 10) * 5) : (Math.floor(Math.random() * 80) + 10);
     return `width: ${progress}%;`;
   }
 
-  closeMap(): void {
-    this.showMap = false;
-    if (this.map) {
-      this.map.remove();
-      this.map = undefined;
-    }
-  }
-
+ 
   getDisplayProgress(school: FetchedSchool): number {
     return school.studentCount ? Math.min(100, Math.floor(school.studentCount / 10) * 5) : (Math.floor(Math.random() * 80) + 10);
   }
@@ -223,6 +232,8 @@ export class Home implements OnInit, OnDestroy {
     const index = parseInt(school.udiseCode.slice(-1), 10) % images.length;
     return images[index];
   }
+
+  
 
   getNeedsText(school: FetchedSchool): string {
     if (this.currentLanguage === 'english') {
@@ -269,7 +280,10 @@ export class Home implements OnInit, OnDestroy {
     this.shouldRedirectAfterLogin = (initialTab === 'login');
     document.body.classList.add('modal-open');
   }
-
+  viewOnMap(school: FetchedSchool): void {
+    const query = `${school.schoolNameEn}, ${school.district}, ${school.pincode}`;
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+  }
   onAuthModalClose(): void {
     this.showAuthModal = false;
     this.selectedSchoolForDonationId = null;

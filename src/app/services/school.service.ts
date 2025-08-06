@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-
+/**
+ * Defines the structure for the data being SENT TO the server.
+ * This is used when submitting the form.
+ */
 export interface SchoolFormData {
   schoolNameEn: string;
   schoolNameTa: string;
@@ -20,21 +23,26 @@ export interface SchoolFormData {
   principalName: string;
   principalContact: string;
   principalEmail: string;
-  renovationAreas: string[]; // Array of strings (labels)
+  renovationAreas: string[];
   priority: string;
-  budgetRange?: string; // Optional
+  budgetRange?: string;
   currentCondition: string;
-  expectedOutcome?: string; // Optional
-  recognitionCert?: string; // Optional, stores filename
-  assessmentReport?: string; // Optional, stores filename
-  conditionPhotos?: string; // Optional, stores filename
-  budgetEstimates?: string; // Optional, stores filename
+  
+  expectedOutcome?: string;
+  recognitionCert?: string;
+  assessmentReport?: string;
+  // --- CRITICAL FIX ---
+  // This property now correctly expects an array of strings for the photo names.
+  conditionPhotos?: string[];
+  budgetEstimates?: string;
 }
 
-// This interface defines the structure of the data you expect to GET FROM your Node.js backend
-// It should closely match your Mongoose Schema fields, including the _id and submittedAt.
+/**
+ * Defines the structure for the data being RECEIVED FROM the server.
+ * This is used when fetching existing school data.
+ */
 export interface FetchedSchool {
-  _id: string; // MongoDB auto-generated ID
+  _id: string;
   schoolNameEn: string;
   schoolNameTa: string;
   udiseCode: string;
@@ -51,43 +59,39 @@ export interface FetchedSchool {
   principalEmail: string;
   renovationAreas: string[];
   priority: string;
-  budgetRange?: string; // Use optional if it might not always be present
+  budgetRange?: string;
   currentCondition: string;
-  expectedOutcome?: string; // Use optional
+  expectedOutcome?: string;
   recognitionCert?: string;
   assessmentReport?: string;
-  conditionPhotos?: string;
+  // Updated for consistency to expect an array of photo names.
+ conditionPhotos?: string[];
   budgetEstimates?: string;
-  submittedAt: Date; // From your backend schema
-  image?: string; // Added optional image property to fix the error
+  submittedAt: Date;
+  image?: string;
 }
-// --- End Interfaces ---
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchoolService {
-  // IMPORTANT: This must match the port your Node.js API is running on!
+  // Ensure this URL matches your backend API endpoint
   private apiUrl = 'http://localhost:3000/api/schools';
 
   constructor(private http: HttpClient) { }
 
   /**
-   * Submits school data to the backend API.
-   * @param schoolData The data object to be sent, structured to match the backend schema.
-   * @returns An Observable of the API response.
+   * Submits the school registration form data to the backend.
+   * @param schoolData The form data, matching the SchoolFormData interface.
    */
-  submitSchool(schoolData: SchoolFormData): Observable<any> { // Use SchoolFormData type
+  submitSchool(schoolData: FormData): Observable<any> { // <--- CHANGE THIS LINE
     return this.http.post<any>(this.apiUrl, schoolData);
   }
-
   /**
-   * Fetches all school data from the backend API.
-   * (Optional: useful for displaying existing submissions or testing).
-   * @returns An Observable of an array of school data.
+   * Fetches a list of all registered schools from the backend.
    */
-  getSchools(): Observable<FetchedSchool[]> { // Use FetchedSchool[] type
+  getSchools(): Observable<FetchedSchool[]> {
     return this.http.get<FetchedSchool[]>(this.apiUrl);
   }
 }

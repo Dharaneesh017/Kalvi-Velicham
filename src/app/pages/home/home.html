@@ -7,11 +7,8 @@
 
     <div class="container">
       <div class="hero-content">
-        <h1>{{ currentLanguage === 'english' ? 'Transforming Tamil Nadu\'s Government Schools' : 'தமிழ்நாடு அரசு
-          பள்ளிகளின் மாற்றம்' }}</h1>
-        <p>{{ currentLanguage === 'english' ? 'Join us in creating better learning environments for over 1 million
-          students across 45,000 government schools' : '45,000 அரசு பள்ளிகளில் 10 லட்சம் மாணவர்களுக்கு சிறந்த கற்றல்
-          சூழலை உருவாக்க எங்களுடன் இணையுங்கள்' }}</p>
+        <h1>{{ currentLanguage === 'english' ? 'Transforming Tamil Nadu\'s Government Schools' : 'தமிழ்நாடு அரசு பள்ளிகளின் மாற்றம்' }}</h1>
+        <p>{{ currentLanguage === 'english' ? 'Join us in creating better learning environments for over 1 million students across 45,000 government schools' : '45,000 அரசு பள்ளிகளில் 10 லட்சம் மாணவர்களுக்கு சிறந்த கற்றல் சூழலை உருவாக்க எங்களுடன் இணையுங்கள்' }}</p>
         <div class="hero-buttons">
           <a (click)="openAuthModal('login')" class="btn btn-primary">{{ currentLanguage === 'english' ? 'Donate Now' :
             'இப்போது நன்கொடை அளிக்கவும்' }}</a>
@@ -60,11 +57,21 @@
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'Featured Schools in Need' : 'தேவையுள்ள முன்னிலைப் பள்ளிகள்' }}</h2>
       <div class="schools-grid">
-        <div class="school-card" *ngFor="let school of fetchedSchools">
+        <div class="school-card" *ngFor="let school of fetchedSchools" (mouseenter)="onSchoolHover(school, true)"
+          (mouseleave)="onSchoolHover(school, false)">
+
           <div class="school-image">
             <img [src]="getSchoolImageUrl(school)"
               alt="{{ currentLanguage === 'english' ? school.schoolNameEn : school.schoolNameTa }}">
+
+            <div class="image-slider-overlay"
+               *ngIf="school.conditionPhotos && school.conditionPhotos.length > 0">
+              <img [src]="school.conditionPhotos[school.currentPhotoIndex!]" alt="Condition Photo">
+              <button class="slider-btn prev" (click)="previousPhoto(school, $event)">&lt;</button>
+              <button class="slider-btn next" (click)="nextPhoto(school, $event)">&gt;</button>
+            </div>
           </div>
+
           <div class="school-info">
             <h3>{{ currentLanguage === 'english' ? school.schoolNameEn : school.schoolNameTa }}</h3>
             <p class="location">{{ currentLanguage === 'english' ? school.district + ', ' + school.block :
@@ -75,10 +82,14 @@
               <span>{{ getDisplayProgress(school) }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி
                 திரட்டப்பட்டது' }}</span>
             </div>
-
-            <a (click)="openAuthModal('login')" class="btn btn-small">{{ currentLanguage === 'english' ? 'Support This
-              School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}</a>
-            <a (click)="showMapForSchool(school)" class="btn btn-small">View School Location</a>
+            <div class="card-buttons">
+              <a (click)="openAuthModal('login')" class="btn support-btn">
+                {{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}
+              </a>
+              <button type="button" class="btn map-btn" (click)="viewOnMap(school)">
+                View on Map
+              </button>
+            </div>
           </div>
         </div>
         <div *ngIf="fetchedSchools.length === 0" class="no-schools-message">
@@ -88,21 +99,15 @@
       </div>
     </div>
   </section>
-<div class="modal" [ngClass]="{ 'show': showMap }">
-  <div class="modal-content">
-    <span class="close" (click)="closeMap()">&times;</span>
-    <h3>Location of: {{ selectedSchoolName }}</h3>
-    <div id="schoolMap" style="height: 400px; margin-top: 20px;"></div>
-  </div>
-</div>
+
   <section class="success-stories">
     <div class="container">
       <h2>{{ currentLanguage === 'english' ? 'Recent Success Stories' : 'சமீபத்திய வெற்றிக் கதைகள்' }}</h2>
       <div class="stories-grid">
         <div class="story-card" *ngFor="let story of successStories">
-          <div class="story-image">
-
-          </div>
+        <div class="story-image">
+          <img [src]="story.image" [alt]="story.title">
+        </div>
           <div class="story-content">
             <h3>{{ currentLanguage === 'english' ? story.title : story.titleTa }}</h3>
             <p>{{ currentLanguage === 'english' ? story.description : story.descriptionTa }}</p>
@@ -153,7 +158,7 @@
           <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a></li>
         </ul>
       </div>
-      <div class="footer-contact">
+      <div class="footer-.contact">
         <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
         <p>infotnschools.in</p>
         <p>+91 9876543210</p>

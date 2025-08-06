@@ -57,7 +57,7 @@ body {
   font-weight: 700;
   color: var(--dark-blue);
   margin-right: 0.5rem;
-  margin-left: 2rem;  
+  margin-left: 2rem;
 }
 
 .nav-links {
@@ -135,7 +135,7 @@ body {
   right: 0;
   background-color: var(--white);
   min-width: 120px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1;
   border-radius: 4px;
 }
@@ -209,15 +209,18 @@ body {
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 4s ease-in-out; /* This controls the fade speed */
+  transition: opacity 4s ease-in-out;
+  /* This controls the fade speed */
 }
 
 .hero-background-image.active {
   opacity: 1;
 }
+
 .hero-content {
   max-width: 1000px;
-  margin: 10px auto; /* Corrected margin */
+  margin: 10px auto;
+  /* Corrected margin */
   position: relative;
   z-index: 2;
   color: #fff;
@@ -245,7 +248,7 @@ body {
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-  cursor:pointer; 
+  cursor: pointer;
 }
 
 .hero-buttons .btn-primary,
@@ -260,17 +263,21 @@ body {
   color: #fff;
   border: 1px solid #fff;
 }
+
 .hero-buttons .btn-secondary:hover {
   background-color: #fff;
   color: #007bff;
 }
+
 .btn {
   padding: 0.8rem 1.5rem;
   border-radius: 4px;
   font-weight: 500;
   text-decoration: none;
   transition: all 0.3s ease;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-primary {
@@ -281,7 +288,7 @@ body {
 .btn-primary:hover {
   background-color: var(--dark-blue);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-secondary {
@@ -291,7 +298,7 @@ body {
 }
 
 .btn-secondary:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
 
@@ -345,7 +352,7 @@ section {
   flex: 1;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .about-image img {
@@ -364,17 +371,17 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
-  
+
 }
 
 .step {
   background-color: var(--white);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   text-align: center;
   transition: transform 0.3s ease;
-  
+
 }
 
 .step:hover {
@@ -416,14 +423,13 @@ section {
   background-color: var(--white);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
+  position: relative;
+  /* Needed for the hover effect */
 }
 
-.school-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
+
 
 .school-image {
   height: 200px;
@@ -437,13 +443,10 @@ section {
   transition: transform 0.5s ease;
 }
 
-.school-card:hover .school-image img {
-  transform: scale(1.1);
-}
 
 .school-info {
   padding: 1.5rem;
-  cursor: pointer;
+ 
 }
 
 .school-info h3 {
@@ -487,9 +490,31 @@ section {
   color: var(--medium-gray);
 }
 
-.btn-small {
-  padding: 0.5rem 1rem;
+.support-btn {
+  padding: 0.75rem 1rem;
+  font-weight: bold;
   font-size: 0.9rem;
+  color: #ddc3c3;
+  /* White text */
+  background-color: #bdcdd1;
+  /* A professional, warm orange */
+
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  color: var(--secondary);
+  text-decoration: none;
+  /* Removes underline from the <a> tag */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+}
+
+.support-btn:hover {
+
+  /* A darker orange for hover */
+  border-color: #D35400;
+  color: #ffffff;
+
 }
 
 /* Success Stories */
@@ -497,39 +522,44 @@ section {
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 2.5rem;
 }
+
 .story-card {
   background-color: var(--white);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
 }
 
 .story-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* Success Stories */
 .story-image {
-  height: 400px; /* Increased height for full image display */
+  height: 400px;
+  /* Increased height for full image display */
   overflow: hidden;
 }
 
 .story-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Maintains aspect ratio while filling container */
+  object-fit: cover;
+  /* Maintains aspect ratio while filling container */
   transition: transform 0.5s ease;
 }
 
 /* Featured Schools */
 .schools-grid .school-card {
-  height: 100%; /* Makes cards equal height */
+  height: 100%;
+  /* Makes cards equal height */
 }
 
 .school-image {
-  height: 300px; /* Increased height for featured schools */
+  height: 300px;
+  /* Increased height for featured schools */
   overflow: hidden;
   position: relative;
 }
@@ -575,18 +605,121 @@ section {
   color: var(--medium-gray);
   margin-bottom: 1rem;
 }
-.map-container {
-  margin-top: 30px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-}
-#schoolMap {
-  height: 400px;
+
+.card-buttons {
+  display: flex;
+  justify-content: space-between;
+
+  /* This will now work perfectly */
+  gap: 1rem;
+  /* A modern way to add space between flex items */
+  margin-top: 1rem;
   width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 8px;
 }
+
+.map-btn {
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #ebe8e8;
+  /* A professional blue for the text and border */
+  background-color: transparent;
+  /* Transparent background */
+  border: 2px solid #3498DB;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+/* Add these styles to your existing home.css file */
+
+.school-image {
+  position: relative;
+  
+}
+
+.image-slider-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+ .slider-btn {
+  opacity: 1;
+}
+
+.image-slider-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  /* Makes the overlay permanently visible */
+  transition: opacity 0.3s ease-in-out;
+}
+
+.image-slider-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  color: #333;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  /* Hide slider buttons by default */
+  transition: opacity 0.3s ease;
+}
+
+/* This rule makes the buttons appear only on hover for a cleaner look */
+.school-card:hover .slider-btn {
+  opacity: 1;
+}
+
+.slider-btn.prev {
+  left: 10px;
+}
+
+.slider-btn.next {
+  right: 10px;
+}
+.map-btn {
+  background: #78aaf6e0;
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
+}
+
+.map-btn:hover {
+
+  color: #ffffff;
+  /* White text on hover */
+}
+
 .modal {
   /* Keep the modal in the document flow but make it invisible */
   position: fixed;
@@ -628,14 +761,16 @@ section {
   font-weight: bold;
   cursor: pointer;
 }
+
 /* CTA Section */
 .cta-section {
-  background-color:#007bff;
+  background-color: #007bff;
   color: var(--white);
   text-align: center;
   padding: 4rem 0;
-  
+
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -647,6 +782,7 @@ section {
     transform: scale(1);
   }
 }
+
 .cta-section h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
@@ -663,7 +799,7 @@ section {
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 /* Footer */
@@ -677,7 +813,8 @@ section {
 .footer-content {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Align items to the top of the flex container */
+  align-items: flex-start;
+  /* Align items to the top of the flex container */
   gap: 2rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
@@ -685,53 +822,68 @@ section {
 
 /* Footer Logo Section */
 .footer-logo {
-  display: flex; /* Make footer-logo a flex container */
-  align-items: center; /* Vertically align logo and text */
-  gap: 20px; /* Space between logo and text content */
+  display: flex;
+  /* Make footer-logo a flex container */
+  align-items: center;
+  /* Vertically align logo and text */
+  gap: 20px;
+  /* Space between logo and text content */
   /* Ensure it takes appropriate width in the footer-content grid */
-  flex-basis: auto; /* Allow content to dictate initial size */
-  flex-shrink: 0; /* Prevent it from shrinking too much */
+  flex-basis: auto;
+  /* Allow content to dictate initial size */
+  flex-shrink: 0;
+  /* Prevent it from shrinking too much */
 }
 
 .logo-wrapper {
- margin-right: 4px;
+  margin-right: 4px;
 }
 
 .govt-logo {
-  height: 100px; /* Adjust based on image_10c4fd.png for a good size */
-  width:150px;/* Maintain aspect ratio */
+  height: 100px;
+  /* Adjust based on image_10c4fd.png for a good size */
+  width: 150px;
+  /* Maintain aspect ratio */
   max-width: 100%;
   margin-right: 50px;
-  margin-left: -90px; /* Ensure responsiveness */
+  margin-left: -90px;
+  /* Ensure responsiveness */
 }
 
 .footer-logo-text {
   /* This div contains the h3 and p for the initiative text */
   margin-left: -80px;
   display: flex;
-  flex-direction: column; /* Stack the h3 and p vertically */
-  align-items: flex-start; /* Align text content to the left */
+  flex-direction: column;
+  /* Stack the h3 and p vertically */
+  align-items: flex-start;
+  /* Align text content to the left */
 }
 
 .footer-logo h3 {
   font-size: 1.3rem;
-  margin-bottom: 0.5rem; /* Space between title and slogan */
-  text-align: left; /* Explicitly align left */
+  margin-bottom: 0.5rem;
+  /* Space between title and slogan */
+  text-align: left;
+  /* Explicitly align left */
 }
 
 .footer-logo p {
   opacity: 0.8;
   line-height: 1.6;
-  text-align: left; /* Explicitly align left */
+  text-align: left;
+  /* Explicitly align left */
 }
 
 /* Footer Links and Contact sections */
 .footer-links,
 .footer-contact {
   flex-grow: 1;
-  max-width: 250px; /* Keep consistent max-width for columns */
+  max-width: 250px;
+  /* Keep consistent max-width for columns */
   text-align: left;
-  cursor: pointer; /* Ensure titles and lists are left-aligned */
+  cursor: pointer;
+  /* Ensure titles and lists are left-aligned */
 }
 
 .footer-links h4,
@@ -783,7 +935,7 @@ section {
 .footer-bottom {
   text-align: center;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-bottom p {
@@ -807,8 +959,10 @@ section {
   }
 
   .footer-logo {
-    flex-direction: column; /* Stack logo and text vertically on small screens */
-    align-items: center; /* Center logo and text within its div when stacked */
+    flex-direction: column;
+    /* Stack logo and text vertically on small screens */
+    align-items: center;
+    /* Center logo and text within its div when stacked */
   }
 
   /* Center the underline for h4 in stacked layout */
@@ -829,7 +983,7 @@ section {
     background-color: var(--white);
     flex-direction: column;
     padding: 2rem;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     transform: translateY(-150%);
     transition: transform 0.3s ease;
     z-index: 999;

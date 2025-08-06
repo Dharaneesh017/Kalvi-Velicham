@@ -224,25 +224,37 @@
 }
 
 .support-btn {
-    background: var(--secondary);
+    background-color: #8d9395;
     color: white;
 }
 
 .support-btn:hover {
-    background: var(--secondary-light);
+    background-color: #ccc  ;
+  
 }
 
 .map-btn {
-    background: transparent;
+    background: #1f3bdca6;
     border: 1px solid var(--secondary);
     color: var(--secondary);
 }
 
 .map-btn:hover {
-    background: var(--secondary);
     color: var(--text-light);
 }
+.map-container {
+    margin-top: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+}
 
+#schoolMap {
+    height: 400px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
 
 /* Modal styles */
 .modal {
@@ -638,7 +650,11 @@
     justify-content: center;
     min-height: 50px;
 }
-
+.bottom-info{
+    text-align: center;
+    font-size: large;
+    font-weight: 500;
+}
 .btn-primary {
     background: transparent;
     

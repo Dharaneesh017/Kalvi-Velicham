@@ -318,44 +318,50 @@ export class SchoolsComponent implements OnInit {
   setPriority(value: string): void {
     this.schoolForm.get('infrastructure.priority')?.setValue(value);
   }
+onFileChange(event: Event, controlName: string, groupName: string): void {
+  const input = event.target as HTMLInputElement;
+  const formControl = this.schoolForm.get(`${groupName}.${controlName}`);
 
-   onFileChange(event: Event, controlName: string, groupName: string): void {
-    const input = event.target as HTMLInputElement;
-    const formControl = this.schoolForm.get(`${groupName}.${controlName}`);
+  // Check if files were selected from the dialog
+  if (input.files && input.files.length > 0) {
+    console.log(`File input changed for: ${controlName}`);
+    console.log(`Number of files selected in browser: ${input.files.length}`);
 
-    if (input.files && input.files.length > 0) {
-      if (controlName === 'conditionPhotos') {
-        // Handle multiple files for 'conditionPhotos'
-        const filesArray: File[] = Array.from(input.files);
-        formControl?.setValue(filesArray);
-      } else {
-        // Handle single file for other fields like 'recognitionCertificate'
-        formControl?.setValue(input.files[0]);
-      }
+    if (controlName === 'conditionPhotos') {
+      // This block handles the "conditionPhotos" input specifically
+      const filesArray: File[] = Array.from(input.files);
+      formControl?.setValue(filesArray);
+      
+      // This is the most important log. It shows what is actually being stored in the form.
+      console.log('Stored in form control:', formControl?.value);
+
     } else {
-      // If no files are selected (e.g., user opens dialog and cancels)
-      formControl?.setValue(null);
+      // This block handles all other single-file inputs
+      formControl?.setValue(input.files[0]);
     }
-
-    // Mark the control as touched to show validation feedback immediately
-    formControl?.markAsTouched();
-
-    // Trigger change detection to update the file input label (e.g., "3 files selected")
-    this.cdRef.detectChanges();
+  } else {
+    // This runs if you open the file dialog and click "Cancel"
+    formControl?.setValue(null);
   }
 
+  // These lines update the form's appearance
+  formControl?.markAsTouched();
+  this.cdRef.detectChanges();
+}
+
+ 
   getSelectedRenovationAreas(): string[] {
-    const selectedAreas: string[] = [];
+    const selectedAreaIds: string[] = [];
     const renovationFormArray = this.schoolForm.get('infrastructure.renovationAreas') as FormArray;
 
+    // This now correctly gets the ID, not the translated label
     this.renovationAreas.forEach((area, index) => {
-      if (renovationFormArray.controls[index] && renovationFormArray.controls[index].value) {
-        selectedAreas.push(this.getTranslatedText(area.labelEn, area.labelTa));
+      if (renovationFormArray.controls[index]?.value) {
+        selectedAreaIds.push(area.id); // Pushing the ID (e.g., 'classrooms')
       }
     });
-    return selectedAreas;
+    return selectedAreaIds;
   }
-
   nextStep(): void {
     const currentSection = this.getCurrentSection();
     if (!currentSection) return;
@@ -407,18 +413,11 @@ export class SchoolsComponent implements OnInit {
     }
   }
 
-  // New method to get the translated school address for display
+
     getSchoolAddressTranslated(englishAddress: string): string {
-    // This function should return the Tamil address from the selectedSchoolDetails
-    // or fallback to the English address if not found.
-    // The selectedSchoolDetails should already contain addressTa if populated.
     if (this.selectedSchoolDetails && this.selectedSchoolDetails.address === englishAddress) {
       return this.selectedSchoolDetails.addressTa || englishAddress;
     }
-    // If selectedSchoolDetails is not available or doesn't match,
-    // you might want to perform a lookup or just return the English address.
-    // For simplicity, we'll return the form's addressTa value if available,
-    // otherwise the English address.
     const addressTaFromForm = this.schoolForm.get('basicInfo.addressTa')?.value;
     return addressTaFromForm || englishAddress;
   }
@@ -433,81 +432,74 @@ export class SchoolsComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    // Before final submission, mark all controls in all sections as touched
-    this.schoolForm.get('basicInfo')?.markAllAsTouched();
-    this.schoolForm.get('infrastructure')?.markAllAsTouched();
-    this.schoolForm.get('documentation')?.markAllAsTouched();
-    this.cdRef.detectChanges(); // Force update to show all errors
+  // Replace your existing onSubmit function with this one
 
-    if (this.schoolForm.valid) {
-      // getRawValue() includes disabled controls, which is important for auto-populated fields
-      const rawFormData = this.schoolForm.getRawValue();
+onSubmit(): void {
+  // Mark all controls as touched to show validation
+  this.schoolForm.markAllAsTouched();
+  this.cdRef.detectChanges();
 
-      // Construct the data payload to send to your Node.js backend
-      // Ensure the keys here match your Mongoose schema fields exactly.
-      const dataToSend: SchoolFormData = { // <-- Type assertion here
-        schoolNameEn: rawFormData.basicInfo.schoolNameEn,
-        schoolNameTa: rawFormData.basicInfo.schoolNameTa,
-        udiseCode: rawFormData.basicInfo.udiseCode,
-        schoolType: rawFormData.basicInfo.schoolType,
-        district: rawFormData.basicInfo.district, // Now included from disabled field
-        block: rawFormData.basicInfo.block,      // Now included from disabled field
-        address: rawFormData.basicInfo.address,
-        addressTa: rawFormData.basicInfo.addressTa, // Include Tamil address
-        pincode: rawFormData.basicInfo.pincode,
-        establishedYear: rawFormData.basicInfo.establishedYear,
-        studentCount: rawFormData.basicInfo.studentCount,
-        teacherCount: rawFormData.basicInfo.teacherCount,
-        principalName: rawFormData.basicInfo.principalName,
-        principalContact: rawFormData.basicInfo.principalContact,
-        principalEmail: rawFormData.basicInfo.principalEmail,
-        renovationAreas: this.getSelectedRenovationAreas(), // Use the helper to get selected strings
-        priority: rawFormData.infrastructure.priority,
-        budgetRange: rawFormData.infrastructure.budgetRange,
-        currentCondition: rawFormData.infrastructure.currentCondition,
-        expectedOutcome: rawFormData.infrastructure.expectedOutcome,
-        // For files, send just the file name (as an example).
-        // For actual file uploads, you'd integrate a file upload service or separate API endpoint
-        // that returns URLs/paths, which you then store here.
-        recognitionCert: rawFormData.documentation.recognitionCert ? rawFormData.documentation.recognitionCert.name : undefined,
-        assessmentReport: rawFormData.documentation.assessmentReport ? rawFormData.documentation.assessmentReport.name : undefined,
-        conditionPhotos: rawFormData.documentation.conditionPhotos ? rawFormData.documentation.conditionPhotos.name : undefined,
-        budgetEstimates: rawFormData.documentation.budgetEstimates ? rawFormData.documentation.budgetEstimates.name : undefined,
-      };
-
-      this.schoolService.submitSchool(dataToSend).subscribe({
-        next: (response) => {
-          console.log('Server response:', response);
-          alert(this.getTranslatedText('School registration submitted successfully!', 'பள்ளி பதிவு வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!'));
-          this.resetForm();
-        },
-        error: (error) => {
-          console.error('Error submitting form:', error);
-          let errorMessage = this.getTranslatedText('An unexpected error occurred. Please try again.', 'எதிர்பாராத பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.');
-          if (error.error && error.error.message) {
-            errorMessage = error.error.message;
-          } else if (error.statusText) {
-            errorMessage = this.getTranslatedText(`Error ${error.status}: ${error.statusText}`, `பிழை ${error.status}: ${error.statusText}`);
-          }
-          alert(this.getTranslatedText(`Submission failed: ${errorMessage}`, `சமர்ப்பிப்பு தோல்வியடைந்தது: ${errorMessage}`));
-        }
-      });
-    } else {
-      console.log('Form is invalid:', this.schoolForm);
-      this.schoolForm.markAllAsTouched(); // Mark all controls as touched to show errors
-
-      // Navigate to the first invalid step for user guidance
-      if (this.schoolForm.get('basicInfo')?.invalid) {
-        this.currentStep = 1;
-      } else if (this.schoolForm.get('infrastructure')?.invalid) {
-        this.currentStep = 2;
-      } else if (this.schoolForm.get('documentation')?.invalid) {
-        this.currentStep = 3;
-      }
-      alert(this.getTranslatedText('Please complete all required fields correctly before submitting.', 'சமர்ப்பிக்கும் முன் அனைத்து கட்டாயப் புலங்களையும் சரியாகப் பூர்த்தி செய்யவும்.'));
-    }
+  if (!this.schoolForm.valid) {
+    alert(this.getTranslatedText('Please complete all required fields correctly before submitting.', 'சமர்ப்பிக்கும் முன் அனைத்து கட்டாயப் புலங்களையும் சரியாகப் பூர்த்தி செய்யவும்.'));
+    return;
   }
+
+  const rawFormData = this.schoolForm.getRawValue();
+  const formData = new FormData();
+
+  // --- Append all text fields from basicInfo ---
+  Object.keys(rawFormData.basicInfo).forEach(key => {
+    formData.append(key, rawFormData.basicInfo[key]);
+  });
+
+  // --- Append all text fields from infrastructure ---
+  Object.keys(rawFormData.infrastructure).forEach(key => {
+    // Skip renovationAreas, we'll handle it separately
+    if (key !== 'renovationAreas') {
+      formData.append(key, rawFormData.infrastructure[key]);
+    }
+  });
+
+  // --- Append the renovationAreas array ---
+  this.getSelectedRenovationAreas().forEach(area => {
+    formData.append('renovationAreas', area);
+  });
+
+  // --- Append the uploaded files ---
+  if (rawFormData.documentation.recognitionCert) {
+    formData.append('recognitionCert', rawFormData.documentation.recognitionCert);
+  }
+  if (rawFormData.documentation.assessmentReport) {
+    formData.append('assessmentReport', rawFormData.documentation.assessmentReport);
+  }
+  if (rawFormData.documentation.budgetEstimates) {
+    formData.append('budgetEstimates', rawFormData.documentation.budgetEstimates);
+  }
+  // Append each condition photo file
+  if (rawFormData.documentation.conditionPhotos && rawFormData.documentation.conditionPhotos.length > 0) {
+    rawFormData.documentation.conditionPhotos.forEach((file: File) => {
+      formData.append('conditionPhotos', file);
+    });
+  }
+
+  // --- Now, send the FormData object to the service ---
+  this.schoolService.submitSchool(formData).subscribe({
+    next: (response) => {
+      console.log('Server response:', response);
+      alert(this.getTranslatedText('School registration submitted successfully!', 'பள்ளி பதிவு வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!'));
+      this.resetForm();
+    },
+    error: (error) => {
+      // Your existing error handling logic
+      console.error('Error submitting form:', error);
+      let detailedErrorMessage = 'An unknown error occurred.';
+      if (error.error && error.error.message) {
+          detailedErrorMessage = error.error.message;
+      }
+      alert(`Submission failed:\n\n${detailedErrorMessage}`);
+    }
+  });
+}
 
   resetForm(): void {
     this.schoolForm.reset(); // Resets all controls to null/empty
