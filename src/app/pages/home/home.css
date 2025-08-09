@@ -654,7 +654,86 @@ section {
  .slider-btn {
   opacity: 1;
 }
+/* --- STYLES FOR IMAGE POPUP MODAL --- */
 
+.image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  cursor: pointer;
+  padding: 20px;
+  /* Add some padding for smaller screens */
+}
+
+.image-modal-content {
+  position: relative;
+  cursor: default;
+  /* The image itself will now control the size */
+}
+.image-modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 16px;
+  transition: background-color 0.3s ease;
+  z-index: 2001;
+  /* Ensure they are above the image */
+}
+
+.image-modal-nav:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.image-modal-nav.prev {
+  left: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.image-modal-nav.next {
+  right: 0;
+  border-radius: 8px 0 0 8px;
+}
+.image-modal-content img {
+  display: block;
+  /* THIS IS THE KEY FIX: The image will scale up to these limits */
+  max-width: 90vw;
+  /* Can be up to 90% of the viewport width */
+  max-height: 90vh;
+  /* Can be up to 90% of the viewport height */
+
+  object-fit: contain;
+  /* Ensures the whole image is visible without distortion */
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.image-modal-close {
+  position: absolute;
+  top: -35px;
+  /* Position it just above the image */
+  right: -15px;
+  color: #ffffff;
+  font-size: 45px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.image-modal-close:hover {
+  color: #bbb;
+}
 .image-slider-overlay {
   position: absolute;
   top: 0;

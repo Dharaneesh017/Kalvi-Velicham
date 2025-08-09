@@ -14,7 +14,8 @@ import { AuthService } from './services/auth.service'; // <-- Import your AuthSe
     CommonModule,
     RouterOutlet,
     NavigationComponent, // Add NavigationComponent to imports
-    AuthModalComponent   // Add AuthModalComponent to imports
+    AuthModalComponent,
+       // Add AuthModalComponent to imports
   ],
   templateUrl: './app.html', // Your HTML file is app.html
   styleUrls: ['./app.css']   // Your CSS file is app.css

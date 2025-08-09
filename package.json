@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^20.1.0",
     "@angular/common": "^20.0.0",
     "@angular/compiler": "^20.0.0",
     "@angular/core": "^20.0.0",
@@ -26,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
     "multer": "^2.0.2",
+    "nodemailer": "^7.0.5",
     "razorpay": "^2.9.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

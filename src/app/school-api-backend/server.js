@@ -66,7 +66,7 @@ const schoolSchema = new mongoose.Schema({
 });
 const School = mongoose.model('School', schoolSchema);
 
-// --- Define Mongoose Schema and Model for VOLUNTEERS ---
+
 const volunteerSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -117,14 +117,14 @@ app.post('/api/schools',
   upload.fields([
     { name: 'recognitionCert', maxCount: 1 },
     { name: 'assessmentReport', maxCount: 1 },
-    { name: 'conditionPhotos', maxCount: 5 }, // Allow up to 5 photos
+    { name: 'conditionPhotos', maxCount: 5 }, 
     { name: 'budgetEstimates', maxCount: 1 }
   ]),
   async (req, res) => {
     try {
       const schoolData = req.body;
 
-      // Add the filenames from multer to the data object
+
       if (req.files.recognitionCert) {
         schoolData.recognitionCert = req.files.recognitionCert[0].filename;
       }
@@ -247,39 +247,42 @@ app.post('/api/auth/login', async (req, res) => {
 
 
 // --- *** NEW: MOCK DONATION SUBMISSION ROUTE *** ---
-app.post('/api/donations/submit-mock-payment', async (req, res) => {
+app.post('/api/donations/submit-mock-payment',
+  upload.single('image'), // <-- 1. ADD THIS MULTER MIDDLEWARE
+  async (req, res) => {
     try {
-        const { paymentMethod, ...donationData } = req.body;
+      // Multer has now parsed the form, so req.body will have the text fields
+      const donationData = req.body;
 
-        // --- Mock Payment Logic ---
-        // 1. Generate a fake, method-specific transaction ID
-        const mockTransactionId = `MOCK_${paymentMethod.toUpperCase()}_${Date.now()}`;
+      // 2. CHECK FOR THE UPLOADED FILE and add its name to the data
+      if (req.file) {
+        donationData.image = req.file.filename;
+      }
 
-        // 2. Create the new donation record
-        const newDonation = new Donation({
-            ...donationData,
-            paymentMethod: paymentMethod, // Save the selected payment method
-            transactionId: mockTransactionId,
-            paymentStatus: 'Succeeded' // Hardcode to 'Succeeded' for the mock
+      const mockTransactionId = `MOCK_${donationData.paymentMethod.toUpperCase()}_${Date.now()}`;
+
+      const newDonation = new Donation({
+        ...donationData,
+        transactionId: mockTransactionId,
+        paymentStatus: 'Succeeded'
+      });
+
+      await newDonation.save();
+
+      setTimeout(() => {
+        res.status(201).json({
+          message: `Mock ${donationData.paymentMethod} donation successful!`,
+          donationId: newDonation._id,
+          transactionId: mockTransactionId
         });
-
-        // 3. Save to the database
-        await newDonation.save();
-        
-        // 4. Simulate a processing delay
-        setTimeout(() => {
-            res.status(201).json({ 
-                message: `Mock ${paymentMethod} donation successful!`, 
-                donationId: newDonation._id,
-                transactionId: mockTransactionId 
-            });
-        }, 1500); // 1.5 second delay
+      }, 1500);
 
     } catch (error) {
-        console.error('Error saving mock donation:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Error saving mock donation:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
-});
+  }
+);
 
 
 

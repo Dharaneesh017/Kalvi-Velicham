@@ -35,6 +35,9 @@ export class Home implements OnInit, OnDestroy {
   private languageSubscription!: Subscription;
   selectedSchoolName = '';
   private map: any;
+  showImageModal: boolean = false;
+  modalPhotos: string[] = [];
+  currentModalPhotoIndex: number = 0;
 
 successStories = [
   {
@@ -183,7 +186,34 @@ successStories = [
   getText(english: string, tamil: string): string {
     return this.currentLanguage === 'english' ? english : tamil;
   }
+    openImageModal(school: any, clickedPhotoIndex: number, event: Event): void {
+    event.stopPropagation();
+    this.modalPhotos = school.conditionPhotos;
+    this.currentModalPhotoIndex = clickedPhotoIndex;
+    this.showImageModal = true;
+  }
 
+  // Replace the old closeImageModal method with this one
+  closeImageModal(): void {
+    this.showImageModal = false;
+    this.modalPhotos = [];
+    this.currentModalPhotoIndex = 0;
+  }
+
+  // Add these two new methods for navigation
+  previousModalPhoto(event: Event): void {
+    event.stopPropagation();
+    this.currentModalPhotoIndex = (this.currentModalPhotoIndex === 0)
+      ? this.modalPhotos.length - 1
+      : this.currentModalPhotoIndex - 1;
+  }
+
+  nextModalPhoto(event: Event): void {
+    event.stopPropagation();
+    this.currentModalPhotoIndex = (this.currentModalPhotoIndex === this.modalPhotos.length - 1)
+      ? 0
+      : this.currentModalPhotoIndex + 1;
+  }
   onSchoolHover(school: SchoolWithCoords, hovering: boolean): void {
     school.hovering = hovering;
     if (!hovering) {

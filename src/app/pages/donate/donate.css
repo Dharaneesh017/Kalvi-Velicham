@@ -2,183 +2,140 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css");
 /* Inter Font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+/* ...existing code... */
 
-/* Dark Blue Theme Variables */
-:root {
-    --primary-dark: #0f2b4d;
-    --primary-medium: #1a3a6a;
-    --primary-light: #2a4f87;
-    --secondary: #ff7d00;
-    --secondary-light: #ff9e40;
-    --text-light: #ffffff;
-    --text-muted: #b3c7e6;
-    --background: #0a1a33;
-    --card-bg: #142d56;
-    --border-color: #28457a;
-}
-
-/* Base Styles */
-:host {
-    display: block;
-}
-
-.dark-theme {
-    background-color: var(--background);
-    color: var(--text-light);
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-}
-
-.full-width-container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-}
-
-/* Hero Section */
-.donation-hero {
-    position: relative;
-    height: 65vh;
+/* Modal Animations */
+.modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+    z-index: 1000;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
+    background: rgba(10,26,51,0.85);
 }
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to right, rgba(15, 43, 77, 0.7), rgba(42, 79, 135, 0.5));
+.modal.show {
+    opacity: 1;
+    pointer-events: auto;
 }
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    padding: 20px;
-    max-width: 800px;
-}
-
-.hero-content h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.tagline {
-    font-size: 1.8rem;
-    font-weight: 300;
-    margin-bottom: 3rem;
-    color: var(--text-muted);
-}
-
-.progress-container {
-    width: 100%;
-    margin-top: 3rem;
-}
-
-.progress-bar {
-    height: 10px;
-    width: 100%;
-    background-color: var(--primary-medium);
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-}
-
-.progress-fill {
-    height: 100%;
-    background-color: var(--secondary);
-    transition: width 1s ease-in-out;
-}
-
-.progress-stats {
-    display: flex;
-    justify-content: space-between;
-    color: var(--text-muted);
-    font-size: 1rem;
-}
-
-/* Featured Schools Section */
-.schools-section {
-    padding: 4rem 2rem;
-    background: var(--background);
-}
-
-.section-title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: var(--text-light);
-    position: relative;
-}
-
-.section-title::after {
-    content: '';
-    display: block;
-    width: 100px;
-    height: 4px;
-    background: var(--secondary);
-    margin: 1rem auto 0;
-}
-
-.section-subtitle {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 3rem;
-    color: var(--text-muted);
-    font-size: 1.1rem;
-}
-
-.school-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-    padding: 0 2rem;
-}
-
-.school-card {
+/* ...existing code... */
+.modal-content {
     background: var(--card-bg);
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-}
-
-.school-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.school-image {
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(15,43,77,0.25);
+    padding: 1.5rem 1rem 1rem 1rem;
+    min-width: 280px;
+    max-width: 350px;
     width: 100%;
-    height: 200px;
-    background-size: cover;
-    background-position: center;
+    animation: modalSlideUp 0.5s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
 }
+@keyframes modalSlideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.close-btn, .btn-close-form {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 1.7rem;
+    color: var(--secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 2;
+}
+.btn-close-form {
+    top: auto;
+    right: 18px;
+    bottom: 18px;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    background: var(--primary-dark);
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(15,43,77,0.08);
+}
+.close-btn:hover, .btn-close-form:hover {
+    color: var(--secondary-light);
+}
+
+.donation-form-section {
+    padding: 1.5rem;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeInSlideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+@keyframes fadeInSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Payment Details Animations */
+.payment-details-wrapper {
+    margin-top: 1.2rem;
+    min-height: 120px;
+    position: relative;
+}
+.payment-details {
+    animation: detailsFadeIn 0.5s cubic-bezier(0.4,0,0.2,1);
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+@keyframes detailsFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Payment Details Fields */
+.payment-details .form-group {
+    margin-bottom: 1.1rem;
+}
+.payment-details .form-row {
+    display: flex;
+    gap: 1rem;
+}
+.payment-details .third-width {
+    flex: 1 1 33%;
+}
+.payment-details input, .payment-details select {
+    background: var(--primary-light);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.payment-details input:focus, .payment-details select:focus {
+    border-color: var(--secondary);
+}
+.payment-details label {
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+
 
 .school-info {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex-grow: 1;
 }
 
 .school-info h3 {
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     color: var(--text-light);
 }
 
@@ -187,7 +144,13 @@
     color: var(--text-muted);
     margin-bottom: 1rem;
 }
-
+.school-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+    padding: 0 2rem;
+}
 .renovation-areas {
     display: flex;
     flex-wrap: wrap;
@@ -202,13 +165,97 @@
     border-radius: 20px;
     font-size: 0.8rem;
 }
+/* --- STYLES FOR IMAGE POPUP MODAL --- */
 
+/* --- STYLES FOR IMAGE POPUP MODAL (Corrected) --- */
+
+.image-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    cursor: pointer;
+    padding: 20px;
+    /* Add some padding for smaller screens */
+}
+
+.image-modal-content {
+    position: relative;
+    cursor: default;
+    /* The image itself will now control the size */
+}
+
+.image-modal-content img {
+    display: block;
+    /* THIS IS THE KEY FIX: The image will scale up to these limits */
+    max-width: 90vw;
+    /* Can be up to 90% of the viewport width */
+    max-height: 90vh;
+    /* Can be up to 90% of the viewport height */
+
+    object-fit: contain;
+    /* Ensures the whole image is visible without distortion */
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.image-modal-close {
+    position: absolute;
+    top: -35px;
+    /* Position it just above the image */
+    right: -15px;
+    color: #ffffff;
+    font-size: 45px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+/* --- STYLES FOR IMAGE POPUP NAVIGATION --- */
+
+.image-modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: rgb(246, 243, 243);
+    font-size: 32px;
+    cursor: pointer;
+    padding: 16px;
+    transition: background-color 0.3s ease;
+    z-index: 2001;
+    /* Ensure they are above the image */
+}
+
+.image-modal-nav:hover {
+    background-color: rgba(28, 24, 24, 0.8);
+}
+
+.image-modal-nav.prev {
+    left: 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.image-modal-nav.next {
+    right: 0;
+    border-radius: 8px 0 0 8px;
+}
+.image-modal-close:hover {
+    color: #bbb;
+}
 /* Style for the button container to push buttons to the bottom */
 .card-buttons {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-top: auto;
+    margin-top: 1.5rem;
+    width: 100%;
 }
 
 /* Updated button styles for visibility and new map button */
@@ -259,7 +306,7 @@
 /* Modal styles */
 .modal {
     position: fixed;
-    z-index: 1000;
+    z-index: 500;
     left: 0;
     top: 0;
     width: 100%;
@@ -280,10 +327,11 @@
 .modal-content {
     background-color: var(--card-bg);
     margin: auto;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
     position: relative;
-    max-width: 90%;
+    max-width:50%;
+    max-height: 85%;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
     animation: slideUpFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -402,7 +450,86 @@
     border-color: var(--secondary);
     box-shadow: 0 0 0 3px rgba(255, 125, 0, 0.2);
 }
+/* --- SLIDER STYLES (COPIED FROM HOME.CSS) --- */
 
+.school-image {
+    position: relative;
+    height: 200px;
+    /* You can adjust this height */
+    background-color: #e2e8f0;
+    /* A light grey for the fallback */
+}
+
+.image-slider-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-slider-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-photo-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    color: #333;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+.school-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+.school-card:hover .slider-btn {
+    opacity: 1;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.slider-btn.prev {
+    left: 10px;
+}
+
+.slider-btn.next {
+    right: 10px;
+}
 /* Floating Label Effect */
 .form-group.focused label,
 .form-group.has-value label {
@@ -410,6 +537,7 @@
     color: var(--secondary);
 }
 
+/* Quick Amounts Styling */
 /* Quick Amounts Styling */
 .quick-amounts {
     display: flex;
@@ -429,6 +557,7 @@
     font-weight: 600;
     font-size: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+   
 }
 
 .quick-amounts button:hover {
@@ -440,11 +569,39 @@
 .quick-amounts button.selected {
     background: var(--secondary);
     border-color: var(--secondary-light);
-    color:#1700ae;
+    color: #1700ae;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 125, 0, 0.3);
 }
+.schools-section {
+    padding: 4rem 2rem;
+    background: var(--background);
+}
 
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--text-light);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: var(--secondary);
+    margin: 1rem auto 0;
+}
+
+.section-subtitle {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
 /* Custom Amount Styling */
 .custom-amount {
     position: relative;
@@ -622,7 +779,41 @@
     font-size: 0.9rem;
     margin: 0;
 }
+.donation-hero {
+    position: relative;
+    height: 65vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+}
 
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(15, 43, 77, 0.7), rgba(42, 79, 135, 0.5));
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 /* Form Navigation Buttons */
 .form-navigation {
     display: flex;
