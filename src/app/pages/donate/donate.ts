@@ -36,6 +36,9 @@ export class DonateComponent implements OnInit {
   showImageModal: boolean = false;
   modalPhotos: string[] = [];
   currentModalPhotoIndex: number = 0;
+  isSuccessModalVisible: boolean = false;
+donationAmount: string | null = null;
+schoolName: string | null = null;
   paymentMethods = [
     { id: 'credit_card', name: 'Credit/Debit Card', icon: 'fa-solid fa-credit-card', description: 'Pay with your card.' },
     { id: 'upi', name: 'UPI', icon: 'fa-solid fa-qrcode', description: 'Pay with any UPI app.' },
@@ -265,6 +268,7 @@ export class DonateComponent implements OnInit {
   prevStep(): void {
     this.currentStep--;
   }
+  
   onSubmit(): void {
     if (this.donationForm.invalid || !this.isCurrentStepValid()) {
       this.donationForm.markAllAsTouched();
@@ -310,13 +314,16 @@ export class DonateComponent implements OnInit {
     this.http.post<any>(apiUrl, formData).subscribe({
       next: (response) => {
         console.log('Mock payment successful:', response);
-        alert(`Thank you! Your donation of ₹${formData.get('finalAmount')} to ${this.selectedSchool?.schoolNameEn} has been recorded.`);
         this.isProcessing = false;
-        this.closeModal();
-        this.currentStep = 1;
-        this.donationForm.reset();
-        this.selectedPayment = '';
-        this.fetchSchools(); //
+        
+        // Populate the success modal data and show it
+        this.donationAmount = formData.get('finalAmount') as string;
+        this.schoolName = this.selectedSchool?.schoolNameEn || 'a school';
+        this.isSuccessModalVisible = true;
+        
+        // We'll reset the form and close the main modal in closeSuccessModal()
+        // No other actions needed here.
+        this.fetchSchools(); 
       },
       error: (err) => {
         console.error('Payment submission failed', err);
@@ -325,7 +332,14 @@ export class DonateComponent implements OnInit {
       }
     });
   }
-
+  closeSuccessModal(): void {
+    this.isSuccessModalVisible = false;
+    this.selectedSchool = null; // This closes the main donation modal
+    this.currentStep = 1;
+    this.donationForm.reset();
+    this.selectedPayment = '';
+    // No need to call fetchSchools() again here as it's already done in the success handler
+  }
   // Angular Animations for modal and payment details
   // Add this to your @Component decorator:
   // animations: [ ... ]
