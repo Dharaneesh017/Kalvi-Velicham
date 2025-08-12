@@ -1,8 +1,10 @@
 <div class="full-width-container dark-theme">
-    <div class="donation-hero"
-        [style.background-image]="'linear-gradient(rgba(15, 43, 77, 0.8), rgba(10, 26, 51, 0.9)), url(' + heroImageUrl + ')'">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
+    <div class="donation-hero" [style.position]="'relative'"
+        style="background: linear-gradient(rgba(15, 43, 77, 0.8), rgba(10, 26, 51, 0.9));">
+
+        <div class="hero-overlay" style="position:relative;z-index:2; background: rgba(15, 43, 77, 0.5);"></div>
+
+        <div class="hero-content" style="position:relative;z-index:3;">
             <h1>Rebuild Tamil Nadu Schools</h1>
             <p class="tagline">Choose a school. Make an impact. Transform a future.</p>
             <div class="progress-container">
@@ -17,53 +19,64 @@
         </div>
     </div>
 
+
     <div class="schools-section" *ngIf="!selectedSchool">
         <h2 class="section-title">Featured Government Schools in Need</h2>
         <p class="section-subtitle">You are about to make a difference in the lives of students at a Tamil Nadu
             Government School. Your support will help renovate their classrooms, provide better learning tools, and
             build a brighter tomorrow.</p>
 
-        <div class="school-list">
-            <div class="school-card" *ngFor="let school of schools" (mouseenter)="onSchoolHover(school, true)"
-                (mouseleave)="onSchoolHover(school, false)">
+ <div class="school-list">
+    <div class="school-card" *ngFor="let school of schools" (mouseenter)="onSchoolHover(school, true)"
+        (mouseleave)="onSchoolHover(school, false)">
 
-                <div class="school-image">
-                    <div class="image-slider-overlay"
-                        *ngIf="school.conditionPhotos && school.conditionPhotos.length > 0"
-                        (click)="openImageModal(school, school.currentPhotoIndex!, $event)">
+        <div class="school-image">
+            <div class="image-slider-overlay"
+                *ngIf="school.conditionPhotos && school.conditionPhotos.length > 0"
+                (click)="openImageModal(school, school.currentPhotoIndex!, $event)">
 
-                        <img [src]="school.conditionPhotos[school.currentPhotoIndex!]" alt="Condition Photo">
-                        <button class="slider-btn prev" (click)="previousPhoto(school, $event)">&lt;</button>
-                        <button class="slider-btn next" (click)="nextPhoto(school, $event)">&gt;</button>
-                    </div>
+                <img [src]="school.conditionPhotos[school.currentPhotoIndex!]" alt="Condition Photo">
+                <button class="slider-btn prev" (click)="previousPhoto(school, $event)">&lt;</button>
+                <button class="slider-btn next" (click)="nextPhoto(school, $event)">&gt;</button>
+            </div>
 
-                    <div class="no-photo-fallback"
-                        *ngIf="!school.conditionPhotos || school.conditionPhotos.length === 0">
-                        <span>No Photos Available</span>
-                    </div>
+            <div class="no-photo-fallback"
+                *ngIf="!school.conditionPhotos || school.conditionPhotos.length === 0">
+                <span>No Photos Available</span>
+            </div>
+        </div>
+
+        <div class="school-info">
+            <h3>{{school.schoolNameEn}}</h3>
+            <p class="school-location">{{school.district}}, {{school.block}}</p>
+            <div class="renovation-areas">
+                <span class="renovation-tag" *ngFor="let area of school.renovationAreas">{{area}}</span>
+            </div>
+
+            <div class="progress-container" style="margin-top: 1rem; margin-bottom: 1rem;">
+                <div class="progress-bar">
+                    <div class="progress-fill" [style]="getProgressBarStyle(school)"></div>
                 </div>
-
-                <div class="school-info">
-                    <h3>{{school.schoolNameEn}}</h3>
-                    <p class="school-location">{{school.district}}, {{school.block}}</p>
-                    <div class="renovation-areas">
-                        <span class="renovation-tag" *ngFor="let area of school.renovationAreas">{{area}}</span>
-                    </div>
-                    <div class="card-buttons">
-                        <button class="support-btn" (click)="selectSchool(school)">Support This School</button>
-                        <button class="map-btn" (click)="viewOnMap(school)">View on Map</button>
-                    </div>
+                <div class="progress-stats" style="font-size: 0.9rem; color: #e0e6ed;">
+                    <span>{{ getFundingProgress(school) }}% funded</span>
+                    <span>Goal: ₹{{ school.fundingGoal | number }}</span>
                 </div>
+            </div>
+            <div class="card-buttons">
+                <button class="support-btn" (click)="selectSchool(school)">Donate</button>
+                <button class="map-btn" (click)="viewOnMap(school)">View on Map</button>
             </div>
         </div>
     </div>
+</div>
+    </div>
 
 
-    <div class="modal" [class.show]="selectedSchool">
-        <div class="modal-content">
-            <!-- New: Conditionally show the form or the success message -->
+    <!-- Donation Form Modal -->
+    <div class="donation-modal" [class.show]="selectedSchool">
+        <div class="donation-modal-content">
             <ng-container *ngIf="!isSuccessModalVisible">
-                <span class="close-btn" (click)="closeModal()">×</span>
+                <span class="donation-close-btn" (click)="closeModal()">×</span>
                 <div class="donation-form-section">
                     <form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
                         <div class="form-header">
@@ -283,31 +296,34 @@
                                     <i class="fas fa-spinner fa-spin"></i> Processing...
                                 </span>
                             </button>
-                            <button type="button" class="btn-close-form" (click)="closeModal()">
+                            <button type="button" class="donation-btn-close-form" (click)="closeModal()">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
                     </form>
                 </div>
             </ng-container>
+        </div>
+    </div>
 
-            <!-- Success Modal Content (New Section) -->
-            <ng-container *ngIf="isSuccessModalVisible">
-                <div class="success-modal-content">
-                    <span class="btn-close-form" (click)="closeSuccessModal()"><i class="fas fa-times"></i></span>
-                    <div class="success-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="success-message">
-                        <h2>Payment Successful!</h2>
-                        <p>Thank you for your generosity! Your donation of <strong>₹{{ donationAmount }}</strong> to
-                            <strong>{{ schoolName }}</strong> has been recorded.</p>
-                    </div>
-                    <div class="success-actions">
-                        <button type="button" class="btn-primary" (click)="closeSuccessModal()">OK</button>
-                    </div>
+    <!-- Payment Success Modal -->
+    <div class="success-modal" [class.show]="isSuccessModalVisible">
+        <div class="success-modal-content">
+            <span class="success-close-btn" (click)="closeSuccessModal()"><i class="fas fa-times"></i></span>
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="success-message">
+                <div class="success-header">
+                    <h2>Payment Successful!</h2>
                 </div>
-            </ng-container>
+                <p>Thank you for your generosity! Your donation of <strong>₹{{ donationAmount }}</strong> to
+                    <strong>{{ schoolName }}</strong> has been recorded.
+                </p>
+            </div>
+            <div class="success-actions">
+                <button type="button" class="success-btn-primary" (click)="closeSuccessModal()">OK</button>
+            </div>
         </div>
     </div>
 

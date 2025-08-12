@@ -239,7 +239,7 @@ export class SchoolsComponent implements OnInit {
       return totalSelected >= min ? null : { required: true };
     };
   }
-
+ 
   onDistrictChange(selectedDistrictValue: string): void {
     this.filteredSchools = []; // Clear previous filtered schools
 

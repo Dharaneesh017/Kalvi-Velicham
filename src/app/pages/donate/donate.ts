@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SchoolService, FetchedSchool } from '../../services/school.service';
 import { CommonModule } from '@angular/common';
@@ -23,7 +24,10 @@ export class DonateComponent implements OnInit {
   currentStep = 1;
   selectedPayment: string = '';
   isProcessing: boolean = false;
-  heroImageUrl: string = 'assets/images/your-background-image.jpg';
+  
+
+  // tsparticles config for professional animated background
+ 
 
   schools: SchoolWithSlider[] = [];
   selectedSchool: SchoolWithSlider | null = null;
@@ -160,7 +164,17 @@ schoolName: string | null = null;
       ? this.modalPhotos.length - 1
       : this.currentModalPhotoIndex - 1;
   }
-
+  getFundingProgress(school: FetchedSchool): number {
+  if (!school.fundingGoal || school.fundingGoal === 0) {
+    return 0; // Avoid division by zero
+  }
+  const progress = (school.amountRaised / school.fundingGoal) * 100;
+  return Math.min(100, Math.floor(progress)); // Cap at 100%
+}
+  getProgressBarStyle(school: FetchedSchool): string {
+  const progress = this.getFundingProgress(school);
+  return `width: ${progress}%;`;
+}
   nextModalPhoto(event: Event): void {
     event.stopPropagation();
     this.currentModalPhotoIndex = (this.currentModalPhotoIndex === this.modalPhotos.length - 1)
@@ -323,7 +337,7 @@ schoolName: string | null = null;
         
         // We'll reset the form and close the main modal in closeSuccessModal()
         // No other actions needed here.
-        this.fetchSchools(); 
+        
       },
       error: (err) => {
         console.error('Payment submission failed', err);
@@ -338,10 +352,13 @@ schoolName: string | null = null;
     this.currentStep = 1;
     this.donationForm.reset();
     this.selectedPayment = '';
+    this.fetchSchools(); 
     // No need to call fetchSchools() again here as it's already done in the success handler
   }
   // Angular Animations for modal and payment details
   // Add this to your @Component decorator:
   // animations: [ ... ]
+
+    // ...existing code...
 
 }

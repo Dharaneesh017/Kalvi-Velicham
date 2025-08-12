@@ -1,1 +1,119 @@
-<p>successstories works!</p>
+<main class="success-stories-page">
+    <div class="page-container">
+
+        <header class="featured-story-section" *ngIf="featuredStory">
+            <div class="featured-image">
+                <img [src]="getStoryImage(featuredStory)" alt="Featured renovation at {{ featuredStory.schoolNameEn }}">
+                <div class="overlay"></div>
+            </div>
+            <div class="featured-content">
+                <span class="featured-badge">Featured Success</span>
+                <h1>{{ featuredStory.schoolNameEn }}</h1>
+                <p>A complete transformation in {{ featuredStory.district }}, impacting over {{
+                    featuredStory.studentCount }} students.</p>
+            </div>
+        </header>
+
+        <section class="impact-metrics">
+            <div class="metric-item">
+                <span class="metric-value">{{ totalSchoolsCompleted }}</span>
+                <span class="metric-label">Schools Transformed</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-value">₹{{ totalFundsRaised | number }}</span>
+                <span class="metric-label">Total Funds Raised</span>
+            </div>
+            <div class="metric-item">
+            <span class="metric-value">{{ totalStudentsImpacted | number }}</span>
+            <span class="metric-label">Students Impacted</span>
+            </div>
+        </section>
+
+        <section class="controls-section">
+            <div class="search-bar">
+                <input type="text" placeholder="Search by school name..." [(ngModel)]="searchQuery"
+                    (input)="applyFiltersAndPagination()">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="filters">
+                <select [(ngModel)]="selectedDistrict" (change)="applyFiltersAndPagination()">
+                    <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+                </select>
+                <select [(ngModel)]="selectedRenovationType" (change)="applyFiltersAndPagination()">
+                    <option *ngFor="let type of renovationTypes" [value]="type">{{ type }}</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="stories-grid">
+            <div *ngIf="paginatedStories.length > 0; else noStories">
+                <div class="story-card" *ngFor="let story of paginatedStories">
+                    <div class="story-image-container">
+                        <img class="story-image after" [src]="getStoryImage(story)" alt="After renovation">
+                        <img class="story-image before" [src]="story.imageBefore" alt="Before renovation">
+                        <span class="image-label before-label">Before</span>
+                        <span class="image-label after-label">After</span>
+                    </div>
+                    <div class="story-content">
+                        <h3>{{ story.schoolNameEn }}</h3>
+                        <p class="location">{{ story.block }}, {{ story.district }}</p>
+                        <div class="renovation-tags">
+                            <span *ngFor="let area of story.renovationAreas.slice(0, 3)">{{ area }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-template #noStories>
+                <div class="no-stories-message">
+                    <p>No completed projects match your criteria. Please adjust the filters or check back later!</p>
+                </div>
+            </ng-template>
+        </section>
+
+        <nav class="pagination-controls" *ngIf="totalPages > 1">
+            <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+            <span>Page {{ currentPage }} of {{ totalPages }}</span>
+            <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+        </nav>
+
+    </div>
+</main>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-wrapper">
+                    <img src="assets/images/govt_logo.jpeg" alt="Government of Tamil Nadu Logo" class="govt-logo">
+                </div>
+                <div class="footer-logo-text">
+                    <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி
+                        புதுப்பித்தல் முயற்சி' }}</h3>
+                    <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம்
+                        சிறந்த
+                        எதிர்காலத்தை உருவாக்குதல்' }}</p>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>{{ currentLanguage === 'english' ? 'Quick Links' : 'விரைவு இணைப்புகள்' }}</h4>
+                <ul>
+                    <li><a routerLink="/">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
+                    <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
+                    <li><a (click)="openAuthModal('login')">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை'
+                            }}</a></li>
+                    <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-.contact">
+                <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
+                <p>infotnschools.in</p>
+                <p>+91 9876543210</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ currentYear }} {{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative. All
+                rights reserved.' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}
+            </p>
+        </div>
+    </div>
+</footer>

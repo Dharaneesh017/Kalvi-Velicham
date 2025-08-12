@@ -1,0 +1,455 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css");
+
+:root {
+    --primary-blue: #0a2651;
+    --accent-green: #12b76a;
+    --text-dark: #101828;
+    --text-light: #f9fafb;
+    --text-muted: #667085;
+    --background-light: #f0f2f5;
+    --white: #ffffff;
+    --border-color: #d0d5dd;
+}
+
+.success-stories-page {
+    background-color: var(--background-light);
+    font-family: 'Inter', sans-serif;
+}
+
+.page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* --- Featured Story --- */
+.featured-story-section {
+    position: relative;
+    height: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    color: var(--white);
+    margin-bottom: 3rem;
+}
+
+.featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.featured-image .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 60%);
+}
+
+.featured-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+}
+
+.featured-badge {
+    background-color: var(--accent-green);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.featured-content h1 {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+}
+
+.featured-content p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* --- Impact Metrics --- */
+.impact-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+
+.metric-label {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+/* --- Controls: Search & Filter --- */
+.controls-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.search-bar {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 1rem;
+}
+
+.search-bar .fa-search {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+}
+
+.filters select {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--white);
+    cursor: pointer;
+}
+
+/* --- Story Card Grid --- */
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.story-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.story-image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    /* 16:9 Aspect Ratio */
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.story-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease;
+}
+
+.story-image.before {
+    opacity: 1;
+}
+
+.story-image.after {
+    opacity: 0;
+}
+
+.story-image-container:hover .before {
+    opacity: 0;
+}
+
+.story-image-container:hover .after {
+    opacity: 1;
+}
+
+.image-label {
+    position: absolute;
+    top: 1rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.8rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.5s ease;
+}
+
+.before-label {
+    left: 1rem;
+}
+
+.after-label {
+    right: 1rem;
+    opacity: 0;
+}
+
+.story-image-container:hover .before-label {
+    opacity: 0;
+}
+
+.story-image-container:hover .after-label {
+    opacity: 1;
+}
+
+.story-content {
+    padding: 1.5rem;
+}
+
+.story-content h3 {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+}
+
+.story-content .location {
+    color: var(--text-muted);
+    margin: 0.25rem 0 1rem;
+}
+
+.renovation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.renovation-tags span {
+    background: #eef4ff;
+    color: #3538cd;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+}
+
+.no-stories-message {
+    text-align: center;
+    padding: 3rem;
+    background: var(--white);
+    border-radius: 12px;
+    grid-column: 1 / -1;
+}
+
+/* --- Pagination --- */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+.pagination-controls button {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+    background: #f9fafb;
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.pagination-controls span {
+    font-weight: 500;
+}
+.footer {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    padding: 2.5rem 0 1rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Align items to the top of the flex container */
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+/* Footer Logo Section */
+.footer-logo {
+    display: flex;
+    /* Make footer-logo a flex container */
+    align-items: center;
+    /* Vertically align logo and text */
+    gap: 20px;
+    /* Space between logo and text content */
+    /* Ensure it takes appropriate width in the footer-content grid */
+    flex-basis: auto;
+    /* Allow content to dictate initial size */
+    flex-shrink: 0;
+    /* Prevent it from shrinking too much */
+}
+
+.logo-wrapper {
+    margin-right: 4px;
+}
+
+.govt-logo {
+    height: 100px;
+    /* Adjust based on image_10c4fd.png for a good size */
+    width: 150px;
+    /* Maintain aspect ratio */
+    max-width: 100%;
+    margin-right: 50px;
+    margin-left: -90px;
+    /* Ensure responsiveness */
+}
+
+.footer-logo-text {
+    /* This div contains the h3 and p for the initiative text */
+    margin-left: -80px;
+    display: flex;
+    flex-direction: column;
+    /* Stack the h3 and p vertically */
+    align-items: flex-start;
+    /* Align text content to the left */
+}
+
+.footer-logo h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    /* Space between title and slogan */
+    text-align: left;
+    /* Explicitly align left */
+}
+
+.footer-logo p {
+    opacity: 0.8;
+    line-height: 1.6;
+    text-align: left;
+    /* Explicitly align left */
+}
+
+/* Footer Links and Contact sections */
+.footer-links,
+.footer-contact {
+    flex-grow: 1;
+    max-width: 250px;
+    /* Keep consistent max-width for columns */
+    text-align: left;
+    cursor: pointer;
+    /* Ensure titles and lists are left-aligned */
+}
+
+.footer-links h4,
+.footer-contact h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.footer-links h4::after,
+.footer-contact h4::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--accent-orange);
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: var(--white);
+    opacity: 0.8;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+}
+
+.footer-contact p {
+    opacity: 0.8;
+    margin-bottom: 0.8rem;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-logo,
+    .footer-links,
+    .footer-contact {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-logo {
+        flex-direction: column;
+        /* Stack logo and text vertically on small screens */
+        align-items: center;
+        /* Center logo and text within its div when stacked */
+    }
+
+    /* Center the underline for h4 in stacked layout */
+    .footer-links h4::after,
+    .footer-contact h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

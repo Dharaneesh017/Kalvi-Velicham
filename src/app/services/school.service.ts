@@ -27,12 +27,9 @@ export interface SchoolFormData {
   priority: string;
   budgetRange?: string;
   currentCondition: string;
-  
   expectedOutcome?: string;
   recognitionCert?: string;
   assessmentReport?: string;
-  // --- CRITICAL FIX ---
-  // This property now correctly expects an array of strings for the photo names.
   conditionPhotos?: string[];
   budgetEstimates?: string;
 }
@@ -64,11 +61,13 @@ export interface FetchedSchool {
   expectedOutcome?: string;
   recognitionCert?: string;
   assessmentReport?: string;
-  // Updated for consistency to expect an array of photo names.
- conditionPhotos?: string[];
+  conditionPhotos?: string[];
   budgetEstimates?: string;
   submittedAt: Date;
   image?: string;
+  amountRaised: number;
+  fundingGoal: number;
+  fundingStatus: string;
 }
 
 
@@ -76,22 +75,33 @@ export interface FetchedSchool {
   providedIn: 'root'
 })
 export class SchoolService {
-  // Ensure this URL matches your backend API endpoint
-  private apiUrl = 'http://localhost:3000/api/schools';
+  // --- FIX 1: Set the API URL to the common base path ---
+  private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) { }
 
   /**
    * Submits the school registration form data to the backend.
-   * @param schoolData The form data, matching the SchoolFormData interface.
+   * @param schoolData The form data, including files.
    */
-  submitSchool(schoolData: FormData): Observable<any> { // <--- CHANGE THIS LINE
-    return this.http.post<any>(this.apiUrl, schoolData);
+  submitSchool(schoolData: FormData): Observable<any> {
+    // --- FIX 2: Append the specific endpoint for this call ---
+    return this.http.post<any>(`${this.apiUrl}/schools`, schoolData);
   }
+
   /**
-   * Fetches a list of all registered schools from the backend.
+   * Fetches a list of schools that are currently funding.
    */
   getSchools(): Observable<FetchedSchool[]> {
-    return this.http.get<FetchedSchool[]>(this.apiUrl);
+    // --- FIX 3: Append the specific endpoint for this call ---
+    return this.http.get<FetchedSchool[]>(`${this.apiUrl}/schools`);
+  }
+
+  /**
+  * Fetches schools whose funding goals have been completed.
+  */
+  getCompletedSchools(): Observable<FetchedSchool[]> {
+    // --- FIX 4: Append the specific endpoint for this call ---
+    return this.http.get<FetchedSchool[]>(`${this.apiUrl}/schools/completed`);
   }
 }

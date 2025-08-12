@@ -473,7 +473,7 @@ section {
 
 .progress-bar {
   height: 8px;
-  background-color: var(--light-gray);
+  background: linear-gradient(90deg, #00c6fb 0%, #005bea 100%);
   border-radius: 4px;
   margin-bottom: 0.5rem;
   overflow: hidden;

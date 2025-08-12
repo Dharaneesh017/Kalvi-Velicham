@@ -78,11 +78,10 @@
             <p class="location">{{ currentLanguage === 'english' ? school.district + ', ' + school.block :
               school.district + ', ' + school.block }}</p>
             <p class="needs">{{ getNeedsText(school) }}</p>
-            <div class="progress-container">
-              <div class="progress-bar" [style]="getProgressBarStyle(school)"></div>
-              <span>{{ getDisplayProgress(school) }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி
-                திரட்டப்பட்டது' }}</span>
-            </div>
+          <div class="progress-container">
+            <div class="progress-bar" [style]="getProgressBarStyle(school)"></div>
+            <span>{{ getFundingProgress(school) }}% {{ currentLanguage === 'english' ? 'funded' : 'நிதி திரட்டப்பட்டது' }}</span>
+          </div>
             <div class="card-buttons">
               <a (click)="openAuthModal('login')" class="btn support-btn">
                 {{ currentLanguage === 'english' ? 'Support This School' : 'இந்த பள்ளிக்கு ஆதரவளிக்கவும்' }}
@@ -101,25 +100,23 @@
     </div>
   </section>
 
-  <section class="success-stories">
-    <div class="container">
-      <h2>{{ currentLanguage === 'english' ? 'Recent Success Stories' : 'சமீபத்திய வெற்றிக் கதைகள்' }}</h2>
-      <div class="stories-grid">
-        <div class="story-card" *ngFor="let story of successStories">
+<section class="success-stories">
+  <div class="container">
+    <h2>{{ currentLanguage === 'english' ? 'Recent Success Stories' : 'சமீபத்திய வெற்றிக் கதைகள்' }}</h2>
+    <div class="stories-grid">
+      <div class="story-card" *ngFor="let story of completedSchools">
         <div class="story-image">
-          <img [src]="story.image" [alt]="story.title">
+          <img [src]="getSchoolImageUrl(story)" [alt]="story.schoolNameEn">
         </div>
-          <div class="story-content">
-            <h3>{{ currentLanguage === 'english' ? story.title : story.titleTa }}</h3>
-            <p>{{ currentLanguage === 'english' ? story.description : story.descriptionTa }}</p>
-            <p class="date">{{ story.date }}</p>
-            <a routerLink="/successstories" class="btn btn-small">{{ currentLanguage === 'english' ? 'Read More' :
-              'மேலும் படிக்க' }}</a>
-          </div>
+        <div class="story-content">
+          <h3>{{ currentLanguage === 'english' ? story.schoolNameEn : story.schoolNameTa }}</h3>
+          <p>{{ story.district }}, {{ story.block }}</p>
+          <p class="date">Funding Completed!</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <section class="cta-section">
     <div class="container">

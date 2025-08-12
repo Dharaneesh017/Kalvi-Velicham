@@ -35,7 +35,16 @@ const storage = multer.diskStorage({
     // --- END: MODIFICATION ---
   }
 });
-
+function convertBudgetToGoal(budgetRange) {
+  if (!budgetRange) return 500000; // Default goal if not specified
+  switch (budgetRange) {
+    case 'below_1lakh': return 100000;
+    case '1-5lakhs': return 500000;
+    case '5-10lakhs': return 1000000;
+    case 'above_10lakhs': return 2000000; // Or a higher number
+    default: return 500000;
+  }
+}
 const upload = multer({ storage: storage });
 const schoolSchema = new mongoose.Schema({
   schoolNameEn: { type: String, required: true },
@@ -62,7 +71,19 @@ const schoolSchema = new mongoose.Schema({
   assessmentReport: { type: String },
   conditionPhotos: { type: [String] },
   budgetEstimates: { type: String },
-  submittedAt: { type: Date, default: Date.now }
+  submittedAt: { type: Date, default: Date.now },
+  renovationAreas: { type: [String], required: true, validate: v => Array.isArray(v) && v.length > 0 },
+  priority: { type: String, required: true },
+  budgetRange: { type: String },
+  
+  // --- NEW FIELDS TO ADD ---
+  fundingGoal: { type: Number, default: 0 },
+  amountRaised: { type: Number, default: 0 },
+  fundingStatus: { type: String, default: 'Funding' }, // e.g., 'Funding', 'Completed'
+  // --- END OF NEW FIELDS ---
+fundingStatus: { type: String, default: 'Funding' },
+  currentCondition: { type: String, required: true },
+  expectedOutcome: { type: String },
 });
 const School = mongoose.model('School', schoolSchema);
 
@@ -123,7 +144,7 @@ app.post('/api/schools',
   async (req, res) => {
     try {
       const schoolData = req.body;
-
+       schoolData.fundingGoal = convertBudgetToGoal(schoolData.budgetRange);
 
       if (req.files.recognitionCert) {
         schoolData.recognitionCert = req.files.recognitionCert[0].filename;
@@ -157,7 +178,15 @@ app.post('/api/schools',
 
 app.get('/api/schools', async (req, res) => {
   try {
-    const schools = await School.find({}); 
+    const schools = await School.find({ fundingStatus: 'Funding' }); 
+    res.status(200).json(schools);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+app.get('/api/schools/completed', async (req, res) => {
+  try {
+    const schools = await School.find({ fundingStatus: 'Completed' });
     res.status(200).json(schools);
   } catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });
@@ -268,7 +297,18 @@ app.post('/api/donations/submit-mock-payment',
       });
 
       await newDonation.save();
-
+      if (newDonation.selectedSchoolId && newDonation.finalAmount > 0) {
+        const school = await School.findById(newDonation.selectedSchoolId);
+        if (school) {
+          school.amountRaised += newDonation.finalAmount;
+          
+          // Check if the funding goal has been met or exceeded
+          if (school.amountRaised >= school.fundingGoal) {
+            school.fundingStatus = 'Completed';
+          }
+          await school.save();
+        }
+      }
       setTimeout(() => {
         res.status(201).json({
           message: `Mock ${donationData.paymentMethod} donation successful!`,

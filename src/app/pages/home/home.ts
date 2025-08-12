@@ -38,7 +38,7 @@ export class Home implements OnInit, OnDestroy {
   showImageModal: boolean = false;
   modalPhotos: string[] = [];
   currentModalPhotoIndex: number = 0;
-
+  completedSchools: FetchedSchool[] = [];
 successStories = [
   {
     title: 'Salem Village School Transformation',
@@ -154,8 +154,16 @@ successStories = [
     console.error('Error fetching schools:', error);
     alert('An error occurred while fetching school details. Please try again later.');
   }
+  
 });
-
+    this.schoolService.getCompletedSchools().subscribe({
+      next: (schools) => {
+        this.completedSchools = schools;
+      },
+      error: (error) => {
+        console.error('Error fetching completed schools:', error);
+      }
+    });
     const defaultIcon = Icon.Default;
     defaultIcon.mergeOptions({
       iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
@@ -241,9 +249,16 @@ successStories = [
 
 
   getProgressBarStyle(school: FetchedSchool): string {
-    const progress = school.studentCount ? Math.min(100, Math.floor(school.studentCount / 10) * 5) : (Math.floor(Math.random() * 80) + 10);
-    return `width: ${progress}%;`;
+  const progress = this.getFundingProgress(school);
+  return `width: ${progress}%;`;
+}
+getFundingProgress(school: FetchedSchool): number {
+  if (!school.fundingGoal || school.fundingGoal === 0) {
+    return 0; // Avoid division by zero
   }
+  const progress = (school.amountRaised / school.fundingGoal) * 100;
+  return Math.min(100, Math.floor(progress)); // Cap at 100%
+}
 
  
   getDisplayProgress(school: FetchedSchool): number {
