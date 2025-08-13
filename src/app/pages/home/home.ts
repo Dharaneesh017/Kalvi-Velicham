@@ -128,6 +128,7 @@ successStories = [
     this.languageSubscription = this.languageService.language$.subscribe(lang => {
     this.currentLanguage = lang;
   });
+   this.startImageSlider(); 
   this.schoolService.getSchools().subscribe({
   next: (schools) => {
     this.fetchedSchools = schools.map(school => {

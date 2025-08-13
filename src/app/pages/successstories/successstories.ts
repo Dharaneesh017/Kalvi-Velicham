@@ -1,76 +1,92 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit ,ChangeDetectorRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SchoolService, FetchedSchool } from '../../services/school.service';
-import { AuthService } from '../../services/auth.service';
-import { AuthModalComponent } from '../auth-modal/auth-modal';
-import { Router,RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { LanguageService } from '../../services/language.service';
-// Interface to add a 'before' image for a more compelling story
+
+// --- CORRECTED INTERFACE ---
+// This interface is now aligned with the data structure for the image carousel.
+// It only includes the 'images' array and 'currentImageIndex'.
 export interface SuccessStory extends FetchedSchool {
-  imageBefore?: string; // URL for a "before renovation" image
+  images: string[];
+  currentImageIndex: number;
 }
 
 @Component({
   selector: 'app-successstories',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterLink,RouterModule],
+  imports: [CommonModule, FormsModule, RouterLink, RouterModule],
   templateUrl: './successstories.html',
   styleUrls: ['./successstories.css']
 })
-export class Successstories implements OnInit {
-  // Data Storage
+export class Successstories implements OnInit, OnDestroy {
   allStories: SuccessStory[] = [];
   paginatedStories: SuccessStory[] = [];
   featuredStory: SuccessStory | null = null;
   currentYear: number = new Date().getFullYear();
   currentLanguage = 'english';
-  // Filtering & Search
-  districts: string[] = [];
+
+  // Filtering & Search properties
+  districts: string[] = ['All Districts'];
   renovationTypes: string[] = ['All Types', 'Classrooms', 'Restrooms', 'Library', 'Playground', 'Drinking Water', 'Boundary Wall'];
   selectedDistrict: string = 'All Districts';
   selectedRenovationType: string = 'All Types';
   searchQuery: string = '';
-totalStudentsImpacted: number = 0;
-  // Pagination
+  totalStudentsImpacted: number = 0;
+
+  // Pagination properties
   currentPage: number = 1;
-  itemsPerPage: number = 6; // Show 6 stories per page
+  itemsPerPage: number = 6;
   totalPages: number = 0;
- showAuthModal: boolean = false;
-  authModalInitialTab: 'login' | 'register' = 'login';
-   private shouldRedirectAfterLogin: boolean = false;
-  showRegistrationSuccessMessage: boolean = false;
+
   // Impact Metrics
   totalSchoolsCompleted: number = 0;
   totalFundsRaised: number = 0;
-selectedSchoolForDonationId: string | null = null;
-   constructor(
-      private languageService: LanguageService,
-      private schoolService: SchoolService,
-      private authService: AuthService,
-      private router: Router
-    ) {}
+  private featuredStoryInterval: any;
+  private currentFeaturedIndex = 0;
+  
+  constructor(
+    private languageService: LanguageService,
+    private schoolService: SchoolService, // Inject the service
+    private router: Router,
+    private ref: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    const schoolImageMap = new Map<string, string[]>([
+      ['33123456807', ['assets/images/successstories/kuniyamuthur_classroom.png', 'assets/images/successstories/kuniyamuthur_drainage.png']],
+      ['33123456797', ['assets/images/successstories/royapettai_ground.png', 'assets/images/successstories/royapettai_ground.png']],
+      ['33123456820', ['assets/images/successstories/bhuvanagiri_water.png', 'assets/images/successstories/bhuvanagiri_water.png']],
+      ['33123456810', ['assets/images/successstories/sulur_classrooms.png', 'assets/images/successstories/sulur_restrooms.png']],
+    ]);
+
     this.schoolService.getCompletedSchools().subscribe({
       next: (schools) => {
-        // Assign a placeholder 'before' image to each story for demonstration
-        this.allStories = schools.map(school => ({
-          ...school,
-          imageBefore: 'assets/images/placeholder-before.jpg' // Placeholder path
-        }));
-        
-      this.totalSchoolsCompleted = this.allStories.length;
-        this.totalFundsRaised = this.allStories.reduce((sum, school) => sum + school.amountRaised, 0);
-        // --- ADD THIS LINE TO CALCULATE THE STUDENT TOTAL ---
-        this.totalStudentsImpacted = this.allStories.reduce((sum, school) => sum + school.studentCount, 0);
+        // This mapping logic is correct and now matches the updated interface.
+        this.allStories = schools.map(school => {
+          const images = schoolImageMap.get(school.udiseCode);
+          return {
+            ...school,
+            images: images || ['assets/images/default-before.jpg', 'assets/images/default-after.jpg'],
+            currentImageIndex: 0
+          };
+        });
 
-        // Set the most recently completed school as the featured story
+        console.log('Total schools for featured carousel:', this.allStories.length);
+
+        this.totalSchoolsCompleted = this.allStories.length;
+        this.totalFundsRaised = this.allStories.reduce((sum, story) => sum + story.amountRaised, 0);
+        this.totalStudentsImpacted = this.allStories.reduce((sum, story) => sum + story.studentCount, 0);
+
         if (this.allStories.length > 0) {
-          this.featuredStory = this.allStories[0]; 
+          this.featuredStory = this.allStories[0];
+          // Start the carousel only if there is more than one story
+          if (this.allStories.length > 1) {
+              this.startFeaturedStoryCarousel();
+          }
         }
 
-        // Populate district filter
         const districtSet = new Set(schools.map(school => school.district));
         this.districts = ['All Districts', ...Array.from(districtSet).sort()];
         
@@ -79,61 +95,40 @@ selectedSchoolForDonationId: string | null = null;
       error: (err) => console.error('Failed to fetch success stories:', err)
     });
   }
-openAuthModal(initialTab: 'login' | 'register', schoolId: string | null = null): void {
-    if (this.authService.isLoggedIn() && schoolId) {
-      this.router.navigate(['/donate', schoolId]);
-      return;
-    }
-    this.authModalInitialTab = initialTab;
-    this.selectedSchoolForDonationId = schoolId;
-    this.showAuthModal = true;
-    this.shouldRedirectAfterLogin = (initialTab === 'login');
-    document.body.classList.add('modal-open');
-  }
-  viewOnMap(school: FetchedSchool): void {
-    const query = `${school.schoolNameEn}, ${school.district}, ${school.pincode}`;
-    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
-  }
-  onAuthModalClose(): void {
-    this.showAuthModal = false;
-    this.selectedSchoolForDonationId = null;
-    this.shouldRedirectAfterLogin = false;
-    document.body.classList.remove('modal-open');
-  }
-  onAuthSuccess(event: { type: 'login' | 'register', user: any }): void {
-    this.showAuthModal = false;
-    if (event.type === 'login') {
-      if (this.selectedSchoolForDonationId) {
-        this.router.navigate(['/donate', this.selectedSchoolForDonationId]);
-      } else {
-        this.router.navigate(['/donate']);
-      }
-    }
-    this.selectedSchoolForDonationId = null;
-  }
-  applyFiltersAndPagination(): void {
-    // 1. Apply Search Filter
-    let filtered = this.searchQuery
-      ? this.allStories.filter(story =>
-          story.schoolNameEn.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
-      : [...this.allStories];
 
-    // 2. Apply District Filter
+  ngOnDestroy(): void {
+    clearInterval(this.featuredStoryInterval);
+  }
+
+  startFeaturedStoryCarousel(): void {
+    this.featuredStoryInterval = setInterval(() => {
+      this.currentFeaturedIndex = (this.currentFeaturedIndex + 1) % this.allStories.length;
+      this.featuredStory = this.allStories[this.currentFeaturedIndex];
+      this.ref.markForCheck();
+    }, 5000);
+  }
+
+ showNextImage(story: SuccessStory): void {
+    story.currentImageIndex = (story.currentImageIndex + 1) % story.images.length;
+  }
+showPrevImage(story: SuccessStory): void { 
+    story.currentImageIndex = (story.currentImageIndex - 1 + story.images.length) % story.images.length;
+  }
+  
+  applyFiltersAndPagination(): void {
+    let filtered = [...this.allStories];
+    if (this.searchQuery) {
+      filtered = filtered.filter(story =>
+        story.schoolNameEn.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
     if (this.selectedDistrict !== 'All Districts') {
       filtered = filtered.filter(story => story.district === this.selectedDistrict);
     }
-
-    // 3. Apply Renovation Type Filter
     if (this.selectedRenovationType !== 'All Types') {
-      filtered = filtered.filter(story => story.renovationAreas.includes(this.selectedRenovationType));
+      filtered = filtered.filter(story => story.renovationAreas.some(area => area === this.selectedRenovationType));
     }
-
-    // 4. Calculate Pagination
     this.totalPages = Math.ceil(filtered.length / this.itemsPerPage);
-    this.currentPage = 1; // Reset to first page after filtering
-
-    // 5. Slice data for the current page
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     this.paginatedStories = filtered.slice(startIndex, startIndex + this.itemsPerPage);
   }
@@ -141,13 +136,6 @@ openAuthModal(initialTab: 'login' | 'register', schoolId: string | null = null):
   goToPage(page: number): void {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
-    this.applyFiltersAndPagination(); // Re-apply to get the correct slice
-  }
-
-  getStoryImage(story: SuccessStory): string {
-    if (story.conditionPhotos && story.conditionPhotos.length > 0) {
-      return `http://localhost:3000/uploads/${story.conditionPhotos[0]}`;
-    }
-    return 'assets/images/placeholder-after.jpg'; // Default "after" image
+    this.applyFiltersAndPagination();
   }
 }

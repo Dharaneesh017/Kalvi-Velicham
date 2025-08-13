@@ -3,7 +3,7 @@
 
         <header class="featured-story-section" *ngIf="featuredStory">
             <div class="featured-image">
-                <img [src]="getStoryImage(featuredStory)" alt="Featured renovation at {{ featuredStory.schoolNameEn }}">
+                <img [src]="featuredStory.images[0]" alt="Featured renovation at {{ featuredStory.schoolNameEn }}">
                 <div class="overlay"></div>
             </div>
             <div class="featured-content">
@@ -24,8 +24,8 @@
                 <span class="metric-label">Total Funds Raised</span>
             </div>
             <div class="metric-item">
-            <span class="metric-value">{{ totalStudentsImpacted | number }}</span>
-            <span class="metric-label">Students Impacted</span>
+                <span class="metric-value">{{ totalStudentsImpacted | number }}</span>
+                <span class="metric-label">Students Impacted</span>
             </div>
         </section>
 
@@ -49,10 +49,14 @@
             <div *ngIf="paginatedStories.length > 0; else noStories">
                 <div class="story-card" *ngFor="let story of paginatedStories">
                     <div class="story-image-container">
-                        <img class="story-image after" [src]="getStoryImage(story)" alt="After renovation">
-                        <img class="story-image before" [src]="story.imageBefore" alt="Before renovation">
-                        <span class="image-label before-label">Before</span>
-                        <span class="image-label after-label">After</span>
+                        <img *ngFor="let image of story.images; let i = index" [src]="image"
+                            [class.active]="i === story.currentImageIndex" class="story-image"
+                            alt="{{ story.schoolNameEn }} - {{ i === 0 ? 'Before' : 'After' }}">
+
+                        <button class="image-nav prev" (click)="showPrevImage(story)">&#10094;</button>
+                        <button class="image-nav next" (click)="showNextImage(story)">&#10095;</button>
+
+                       
                     </div>
                     <div class="story-content">
                         <h3>{{ story.schoolNameEn }}</h3>
@@ -78,6 +82,10 @@
 
     </div>
 </main>
+
+<footer class="footer">
+</footer>
+
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
@@ -98,7 +106,7 @@
                 <ul>
                     <li><a routerLink="/">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
                     <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
-                    <li><a (click)="openAuthModal('login')">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை'
+                    <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை'
                             }}</a></li>
                     <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a>
                     </li>

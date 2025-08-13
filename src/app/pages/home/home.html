@@ -112,6 +112,9 @@
           <h3>{{ currentLanguage === 'english' ? story.schoolNameEn : story.schoolNameTa }}</h3>
           <p>{{ story.district }}, {{ story.block }}</p>
           <p class="date">Funding Completed!</p>
+          <a routerLink="/successstories" class="btn read-more-btn">
+            {{ currentLanguage === 'english' ? 'Read More' : 'மேலும் படிக்க' }}
+          </a>
         </div>
       </div>
     </div>

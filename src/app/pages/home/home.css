@@ -648,9 +648,24 @@ section {
   align-items: center;
   justify-content: center;
   opacity: 1;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+}
+.success-stories .read-more-btn {
+  margin-top: 1rem;
+  /* Add some space above the button */
+  background-color: var(--primary-blue);
+  color: var(--white);
+  text-align: center;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
+.success-stories .read-more-btn:hover {
+  background-color: var(--dark-blue);
+}
  .slider-btn {
   opacity: 1;
 }

@@ -9,8 +9,22 @@
     --background-light: #f0f2f5;
     --white: #ffffff;
     --border-color: #d0d5dd;
+    --dark-blue: #0a2651;
+    /* Added for footer */
+    --accent-orange: #f7931a;
+    /* Added for footer underlines */
 }
+@keyframes kenburns-fade-in {
+    0% {
+        transform: scale(1.1);
+        opacity: 0;
+    }
 
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 .success-stories-page {
     background-color: var(--background-light);
     font-family: 'Inter', sans-serif;
@@ -25,19 +39,35 @@
 /* --- Featured Story --- */
 .featured-story-section {
     position: relative;
-    height: 400px;
+    height: 460px;
     border-radius: 16px;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
     color: var(--white);
     margin-bottom: 3rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
+.featured-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Updated Image Styles for Professional Transition */
 .featured-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+
+    /* We now use an animation for a smoother effect */
+animation: kenburns-fade-in 2.5s ease-in-out forwards;
 }
 
 .featured-image .overlay {
@@ -47,12 +77,16 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 60%);
+    z-index: 1;
+    /* Ensure overlay is on top of the image */
 }
 
 .featured-content {
     position: relative;
     z-index: 2;
-    padding: 2rem;
+    /* Ensure content is on top of the overlay */
+    padding: 2.5rem;
+    transition: opacity 0.5 ease-in-out;
 }
 
 .featured-badge {
@@ -63,12 +97,13 @@
 }
 
 .featured-content h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin-top: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .featured-content p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     opacity: 0.9;
 }
 
@@ -78,7 +113,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     background-color: var(--white);
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 12px;
     text-align: center;
     margin-bottom: 3rem;
@@ -100,7 +135,7 @@
     color: var(--text-muted);
 }
 
-/* --- Controls: Search & Filter --- */
+/* --- Controls: Search & Filter (CORRECTED) --- */
 .controls-section {
     display: flex;
     justify-content: space-between;
@@ -113,15 +148,18 @@
 .search-bar {
     position: relative;
     flex-grow: 1;
-    max-width: 400px;
+    max-width: 450px;
 }
 
+/* Increased padding and font-size to make the search bar larger */
 .search-bar input {
     width: 100%;
-    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    padding: 0.9rem 1rem 0.9rem 2.75rem;
+    /* Increased padding */
     border-radius: 8px;
     border: 1px solid var(--border-color);
-    font-size: 1rem;
+    font-size: 1.5rem;
+    /* Increased font size */
 }
 
 .search-bar .fa-search {
@@ -135,15 +173,22 @@
 .filters {
     display: flex;
     gap: 1rem;
+    flex-shrink: 0;
 }
 
+/* Increased padding and font-size to make the dropdowns larger */
 .filters select {
-    padding: 0.8rem 1rem;
+    padding: 0.9rem 1.2rem;
+    /* Increased padding */
     border-radius: 8px;
     border: 1px solid var(--border-color);
     background-color: var(--white);
     cursor: pointer;
+    min-width: 150px;
+    font-size: 1.5rem;
+    /* Increased font size */
 }
+
 
 /* --- Story Card Grid --- */
 .stories-grid {
@@ -159,13 +204,12 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
+/* Image Container Styles */
 .story-image-container {
     position: relative;
     width: 100%;
-    padding-top: 56.25%;
-    /* 16:9 Aspect Ratio */
-    overflow: hidden;
-    cursor: pointer;
+    /* CORRECTED: Reduced padding-top to make the image shorter */
+    padding-top: 50%;
 }
 
 .story-image {
@@ -175,54 +219,57 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: opacity 0.5s ease;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
 }
 
-.story-image.before {
+.story-image.active {
     opacity: 1;
 }
 
-.story-image.after {
+.image-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    z-index: 10;
     opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.story-image-container:hover .before {
-    opacity: 0;
-}
-
-.story-image-container:hover .after {
+.story-image-container:hover .image-nav {
     opacity: 1;
+}
+
+.image-nav.prev {
+    left: 1rem;
+    border-radius: 50%;
+}
+
+.image-nav.next {
+    right: 1rem;
+    border-radius: 50%;
 }
 
 .image-label {
     position: absolute;
     top: 1rem;
-    padding: 0.3rem 0.7rem;
-    border-radius: 4px;
-    color: var(--white);
-    font-weight: 600;
-    font-size: 0.8rem;
-    background-color: rgba(0, 0, 0, 0.5);
-    transition: opacity 0.5s ease;
-}
-
-.before-label {
-    left: 1rem;
-}
-
-.after-label {
     right: 1rem;
-    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 5;
 }
 
-.story-image-container:hover .before-label {
-    opacity: 0;
-}
-
-.story-image-container:hover .after-label {
-    opacity: 1;
-}
-
+/* Content Styles */
 .story-content {
     padding: 1.5rem;
 }
@@ -285,35 +332,35 @@
 .pagination-controls span {
     font-weight: 500;
 }
+
+/* --- Footer --- */
 .footer {
     background-color: var(--dark-blue);
     color: var(--white);
     padding: 2.5rem 0 1rem;
 }
 
+.footer .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
 .footer-content {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    /* Align items to the top of the flex container */
     gap: 2rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
 }
 
-/* Footer Logo Section */
 .footer-logo {
     display: flex;
-    /* Make footer-logo a flex container */
     align-items: center;
-    /* Vertically align logo and text */
     gap: 20px;
-    /* Space between logo and text content */
-    /* Ensure it takes appropriate width in the footer-content grid */
     flex-basis: auto;
-    /* Allow content to dictate initial size */
     flex-shrink: 0;
-    /* Prevent it from shrinking too much */
 }
 
 .logo-wrapper {
@@ -322,49 +369,37 @@
 
 .govt-logo {
     height: 100px;
-    /* Adjust based on image_10c4fd.png for a good size */
     width: 150px;
-    /* Maintain aspect ratio */
     max-width: 100%;
     margin-right: 50px;
     margin-left: -90px;
-    /* Ensure responsiveness */
 }
 
 .footer-logo-text {
-    /* This div contains the h3 and p for the initiative text */
     margin-left: -80px;
     display: flex;
     flex-direction: column;
-    /* Stack the h3 and p vertically */
     align-items: flex-start;
-    /* Align text content to the left */
 }
 
 .footer-logo h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
-    /* Space between title and slogan */
     text-align: left;
-    /* Explicitly align left */
 }
 
 .footer-logo p {
     opacity: 0.8;
     line-height: 1.6;
     text-align: left;
-    /* Explicitly align left */
 }
 
-/* Footer Links and Contact sections */
 .footer-links,
 .footer-contact {
     flex-grow: 1;
     max-width: 250px;
-    /* Keep consistent max-width for columns */
     text-align: left;
     cursor: pointer;
-    /* Ensure titles and lists are left-aligned */
 }
 
 .footer-links h4,
@@ -412,7 +447,6 @@
     margin-bottom: 0.8rem;
 }
 
-/* Footer Bottom */
 .footer-bottom {
     text-align: center;
     padding-top: 1rem;
@@ -424,7 +458,6 @@
     font-size: 0.9rem;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .footer-content {
         flex-direction: column;
@@ -441,12 +474,9 @@
 
     .footer-logo {
         flex-direction: column;
-        /* Stack logo and text vertically on small screens */
         align-items: center;
-        /* Center logo and text within its div when stacked */
     }
 
-    /* Center the underline for h4 in stacked layout */
     .footer-links h4::after,
     .footer-contact h4::after {
         left: 50%;
