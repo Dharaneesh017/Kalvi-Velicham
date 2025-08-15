@@ -268,8 +268,8 @@ getFundingProgress(school: FetchedSchool): number {
 
   getSchoolImageUrl(school: FetchedSchool): string {
     const images = [
-      'assets/images/ooty-school.jpeg',
-      'assets/images/mahabalipuram-school.jpeg',
+      'assets/images/successstories/kuniyamuthur_classroom.png',
+      'assets/images/successstories/royapettai_boundarywall.png',
       'assets/images/kanyakumari-school.jpeg',
       'assets/images/success-1.jpg',
       'assets/images/success-2.jpg',

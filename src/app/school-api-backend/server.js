@@ -9,10 +9,17 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const PORT = process.env.PORT || 3000; // API will run on this port
 const multer = require('multer'); // <-- 1. Require multer
-const path = require('path');     
+const path = require('path');    
+const nodemailer = require('nodemailer'); 
 // --- MONGODB CONNECTION URI ---
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/school_renovation_db';
-
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('MongoDB connected successfully!'))
@@ -309,13 +316,37 @@ app.post('/api/donations/submit-mock-payment',
           await school.save();
         }
       }
-      setTimeout(() => {
-        res.status(201).json({
-          message: `Mock ${donationData.paymentMethod} donation successful!`,
-          donationId: newDonation._id,
-          transactionId: mockTransactionId
-        });
-      }, 1500);
+
+      
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: donationData.email,
+        subject: `Thank you for your donation to ${donationData.selectedSchoolName}!`,
+        html: `
+          <div style="font-family: sans-serif; padding: 20px; color: #333;">
+              <h2 style="color: #0a2651;">Donation Successful</h2>
+              <p>Dear ${donationData.name},</p>
+              <p>Thank you for your generous donation of <strong>₹${donationData.finalAmount}</strong> to the <strong>${donationData.selectedSchoolName}</strong> renovation initiative.</p>
+              <p>Your contribution will make a significant impact on the students and staff.</p>
+              <p>Transaction ID: <strong>${mockTransactionId}</strong></p>
+              <p>Sincerely,</p>
+              <p>The Tamil Nadu School Renovation Initiative Team</p>
+          </div>
+        `
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log('Donation confirmation email sent successfully!');
+      } catch (emailError) {
+        console.error('Error sending email:', emailError);
+      }
+      
+      res.status(201).json({
+        message: `Mock ${donationData.paymentMethod} donation successful!`,
+        donationId: newDonation._id,
+        transactionId: mockTransactionId
+      });
 
     } catch (error) {
       console.error('Error saving mock donation:', error);
@@ -323,6 +354,7 @@ app.post('/api/donations/submit-mock-payment',
     }
   }
 );
+
 
 
 

@@ -1,0 +1,85 @@
+<section class="contact-section">
+  <div class="contact-container">
+    <div class="contact-info">
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you. Please fill out the form below or reach out to us using the contact details provided.</p>
+
+      <div class="contact-details">
+        <div class="detail-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <p>Government School Renovation Initiative</p>
+        </div>
+        <div class="detail-item">
+          <i class="fas fa-envelope"></i>
+          <p><a href="mailto:info@govschoolrenovation.org">info@govtsschoolsrenovation.org</a></p>
+        </div>
+        <div class="detail-item">
+          <i class="fas fa-phone-alt"></i>
+          <p>+91 6381465795</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form-container">
+      <h2>Send us a message</h2>
+      <form class="contact-form">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-wrapper">
+                    <img src="assets/images/govt_logo.jpeg" alt="Government of Tamil Nadu Logo" class="govt-logo">
+                </div>
+                <div class="footer-logo-text">
+                    <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு பள்ளி
+                        புதுப்பித்தல் முயற்சி' }}</h3>
+                    <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம்
+                        சிறந்த
+                        எதிர்காலத்தை உருவாக்குதல்' }}</p>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>{{ currentLanguage === 'english' ? 'Quick Links' : 'விரைவு இணைப்புகள்' }}</h4>
+                <ul>
+                    <li><a routerLink="/">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
+                    <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
+                    <li><a routerLink="/schools">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை'
+                            }}</a></li>
+                    <li><a routerLink="volunteer">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-.contact">
+                <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
+                <p>infotnschools.in</p>
+                <p>+91 9876543210</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ currentYear }} {{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative. All
+                rights reserved.' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' }}
+            </p>
+        </div>
+    </div>
+</footer>
