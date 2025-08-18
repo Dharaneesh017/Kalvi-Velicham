@@ -1,9 +1,11 @@
+// donate.ts
 import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SchoolService, FetchedSchool } from '../../services/school.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { LanguageService } from '../../services/language.service'; // Added LanguageService import
 
 // 1. ADD THIS INTERFACE (COPIED FROM HOME.TS)
 interface SchoolWithSlider extends FetchedSchool {
@@ -24,7 +26,7 @@ export class DonateComponent implements OnInit {
   currentStep = 1;
   selectedPayment: string = '';
   isProcessing: boolean = false;
-  
+
 
   // tsparticles config for professional animated background
  
@@ -62,7 +64,7 @@ schoolName: string | null = null;
     { quote: "Donating to this cause was the best decision. Seeing photos of the renovated classrooms made me realize my contribution's impact.", name: "Ananya Iyer", title: "Corporate Donor" }
   ];
 
-  constructor(private fb: FormBuilder, private schoolService: SchoolService, private http: HttpClient) { }
+  constructor(private fb: FormBuilder, private schoolService: SchoolService, private http: HttpClient, public languageService: LanguageService) { }
 
   ngOnInit(): void {
     this.initializeForm();

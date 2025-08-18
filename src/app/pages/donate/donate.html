@@ -1,19 +1,21 @@
 <div class="full-width-container dark-theme">
     <div class="donation-hero" [style.position]="'relative'"
-        style="background: linear-gradient(rgba(15, 43, 77, 0.8), rgba(10, 26, 51, 0.9));">
+        style="background: linear-gradient(rgba(74, 147, 236, 0.8), rgba(10, 26, 51, 0.9));">
 
         <div class="hero-overlay" style="position:relative;z-index:2; background: rgba(15, 43, 77, 0.5);"></div>
 
         <div class="hero-content" style="position:relative;z-index:3;">
-            <h1>Rebuild Tamil Nadu Schools</h1>
-            <p class="tagline">Choose a school. Make an impact. Transform a future.</p>
+            <h1>{{ languageService.translate('rebuild_tn_schools') }}</h1>
+            <p class="tagline">{{ languageService.translate('choose_a_school') }}</p>
             <div class="progress-container">
                 <div class="progress-bar">
                     <div class="progress-fill" [style.width.%]="(raisedAmount / fundingGoal) * 100"></div>
                 </div>
                 <div class="progress-stats">
-                    <span>₹{{raisedAmount | number}} raised of ₹{{fundingGoal | number}} goal</span>
-                    <span>{{((raisedAmount / fundingGoal) * 100).toFixed(0)}}% funded</span>
+                    <span>₹{{raisedAmount | number}} {{ languageService.translate('raised_of') }} ₹{{fundingGoal |
+                        number}} {{ languageService.translate('goal') }}</span>
+                    <span>{{((raisedAmount / fundingGoal) * 100).toFixed(0)}}% {{ languageService.translate('funded')
+                        }}</span>
                 </div>
             </div>
         </div>
@@ -21,58 +23,57 @@
 
 
     <div class="schools-section" *ngIf="!selectedSchool">
-        <h2 class="section-title">Featured Government Schools in Need</h2>
-        <p class="section-subtitle">You are about to make a difference in the lives of students at a Tamil Nadu
-            Government School. Your support will help renovate their classrooms, provide better learning tools, and
-            build a brighter tomorrow.</p>
+        <h2 class="section-title">{{ languageService.translate('featured_schools') }}</h2>
+        <p class="section-subtitle">{{ languageService.translate('you_are_about_to_make_a_difference') }}</p>
 
- <div class="school-list">
-    <div class="school-card" *ngFor="let school of schools" (mouseenter)="onSchoolHover(school, true)"
-        (mouseleave)="onSchoolHover(school, false)">
+        <div class="school-list">
+            <div class="school-card" *ngFor="let school of schools" (mouseenter)="onSchoolHover(school, true)"
+                (mouseleave)="onSchoolHover(school, false)">
 
-        <div class="school-image">
-            <div class="image-slider-overlay"
-                *ngIf="school.conditionPhotos && school.conditionPhotos.length > 0"
-                (click)="openImageModal(school, school.currentPhotoIndex!, $event)">
+                <div class="school-image">
+                    <div class="image-slider-overlay"
+                        *ngIf="school.conditionPhotos && school.conditionPhotos.length > 0"
+                        (click)="openImageModal(school, school.currentPhotoIndex!, $event)">
 
-                <img [src]="school.conditionPhotos[school.currentPhotoIndex!]" alt="Condition Photo">
-                <button class="slider-btn prev" (click)="previousPhoto(school, $event)">&lt;</button>
-                <button class="slider-btn next" (click)="nextPhoto(school, $event)">&gt;</button>
-            </div>
+                        <img [src]="school.conditionPhotos[school.currentPhotoIndex!]" alt="Condition Photo">
+                        <button class="slider-btn prev" (click)="previousPhoto(school, $event)">&lt;</button>
+                        <button class="slider-btn next" (click)="nextPhoto(school, $event)">&gt;</button>
+                    </div>
 
-            <div class="no-photo-fallback"
-                *ngIf="!school.conditionPhotos || school.conditionPhotos.length === 0">
-                <span>No Photos Available</span>
-            </div>
-        </div>
-
-        <div class="school-info">
-            <h3>{{school.schoolNameEn}}</h3>
-            <p class="school-location">{{school.district}}, {{school.block}}</p>
-            <div class="renovation-areas">
-                <span class="renovation-tag" *ngFor="let area of school.renovationAreas">{{area}}</span>
-            </div>
-
-            <div class="progress-container" style="margin-top: 1rem; margin-bottom: 1rem;">
-                <div class="progress-bar">
-                    <div class="progress-fill" [style]="getProgressBarStyle(school)"></div>
+                    <div class="no-photo-fallback"
+                        *ngIf="!school.conditionPhotos || school.conditionPhotos.length === 0">
+                        <span>{{ languageService.translate('no_photos') }}</span>
+                    </div>
                 </div>
-                <div class="progress-stats" style="font-size: 0.9rem; color: #e0e6ed;">
-                    <span>{{ getFundingProgress(school) }}% funded</span>
-                    <span>Goal: ₹{{ school.fundingGoal | number }}</span>
+
+                <div class="school-info">
+                    <h3>{{school.schoolNameEn}}</h3>
+                    <p class="school-location">{{school.district}}, {{school.block}}</p>
+                    <div class="renovation-areas">
+                        <span class="renovation-tag" *ngFor="let area of school.renovationAreas">{{area}}</span>
+                    </div>
+
+                    <div class="progress-container" style="margin-top: 1rem; margin-bottom: 1rem;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style]="getProgressBarStyle(school)"></div>
+                        </div>
+                        <div class="progress-stats" style="font-size: 0.9rem; color: #e0e6ed;">
+                            <span>{{ getFundingProgress(school) }}% {{ languageService.translate('funded') }}</span>
+                            <span>{{ languageService.translate('goal') }}: ₹{{ school.fundingGoal | number }}</span>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <button class="support-btn" (click)="selectSchool(school)">{{
+                            languageService.translate('donate_btn') }}</button>
+                        <button class="map-btn" (click)="viewOnMap(school)">{{ languageService.translate('view_on_map')
+                            }}</button>
+                    </div>
                 </div>
-            </div>
-            <div class="card-buttons">
-                <button class="support-btn" (click)="selectSchool(school)">Donate</button>
-                <button class="map-btn" (click)="viewOnMap(school)">View on Map</button>
             </div>
         </div>
     </div>
-</div>
-    </div>
 
 
-    <!-- Donation Form Modal -->
     <div class="donation-modal" [class.show]="selectedSchool">
         <div class="donation-modal-content">
             <ng-container *ngIf="!isSuccessModalVisible">
@@ -80,70 +81,66 @@
                 <div class="donation-form-section">
                     <form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
                         <div class="form-header">
-                            <h2>Support {{selectedSchool?.schoolNameEn}}</h2>
-                            <p>You are about to make a difference in the lives of students at
-                                {{selectedSchool?.schoolNameEn}}. Your
-                                support will help renovate their classrooms, provide better learning tools, and build a
-                                brighter tomorrow.</p>
+                            <h2>{{ languageService.translate('support') }} {{selectedSchool?.schoolNameEn}}</h2>
+                            <p>{{ languageService.translate('you_are_about_to_make_a_difference') }}</p>
                         </div>
 
                         <div class="form-steps-indicator">
                             <div class="step" [class.active]="currentStep === 1">
                                 <div class="step-circle">1</div>
-                                <div class="step-label">Personal Info</div>
+                                <div class="step-label">{{ languageService.translate('personal_info') }}</div>
                             </div>
                             <div class="step-line"></div>
                             <div class="step" [class.active]="currentStep === 2">
                                 <div class="step-circle">2</div>
-                                <div class="step-label">Donation Amount</div>
+                                <div class="step-label">{{ languageService.translate('donation_amount') }}</div>
                             </div>
                             <div class="step-line"></div>
                             <div class="step" [class.active]="currentStep === 3">
                                 <div class="step-circle">3</div>
-                                <div class="step-label">Payment</div>
+                                <div class="step-label">{{ languageService.translate('payment') }}</div>
                             </div>
                         </div>
 
                         <div class="step-content" *ngIf="currentStep === 1">
                             <div class="form-group" [class.focused]="donationForm.get('name')?.value"
                                 [class.has-value]="donationForm.get('name')?.value">
-                                <label for="name">Full Name</label>
-                                <input type="text" id="name" formControlName="name" placeholder="Enter your full name"
-                                    required>
+                                <label for="name">{{ languageService.translate('full_name') }}</label>
+                                <input type="text" id="name" formControlName="name"
+                                    placeholder="{{ languageService.translate('enter_full_name') }}" required>
                                 <div *ngIf="donationForm.get('name')?.invalid && donationForm.get('name')?.touched"
                                     class="error-message">
-                                    Name is required.
+                                    {{ languageService.translate('name_required') }}
                                 </div>
                             </div>
                             <div class="form-group" [class.focused]="donationForm.get('email')?.value"
                                 [class.has-value]="donationForm.get('email')?.value">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" formControlName="email" placeholder="Enter your email"
-                                    required>
+                                <label for="email">{{ languageService.translate('email_address') }}</label>
+                                <input type="email" id="email" formControlName="email"
+                                    placeholder="{{ languageService.translate('enter_email') }}" required>
                                 <div *ngIf="donationForm.get('email')?.invalid && donationForm.get('email')?.touched"
                                     class="error-message">
-                                    <span *ngIf="donationForm.get('email')?.errors?.['required']">Email is
-                                        required.</span>
-                                    <span *ngIf="donationForm.get('email')?.errors?.['email']">Please enter a valid
-                                        email
-                                        address.</span>
+                                    <span *ngIf="donationForm.get('email')?.errors?.['required']">{{
+                                        languageService.translate('email_required') }}</span>
+                                    <span *ngIf="donationForm.get('email')?.errors?.['email']">{{
+                                        languageService.translate('invalid_email') }}</span>
                                 </div>
                             </div>
                             <div class="form-group" [class.focused]="donationForm.get('phone')?.value"
                                 [class.has-value]="donationForm.get('phone')?.value">
-                                <label for="phone">Phone Number</label>
+                                <label for="phone">{{ languageService.translate('phone_number') }}</label>
                                 <input type="tel" id="phone" formControlName="phone"
-                                    placeholder="Enter your phone number">
+                                    placeholder="{{ languageService.translate('enter_phone_number') }}">
                                 <div *ngIf="donationForm.get('phone')?.invalid && donationForm.get('phone')?.touched"
                                     class="error-message">
-                                    Please enter a valid 10-digit phone number.
+                                    {{ languageService.translate('invalid_phone') }}
                                 </div>
                             </div>
                         </div>
 
                         <div class="step-content" *ngIf="currentStep === 2">
                             <div class="form-group">
-                                <label>Donation Amount (₹)</label>
+                                <label>{{ languageService.translate('donation_amount') }} (₹)</label>
                                 <div class="quick-amounts">
                                     <button type="button" *ngFor="let option of quickAmounts"
                                         [class.selected]="donationForm.value.amount === option"
@@ -154,65 +151,65 @@
                                 <div class="custom-amount">
                                     <span class="currency-symbol">₹</span>
                                     <input type="number" id="amount" formControlName="amount"
-                                        placeholder="Enter custom amount" min="100" step="100" required>
+                                        placeholder="{{ languageService.translate('enter_custom_amount') }}" min="100"
+                                        step="100" required>
                                 </div>
                                 <div *ngIf="donationForm.get('amount')?.invalid && donationForm.get('amount')?.touched"
                                     class="error-message">
-                                    <span *ngIf="donationForm.get('amount')?.errors?.['required']">Donation amount is
-                                        required.</span>
-                                    <span *ngIf="donationForm.get('amount')?.errors?.['min']">Amount must be at least
-                                        ₹100.</span>
+                                    <span *ngIf="donationForm.get('amount')?.errors?.['required']">{{
+                                        languageService.translate('donation_amount_required') }}</span>
+                                    <span *ngIf="donationForm.get('amount')?.errors?.['min']">{{
+                                        languageService.translate('min_amount') }}</span>
                                 </div>
                             </div>
                             <div class="form-group" [class.focused]="donationForm.get('dedication')?.value">
-                                <label>Dedication (Optional)</label>
+                                <label>{{ languageService.translate('dedication') }} ({{
+                                    languageService.translate('optional') }})</label>
                                 <textarea formControlName="dedication"
-                                    placeholder="In honor/memory of someone special?"></textarea>
+                                    placeholder="{{ languageService.translate('dedication_placeholder') }}"></textarea>
                             </div>
                         </div>
 
                         <div class="step-content" *ngIf="currentStep === 3">
                             <div class="form-group">
-                                <label>Choose a Payment Method</label>
+                                <label>{{ languageService.translate('choose_payment_method') }}</label>
                                 <div class="payment-methods-grid">
                                     <div class="payment-method-card" *ngFor="let method of paymentMethods"
                                         [class.selected]="selectedPayment === method.id"
                                         (click)="selectPaymentMethod(method.id)">
                                         <div class="method-icon"><i class="{{ method.icon }}"></i></div>
                                         <div class="method-info">
-                                            <h4>{{method.name}}</h4>
-                                            <p>{{method.description}}</p>
+                                            <h4>{{languageService.translate(method.name)}}</h4>
+                                            <p>{{languageService.translate(method.description)}}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div *ngIf="donationForm.get('paymentMethod')?.invalid && donationForm.get('paymentMethod')?.touched"
                                     class="error-message">
-                                    Please select a payment method.
+                                    {{ languageService.translate('select_payment_method') }}
                                 </div>
                             </div>
 
-                            <!-- Payment Details Section -->
                             <div class="payment-details-wrapper">
-                                <!-- Credit Card Fields -->
                                 <div class="payment-details" *ngIf="selectedPayment === 'credit_card'" [@detailsFade]>
                                     <div class="form-group" [class.focused]="donationForm.get('cardNumber')?.value">
-                                        <label for="cardNumber">Card Number</label>
+                                        <label for="cardNumber">{{ languageService.translate('card_number') }}</label>
                                         <input type="text" id="cardNumber" formControlName="cardNumber" maxlength="19"
                                             placeholder="1234 5678 9012 3456">
                                         <div *ngIf="donationForm.get('cardNumber')?.invalid && donationForm.get('cardNumber')?.touched"
                                             class="error-message">
-                                            Please enter a valid card number.
+                                            {{ languageService.translate('invalid_card_number') }}
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group third-width"
                                             [class.focused]="donationForm.get('expiry')?.value">
-                                            <label for="expiry">Expiry Date</label>
+                                            <label for="expiry">{{ languageService.translate('expiry_date') }}</label>
                                             <input type="text" id="expiry" formControlName="expiry" maxlength="5"
                                                 placeholder="MM/YY">
                                             <div *ngIf="donationForm.get('expiry')?.invalid && donationForm.get('expiry')?.touched"
                                                 class="error-message">
-                                                Invalid expiry date.
+                                                {{ languageService.translate('invalid_expiry_date') }}
                                             </div>
                                         </div>
                                         <div class="form-group third-width"
@@ -222,52 +219,52 @@
                                                 placeholder="CVV">
                                             <div *ngIf="donationForm.get('cvv')?.invalid && donationForm.get('cvv')?.touched"
                                                 class="error-message">
-                                                Invalid CVV.
+                                                {{ languageService.translate('invalid_cvv') }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Net Banking Fields -->
                                 <div class="payment-details" *ngIf="selectedPayment === 'netbanking'">
                                     <div class="form-group" [class.focused]="donationForm.get('bankName')?.value">
-                                        <label for="bankName">Bank Name</label>
+                                        <label for="bankName">{{ languageService.translate('bank_name') }}</label>
                                         <select id="bankName" formControlName="bankName">
-                                            <option value="">Select Bank</option>
+                                            <option value="">{{ languageService.translate('select_bank') }}</option>
                                             <option *ngFor="let bank of bankNames" [value]="bank">{{bank}}</option>
                                         </select>
                                         <div *ngIf="donationForm.get('bankName')?.invalid && donationForm.get('bankName')?.touched"
                                             class="error-message">
-                                            Please select a bank.
+                                            {{ languageService.translate('select_bank_required') }}
                                         </div>
                                     </div>
                                     <div class="form-group" [class.focused]="donationForm.get('accountNumber')?.value">
-                                        <label for="accountNumber">Account Number</label>
+                                        <label for="accountNumber">{{ languageService.translate('account_number')
+                                            }}</label>
                                         <input type="text" id="accountNumber" formControlName="accountNumber"
-                                            maxlength="18" placeholder="Account Number">
+                                            maxlength="18"
+                                            placeholder="{{ languageService.translate('account_number') }}">
                                         <div *ngIf="donationForm.get('accountNumber')?.invalid && donationForm.get('accountNumber')?.touched"
                                             class="error-message">
-                                            Please enter a valid account number.
+                                            {{ languageService.translate('invalid_account_number') }}
                                         </div>
                                     </div>
                                     <div class="form-group" [class.focused]="donationForm.get('ifsc')?.value">
-                                        <label for="ifsc">IFSC Code</label>
+                                        <label for="ifsc">{{ languageService.translate('ifsc_code') }}</label>
                                         <input type="text" id="ifsc" formControlName="ifsc" maxlength="11"
-                                            placeholder="IFSC Code">
+                                            placeholder="{{ languageService.translate('ifsc_code') }}">
                                         <div *ngIf="donationForm.get('ifsc')?.invalid && donationForm.get('ifsc')?.touched"
                                             class="error-message">
-                                            Please enter a valid IFSC code.
+                                            {{ languageService.translate('invalid_ifsc_code') }}
                                         </div>
                                     </div>
                                 </div>
-                                <!-- UPI Fields -->
                                 <div class="payment-details" *ngIf="selectedPayment === 'upi'" [@detailsFade]>
                                     <div class="form-group" [class.focused]="donationForm.get('upiId')?.value">
-                                        <label for="upiId">UPI ID</label>
+                                        <label for="upiId">{{ languageService.translate('upi_id') }}</label>
                                         <input type="text" id="upiId" formControlName="upiId"
                                             placeholder="yourname@bank">
                                         <div *ngIf="donationForm.get('upiId')?.invalid && donationForm.get('upiId')?.touched"
                                             class="error-message">
-                                            Please enter a valid UPI ID.
+                                            {{ languageService.translate('invalid_upi_id') }}
                                         </div>
                                     </div>
                                 </div>
@@ -276,24 +273,24 @@
                             <div class="form-group">
                                 <label>
                                     <input type="checkbox" formControlName="coverFees">
-                                    Add ₹{{feeAmount | number}} to cover payment processing fees
+                                    {{ languageService.translate('cover_fees') }}
                                 </label>
                             </div>
                         </div>
 
                         <div class="form-navigation">
                             <button type="button" class="btn-secondary" *ngIf="currentStep > 1" (click)="prevStep()">
-                                Back
+                                {{ languageService.translate('previous') }}
                             </button>
                             <button type="button" class="btn-primary" *ngIf="currentStep < 3" (click)="nextStep()"
                                 [disabled]="!isCurrentStepValid()">
-                                Continue
+                                {{ languageService.translate('next') }}
                             </button>
                             <button type="submit" class="btn-primary" *ngIf="currentStep === 3"
                                 [disabled]="!donationForm.valid || isProcessing">
-                                <span *ngIf="!isProcessing">Proceed to Pay</span>
+                                <span *ngIf="!isProcessing">{{ languageService.translate('proceed_to_pay') }}</span>
                                 <span *ngIf="isProcessing">
-                                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                                    <i class="fas fa-spinner fa-spin"></i> {{ languageService.translate('processing') }}
                                 </span>
                             </button>
                             <button type="button" class="donation-btn-close-form" (click)="closeModal()">
@@ -306,7 +303,6 @@
         </div>
     </div>
 
-    <!-- Payment Success Modal -->
     <div class="success-modal" [class.show]="isSuccessModalVisible">
         <div class="success-modal-content">
             <span class="success-close-btn" (click)="closeSuccessModal()"><i class="fas fa-times"></i></span>
@@ -315,10 +311,11 @@
             </div>
             <div class="success-message">
                 <div class="success-header">
-                    <h2>Payment Successful!</h2>
+                    <h2>{{ languageService.translate('payment_successful') }}!</h2>
                 </div>
-                <p>Thank you for your generosity! Your donation of <strong>₹{{ donationAmount }}</strong> to
-                    <strong>{{ schoolName }}</strong> has been recorded.
+                <p>{{ languageService.translate('thank_you_message') }} <strong>₹{{ donationAmount }}</strong> {{
+                    languageService.translate('to') }}
+                    <strong>{{ schoolName }}</strong> {{ languageService.translate('has_been_recorded') }}.
                 </p>
             </div>
             <div class="success-actions">
@@ -327,28 +324,27 @@
         </div>
     </div>
 
-    <p class="bottom-info">All donations directly support infrastructure and learning resources for the selected school.
-    </p>
+    <p class="bottom-info">{{ languageService.translate('donations_directly_support') }}</p>
 
     <div class="impact-gallery">
-        <h2 class="section-title">See Your Impact</h2>
+        <h2 class="section-title">{{ languageService.translate('see_your_impact') }}</h2>
         <div class="gallery-grid">
             <div class="gallery-item" *ngFor="let image of impactImages">
                 <img [src]="image.src" [alt]="image.alt">
-                <div class="image-caption">{{image.caption}}</div>
+                <div class="image-caption">{{ languageService.translate(image.caption) }}</div>
             </div>
         </div>
     </div>
 
     <div class="testimonial-section">
-        <h2 class="section-title">Donor Stories</h2>
+        <h2 class="section-title">{{ languageService.translate('donor_stories') }}</h2>
         <div class="testimonial-carousel">
             <div class="testimonial-item" *ngFor="let testimonial of testimonials">
                 <div class="testimonial-content">
-                    <blockquote>{{testimonial.quote}}</blockquote>
+                    <blockquote>{{languageService.translate(testimonial.quote)}}</blockquote>
                     <div class="testimonial-author">
                         <div class="author-name">{{testimonial.name}}</div>
-                        <div class="author-title">{{testimonial.title}}</div>
+                        <div class="author-title">{{languageService.translate(testimonial.title)}}</div>
                     </div>
                 </div>
             </div>
@@ -374,31 +370,27 @@
                         <img src="assets/images/govt_logo.jpeg" alt="Government of Tamil Nadu Logo" class="govt-logo">
                     </div>
                     <div class="footer-logo-text">
-                        <h3>{{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative' : 'தமிழ்நாடு
-                            பள்ளி புதுப்பித்தல் முயற்சி' }}</h3>
-                        <p>{{ currentLanguage === 'english' ? 'Building better futures through education' : 'கல்வி மூலம்
-                            சிறந்த எதிர்காலத்தை உருவாக்குதல்' }}</p>
+                        <h3>{{ languageService.translate('school_renovation_initiative') }}</h3>
+                        <p>{{ languageService.translate('building_better_futures') }}</p>
                     </div>
                 </div>
                 <div class="footer-links">
-                    <h4>{{ currentLanguage === 'english' ? 'Quick Links' : 'விரைவு இணைப்புகள்' }}</h4>
+                    <h4>{{ languageService.translate('quick_links') }}</h4>
                     <ul>
-                        <li><a href="#">{{ currentLanguage === 'english' ? 'Home' : 'முகப்பு' }}</a></li>
-                        <li><a href="#">{{ currentLanguage === 'english' ? 'Schools' : 'பள்ளிகள்' }}</a></li>
-                        <li><a href="#">{{ currentLanguage === 'english' ? 'Donate' : 'நன்கொடை' }}</a></li>
-                        <li><a href="#">{{ currentLanguage === 'english' ? 'Volunteer' : 'தன்னார்வலர்' }}</a></li>
+                        <li><a href="#">{{ languageService.translate('home') }}</a></li>
+                        <li><a href="#">{{ languageService.translate('schools') }}</a></li>
+                        <li><a href="#">{{ languageService.translate('donate') }}</a></li>
+                        <li><a href="#">{{ languageService.translate('volunteer') }}</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
-                    <h4>{{ currentLanguage === 'english' ? 'Contact Us' : 'எங்களைத் தொடர்பு கொள்ள' }}</h4>
+                    <h4>{{ languageService.translate('contact_us') }}</h4>
                     <p>infotnschools.in</p>
                     <p>+91 9876543210</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; {{ currentYear }} {{ currentLanguage === 'english' ? 'Tamil Nadu School Renovation Initiative.
-                    All rights reserved.' : 'தமிழ்நாடு பள்ளி புதுப்பித்தல் முயற்சி. அனைத்து உரிமைகளும்
-                    பாதுகாக்கப்பட்டவை.' }}</p>
+                <p>&copy; {{ currentYear }} {{ languageService.translate('all_rights_reserved') }}</p>
             </div>
         </div>
     </footer>
