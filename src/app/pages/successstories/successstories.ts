@@ -25,13 +25,13 @@ export class Successstories implements OnInit, OnDestroy {
   paginatedStories: SuccessStory[] = [];
   featuredStory: SuccessStory | null = null;
   currentYear: number = new Date().getFullYear();
-  currentLanguage = 'english';
+  
 
   // Filtering & Search properties
-  districts: string[] = ['All Districts'];
-  renovationTypes: string[] = ['All Types', 'Classrooms', 'Restrooms', 'Library', 'Playground', 'Drinking Water', 'Boundary Wall'];
-  selectedDistrict: string = 'All Districts';
-  selectedRenovationType: string = 'All Types';
+  districts: string[] = ['all_districts'];
+  renovationTypes: string[] = ['all_types', 'Classrooms', 'Restrooms', 'Library', 'Playground', 'Drinking Water', 'Boundary Wall'];
+  selectedDistrict: string = 'all_districts';
+  selectedRenovationType: string = 'all_types';
   searchQuery: string = '';
   totalStudentsImpacted: number = 0;
 
@@ -47,7 +47,7 @@ export class Successstories implements OnInit, OnDestroy {
   private currentFeaturedIndex = 0;
   
   constructor(
-    private languageService: LanguageService,
+    public languageService: LanguageService, // Changed from private to public
     private schoolService: SchoolService, // Inject the service
     private router: Router,
     private ref: ChangeDetectorRef
@@ -88,7 +88,7 @@ export class Successstories implements OnInit, OnDestroy {
         }
 
         const districtSet = new Set(schools.map(school => school.district));
-        this.districts = ['All Districts', ...Array.from(districtSet).sort()];
+        this.districts = ['all_districts', ...Array.from(districtSet).sort()];
         
         this.applyFiltersAndPagination();
       },
@@ -122,10 +122,10 @@ showPrevImage(story: SuccessStory): void {
         story.schoolNameEn.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     }
-    if (this.selectedDistrict !== 'All Districts') {
+    if (this.selectedDistrict !== 'all_districts') {
       filtered = filtered.filter(story => story.district === this.selectedDistrict);
     }
-    if (this.selectedRenovationType !== 'All Types') {
+    if (this.selectedRenovationType !== 'all_types') {
       filtered = filtered.filter(story => story.renovationAreas.some(area => area === this.selectedRenovationType));
     }
     this.totalPages = Math.ceil(filtered.length / this.itemsPerPage);

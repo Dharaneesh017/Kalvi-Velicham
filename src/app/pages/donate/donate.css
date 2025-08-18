@@ -10,28 +10,51 @@
     transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    display: flex; align-items: center; justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(31, 33, 35, 0.85);
     backdrop-filter: blur(1px);
-        /* The blur effect */
-        -webkit-backdrop-filter: blur(1px);
+    /* The blur effect */
+    -webkit-backdrop-filter: blur(1px);
 }
-.donation-modal.show { opacity: 1; pointer-events: auto; }
+
+.donation-modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 .donation-modal-content {
     background-color: var(--card-bg);
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(210, 199, 199, 0.3);
-    max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
 }
- .donation-btn-close-form {
-    position: absolute; top: 10px; right: 10px;
-    font-size: 2rem; color: var(--secondary);
-    background: none; border: none; cursor: pointer; z-index: 2;
+
+.donation-btn-close-form {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 2rem;
+    color: var(--secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
 }
-.donation-close-btn:hover, .donation-btn-close-form:hover { color: var(--secondary-light); }
+
+.donation-close-btn:hover,
+.donation-btn-close-form:hover {
+    color: var(--secondary-light);
+}
 
 /* Payment Success Modal */
 .success-modal {
@@ -41,48 +64,101 @@
     z-index: 1500;
 
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    display: flex; align-items: center; justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-color: #005bea;
-  
+
     backdrop-filter: blur(1px);
-        /* The blur effect */
+    /* The blur effect */
     -webkit-backdrop-filter: blur(1px);
 }
-.success-modal.show { opacity: 1; pointer-events: auto; }
+
+.success-modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 .success-modal-content {
     background-color: #ffa3a3;
     border-radius: 15px;
     padding: 2rem 2rem;
-    max-width: 530px; width: 100%; min-height: 400px;
-    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    max-width: 530px;
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     box-shadow: 0 20px 30px rgba(44, 107, 217, 0.3);
     position: relative;
     margin-right: 10vw;
 }
+
 .success-close-btn {
-    position: absolute; top: 10px; right: 10px;
-    font-size: 2rem; color: #888;
-    background: none; border: none; cursor: pointer; z-index: 2;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 2rem;
+    color: #888;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
 }
-.success-close-btn:hover { color: #000; }
+
+.success-close-btn:hover {
+    color: #000;
+}
+
 .success-icon {
-    color: #28a745; font-size: 5rem; margin-bottom: 4.4rem;
+    color: #28a745;
+    font-size: 5rem;
+    margin-bottom: 4.4rem;
 }
+
 .success-message h2 {
-    font-size: 4rem; color: var(--text-light); margin-bottom: 2rem;font-weight: 1000;font-family:Arial, Helvetica, sans-serif;
+    font-size: 4rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    font-weight: 1000;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
 .success-message p {
-    font-size: 1.2rem; color: var(--text-muted); line-height: 1.9;font-weight: 1000;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+    font-weight: 1000;
 }
-.success-actions { margin-top: 2rem; }
+
+.success-actions {
+    margin-top: 2rem;
+}
+
 .success-btn-primary {
-    background: #28a745;; color: #191818; border: none; border-radius: 8px;
-    padding: 1rem 3rem; font-weight: 1000; font-size: 1.2rem; cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: background 0.3s;
+    background: #28a745;
+    ;
+    color: #191818;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 3rem;
+    font-weight: 1000;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s;
 }
-.success-btn-primary:hover { background: #55d072; }
+
+.success-btn-primary:hover {
+    background: #55d072;
+}
+
 /* Font Awesome for Icons */
 
 
@@ -266,7 +342,9 @@ a {
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
+    position: relative;
 }
+
 .modal-content.success-state {
     background: transparent;
     box-shadow: none;
@@ -276,6 +354,7 @@ a {
     border-radius: 0;
     /* Removes rounded corners from the invisible container */
 }
+
 @keyframes modalSlideUp {
     from {
         transform: translateY(40px);
@@ -575,7 +654,7 @@ a {
 }
 
 .modal.show {
-    display:flex;
+    display: flex;
 }
 
 
@@ -813,9 +892,12 @@ a {
 
 .section-title::after {
     content: '';
-    display: block;
-    width: 100px;
-    height: 4px;
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
     background: var(--secondary);
     margin: 1rem auto 0;
 }
@@ -1588,13 +1670,13 @@ a {
 /* --- NEW SUCCESS MODAL STYLING --- */
 .success-modal-content {
     background-color: rgba(255, 255, 255, 0.953);
-        /* Semi-transparent dark blue */
-        backdrop-filter: blur(10px);
-        /* The blur effect */
-        -webkit-backdrop-filter: blur(10px);
-        /* For Safari browser support */
-        border: 1px solid rgba(0, 0, 0, 0.2);
-      /* Sets the background to white */
+    /* Semi-transparent dark blue */
+    backdrop-filter: blur(10px);
+    /* The blur effect */
+    -webkit-backdrop-filter: blur(10px);
+    /* For Safari browser support */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    /* Sets the background to white */
     margin-left: 8vw;
     border-radius: 16px;
     padding: 3rem 0rem;
@@ -1611,6 +1693,7 @@ a {
     animation: modalSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
+
 .success-header {
     background-color: var(--primary);
     /* A solid, dark blue background */
@@ -1620,12 +1703,14 @@ a {
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
 }
+
 .success-header h2 {
     color: var(--white);
     /* White text for the header */
     margin: 0;
     font-size: 1.8rem;
 }
+
 .success-icon {
     color: #28a745;
     font-size: 5rem;
@@ -1636,8 +1721,8 @@ a {
 .success-message h2 {
     font-size: 2.4rem;
     color: #04050594;
-        /* A light color for readability */
-        /* Add a subtle shadow to the text to make it pop */
+    /* A light color for readability */
+    /* Add a subtle shadow to the text to make it pop */
     text-shadow: none;
     margin-bottom: 2rem;
 }
@@ -1645,8 +1730,8 @@ a {
 .success-message p {
     font-size: 1.2rem;
     color: #0a0a0a9c;
-        /* A light color for readability */
-        /* Add a subtle shadow to the text to make it pop */
+    /* A light color for readability */
+    /* Add a subtle shadow to the text to make it pop */
     text-shadow: none;
     line-height: 1.9;
     padding: 1.5rem;
@@ -1662,13 +1747,142 @@ a {
     background-color: #28a745;
     color: rgb(240, 235, 235);
 }
+
 .success-modal-content .btn-close-form {
     color: #4e4646;
 }
+
 .success-actions .btn-primary:hover {
     background-color: #218838;
 }
+
 .form-navigation button:empty,
 .form-navigation div:empty {
     display: none !important;
+}
+
+/* New responsive rules for mobile */
+@media (max-width: 768px) {
+
+    .donation-hero {
+        min-height: 40vh;
+        /* Adjust hero height on mobile */
+    }
+
+    .donation-hero h1 {
+        font-size: 2rem;
+    }
+
+    .donation-hero .tagline {
+        font-size: 1.1rem;
+    }
+
+    .schools-section,
+    .impact-gallery,
+    .testimonial-section {
+        padding: 2rem 1rem;
+        /* Adjust padding on sections */
+    }
+
+    .school-list {
+        grid-template-columns: 1fr;
+        /* Stack school cards on mobile */
+        padding: 0;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        /* Reduce section title size */
+        margin-bottom: 2rem;
+    }
+
+    .section-subtitle {
+        font-size: 1rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        /* Stack gallery items */
+        padding: 0;
+    }
+
+    .testimonial-carousel {
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+        scroll-snap-type: none;
+    }
+
+    .testimonial-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .footer-logo {
+        flex-direction: column;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-logo-text {
+        align-items: center;
+    }
+
+    .govt-logo {
+        height: 80px;
+        width: 120px;
+        margin: 0;
+        /* Remove negative margins for mobile */
+    }
+
+    .footer-logo-text {
+        margin: 0;
+        /* Remove negative margins for mobile */
+    }
+
+    .footer-links,
+    .footer-contact {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-links h4::after,
+    .footer-contact h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* 📱 New rules to fix the donation form modal responsiveness based on the provided image */
+@media (max-width: 768px) {
+    .donation-modal-content {
+        max-width: 95%;
+        /* Adjust width to fit mobile screens better */
+        width: 95%;
+        padding: 1rem;
+        /* Reduce padding for smaller screens */
+    }
+
+    .donation-form-section {
+        padding: 1rem;
+        /* Reduce form section padding on mobile */
+    }
+
+    .form-header h2 {
+        font-size: 1.5rem;
+        /* Scale down heading */
+    }
+
+    .form-header p {
+        font-size: 0.9rem;
+        /* Scale down paragraph text */
+    }
 }

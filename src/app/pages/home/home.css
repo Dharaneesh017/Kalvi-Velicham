@@ -1040,31 +1040,46 @@ section {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .footer-content {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .footer-logo,
-  .footer-links,
-  .footer-contact {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .footer-logo {
-    flex-direction: column;
-    /* Stack logo and text vertically on small screens */
-    align-items: center;
-    /* Center logo and text within its div when stacked */
-  }
-
-  /* Center the underline for h4 in stacked layout */
-  .footer-links h4::after,
-  .footer-contact h4::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.5rem;
+    }
+  
+    .footer-logo {
+      flex-direction: column;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  
+    .footer-logo-text {
+      align-items: center;
+    }
+  
+    .govt-logo {
+      height: 80px;
+      width: 120px;
+      margin: 0;
+      /* Remove negative margins for mobile */
+    }
+  
+    .footer-logo-text {
+      margin: 0;
+      /* Remove negative margins for mobile */
+    }
+  
+    .footer-links,
+    .footer-contact {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  
+    .footer-links h4::after,
+    .footer-contact h4::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
 }
 
 /* Responsive Design */

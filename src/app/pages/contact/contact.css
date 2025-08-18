@@ -1,4 +1,10 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css");
+/* Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
 :root {
+    --primary-blue: #0a2651;
+    --accent-orange: #f7931a;
     --primary-color: #0056b3;
     /* A professional blue */
     --secondary-color: #e9ecef;
@@ -7,6 +13,8 @@
     --white-color: #fff;
     --border-color: #ced4da;
     --shadow-color: rgba(0, 0, 0, 0.1);
+    --dark-blue: #0a2651;
+    --white: #ffffff;
 }
 
 body {
@@ -132,35 +140,37 @@ body {
 .submit-btn:hover {
     background-color: #9bb7d7;
 }
+
+/* --- Footer --- */
+/* The footer code was added from other files; consolidating and correcting it here for a complete solution. */
 .footer {
     background-color: var(--dark-blue);
     color: var(--white);
     padding: 2.5rem 0 1rem;
+    width: 100%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    /* Align items to the top of the flex container */
     gap: 2rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
 }
 
-/* Footer Logo Section */
 .footer-logo {
     display: flex;
-    /* Make footer-logo a flex container */
     align-items: center;
-    /* Vertically align logo and text */
     gap: 20px;
-    /* Space between logo and text content */
-    /* Ensure it takes appropriate width in the footer-content grid */
     flex-basis: auto;
-    /* Allow content to dictate initial size */
     flex-shrink: 0;
-    /* Prevent it from shrinking too much */
 }
 
 .logo-wrapper {
@@ -169,49 +179,36 @@ body {
 
 .govt-logo {
     height: 100px;
-    /* Adjust based on image_10c4fd.png for a good size */
     width: 150px;
-    /* Maintain aspect ratio */
     max-width: 100%;
-    margin-right: 50px;
-    margin-left: -90px;
-    /* Ensure responsiveness */
+    /* Corrected: Removed negative margins for better layout */
 }
 
 .footer-logo-text {
-    /* This div contains the h3 and p for the initiative text */
-    margin-left: -80px;
+    /* Corrected: Removed negative margins */
     display: flex;
     flex-direction: column;
-    /* Stack the h3 and p vertically */
     align-items: flex-start;
-    /* Align text content to the left */
 }
 
 .footer-logo h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
-    /* Space between title and slogan */
     text-align: left;
-    /* Explicitly align left */
 }
 
 .footer-logo p {
     opacity: 0.8;
     line-height: 1.6;
     text-align: left;
-    /* Explicitly align left */
 }
 
-/* Footer Links and Contact sections */
 .footer-links,
 .footer-contact {
     flex-grow: 1;
     max-width: 250px;
-    /* Keep consistent max-width for columns */
     text-align: left;
     cursor: pointer;
-    /* Ensure titles and lists are left-aligned */
 }
 
 .footer-links h4,
@@ -259,7 +256,6 @@ body {
     margin-bottom: 0.8rem;
 }
 
-/* Footer Bottom */
 .footer-bottom {
     text-align: center;
     padding-top: 1rem;
@@ -270,9 +266,61 @@ body {
     opacity: 0.7;
     font-size: 0.9rem;
 }
-/* Responsive adjustments */
+
+/* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
     .contact-container {
         flex-direction: column;
+    }
+
+    .contact-info,
+    .contact-form-container {
+        padding: 30px;
+    }
+
+    .contact-info h1 {
+        font-size: 2rem;
+    }
+
+    .contact-info p {
+        font-size: 1rem;
+    }
+
+    .contact-form-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-logo {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .govt-logo {
+        height: 80px;
+        width: 120px;
+    }
+
+    .footer-logo-text {
+        align-items: center;
+    }
+
+    .footer-links,
+    .footer-contact {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-links h4::after,
+    .footer-contact h4::after {
+        left: 50%;
+        transform: translateX(-50%);
     }
 }

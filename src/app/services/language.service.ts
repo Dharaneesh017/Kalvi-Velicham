@@ -102,7 +102,31 @@ public language$ = this.currentLanguage$;
       'quick_links': 'Quick Links',
       'all_rights_reserved': 'All rights reserved.',
       'email': 'info@tnschools.com',
-      'phone': '+91 9876543210'
+      'phone': '+91 9876543210',
+
+      // Success Stories Page
+      'featured_success': 'Featured Success',
+      'a_complete_transformation': 'A complete transformation in',
+      'schools_transformed': 'Schools Transformed',
+      'total_funds_raised': 'Total Funds Raised',
+      'students_impacted': 'Students Impacted',
+      'search_by_school_name': 'Search by school name...',
+      'all_districts': 'All Districts',
+      'all_types': 'All Types',
+      'no_stories_message': 'No completed projects match your criteria. Please adjust the filters or check back later!',
+      'page_of': 'Page',
+      'story_location_prefix': 'A complete transformation in',
+
+      // Contact Page
+      'contact_us_title': 'Contact Us',
+      'contact_us_message': 'We\'d love to hear from you. Please fill out the form below or reach out to us using the contact details provided.',
+      'govt_school_initiative': 'Government School Renovation Initiative',
+      'send_message_title': 'Send us a message',
+      'your_name': 'Your Name',
+      'your_email': 'Your Email',
+      'subject': 'Subject',
+      'message': 'Message',
+      'send_message': 'Send Message'
     },
     tamil: {
       // Header and Navigation
@@ -190,7 +214,31 @@ public language$ = this.currentLanguage$;
       'quick_links': 'விரைவு இணைப்புகள்',
       'all_rights_reserved': 'அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.',
       'email': 'info@tnschools.com',
-      'phone': '+91 9876543210'
+      'phone': '+91 9876543210',
+
+      // Success Stories Page
+      'featured_success': 'சிறப்பு வெற்றி',
+      'a_complete_transformation': 'ஒரு முழுமையான மாற்றம்',
+      'schools_transformed': 'பள்ளிகள் மாற்றப்பட்டன',
+      'total_funds_raised': 'திரட்டப்பட்ட மொத்த நிதி',
+      'students_impacted': 'தாக்கம் பெற்ற மாணவர்கள்',
+      'search_by_school_name': 'பள்ளிப் பெயர் மூலம் தேடுக...',
+      'all_districts': 'அனைத்து மாவட்டங்களும்',
+      'all_types': 'அனைத்து வகைகளும்',
+      'no_stories_message': 'உங்கள் தேடலுக்கு பொருத்தமான திட்டங்கள் எதுவும் இல்லை. தயவுசெய்து வடிகட்டிகளை மாற்றியமைக்கவும் அல்லது பின்னர் சரிபார்க்கவும்!',
+      'page_of': 'பக்கம்',
+      'story_location_prefix': 'ஒரு முழுமையான மாற்றம்',
+
+      // Contact Page
+      'contact_us_title': 'எங்களைத் தொடர்பு கொள்ள',
+      'contact_us_message': 'உங்கள் கருத்துக்களை அறிய நாங்கள் ஆவலுடன் உள்ளோம். தயவுசெய்து கீழே உள்ள படிவத்தை நிரப்பவும் அல்லது வழங்கப்பட்ட தொடர்பு விவரங்களைப் பயன்படுத்தி எங்களை அணுகவும்.',
+      'govt_school_initiative': 'அரசுப் பள்ளி புதுப்பித்தல் முயற்சி',
+      'send_message_title': 'எங்களுக்கு ஒரு செய்தி அனுப்பவும்',
+      'your_name': 'உங்கள் பெயர்',
+      'your_email': 'உங்கள் மின்னஞ்சல்',
+      'subject': 'தலைப்பு',
+      'message': 'செய்தி',
+      'send_message': 'செய்தி அனுப்பவும்'
     }
   };
 

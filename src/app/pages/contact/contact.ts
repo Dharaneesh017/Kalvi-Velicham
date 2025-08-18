@@ -1,6 +1,8 @@
+// contact.ts
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import CommonModule
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { LanguageService } from '../../services/language.service'; // Import LanguageService
 
 @Component({
   selector: 'app-contact',
@@ -10,7 +12,6 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
   styleUrl: './contact.css'
 })
 export class Contact {
-
   
   formData = {
     name: '',
@@ -18,9 +19,10 @@ export class Contact {
     subject: '',
     message: ''
   };
-currentLanguage = 'english';
   currentYear: number = new Date().getFullYear();
  
+  constructor(public languageService: LanguageService) {} // Make LanguageService public
+
   onSubmit() {
     console.log('Form Submitted!', this.formData);
     
