@@ -3,18 +3,17 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, ViewEncapsulation, Renderer2, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl, FormsModule, ReactiveFormsModule, AbstractControl, ValidatorFn } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { LanguageService } from '../../services/language.service'; // Ensure this path is correct
-import { VolunteerService } from '../../services/volunteer.service'; // Import your VolunteerService
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule for standalone component
+import { LanguageService } from '../../services/language.service';
+import { VolunteerService } from '../../services/volunteer.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
-// Interfaces for data structures (kept as is)
 interface VolunteerOpportunity {
   id: string;
   titleEn: string;
   titleTa: string;
   descriptionEn: string;
   descriptionTa: string;
-  icon: string; // e.g., 'fas fa-chalkboard-teacher' or SVG name
+  icon: string;
 }
 
 interface WhyVolunteerItem {
@@ -34,17 +33,18 @@ interface WhyVolunteerItem {
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    HttpClientModule 
+    HttpClientModule
   ],
   templateUrl: './volunteer.html',
   styleUrls: ['./volunteer.css'],
   encapsulation: ViewEncapsulation.None,
-  
 })
 export class VolunteerComponent implements OnInit {
   volunteerForm!: FormGroup;
   currentLanguage = 'english';
   currentYear: number = new Date().getFullYear();
+  isSubmitting: boolean = false; // New variable to track submission state
+
   whyVolunteerItems: WhyVolunteerItem[] = [
     {
       id: 'impact',
@@ -137,7 +137,8 @@ export class VolunteerComponent implements OnInit {
     private languageService: LanguageService,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document,
-    private volunteerService: VolunteerService // Inject VolunteerService here
+    private volunteerService: VolunteerService,
+    private http: HttpClient,
   ) {
     this.initializeForm();
   }
@@ -191,69 +192,70 @@ export class VolunteerComponent implements OnInit {
     return selectedAreas;
   }
 
-  onSubmit(): void {
-    this.volunteerForm.markAllAsTouched();
-
-    if (this.volunteerForm.valid) {
-      const formData = {
-        ...this.volunteerForm.value,
-        areasOfInterest: this.getSelectedAreasOfInterest()
-      };
-
-      console.log('Volunteer Form Submitted:', formData);
-
-      // Call the VolunteerService to register the volunteer
-      this.volunteerService.registerVolunteer(formData).subscribe({
-        next: (response) => {
-          console.log('Volunteer registered successfully:', response);
-          this.submissionMessage =
-            this.currentLanguage === 'english'
-              ? 'Thank you for volunteering! Your application has been submitted successfully.'
-              : 'தன்னார்வத் தொண்டில் இணைந்ததற்கு நன்றி! உங்கள் விண்ணப்பம் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது.';
-          this.showSubmissionSuccess = true;
-          this.resetForm(); // Reset form on success
-        },
-        error: (error) => {
-          console.error('Error during volunteer registration:', error);
-          let errorMessage = this.currentLanguage === 'english'
-            ? 'Volunteer registration failed. Please try again.'
-            : 'தன்னார்வலர் பதிவு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.';
-
-          if (error.status === 409) { // Assuming 409 Conflict for duplicate email
-            errorMessage = this.currentLanguage === 'english'
-              ? 'Registration failed: This email is already registered.'
-              : 'பதிவு தோல்வியடைந்தது: இந்த மின்னஞ்சல் ஏற்கனவே பதிவு செய்யப்பட்டுள்ளது.';
-          } else if (error.error && error.error.message) {
-            errorMessage = this.currentLanguage === 'english'
-              ? `Registration failed: ${error.error.message}`
-              : `பதிவு தோல்வியடைந்தது: ${error.error.message}`;
-          }
-
-          this.submissionMessage = errorMessage;
-          this.showSubmissionSuccess = false;
-        }
-      });
-
-    } else {
-      console.log('Volunteer Form is invalid:', this.volunteerForm);
+   onSubmit(): void {
+    // A. Check if the form is valid before proceeding
+    if (this.volunteerForm.invalid) {
+      this.volunteerForm.markAllAsTouched();
+      this.isSubmitting = false; 
       this.submissionMessage =
         this.currentLanguage === 'english'
           ? 'Please complete all required fields correctly before submitting.'
           : 'சமர்ப்பிக்கும் முன் தேவையான அனைத்து புலங்களையும் சரியாக நிரப்பவும்.';
       this.showSubmissionSuccess = false;
+      this.cdRef.detectChanges();
+      return; // Stop the function here if the form is invalid
     }
-    this.cdRef.detectChanges(); // Ensure UI updates based on submission status
+
+    // B. If the form is valid, start the submission process
+    this.isSubmitting = true; 
+    const formData = {
+      ...this.volunteerForm.value,
+      areasOfInterest: this.getSelectedAreasOfInterest()
+    };
+
+    // C. Post data to the server and handle the response
+    this.http.post('http://localhost:3000/api/volunteer', formData).subscribe({
+      next: (response: any) => {
+        console.log('Volunteer registered successfully:', response);
+        this.submissionMessage =
+          this.currentLanguage === 'english'
+            ? 'Thank you for volunteering! We have received your application and will reach out to you soon.'
+            : 'தன்னார்வத் தொண்டில் இணைந்ததற்கு நன்றி! உங்கள் விண்ணப்பம் பெறப்பட்டது, விரைவில் உங்களை தொடர்புகொள்வோம்.';
+        this.showSubmissionSuccess = true;
+        this.isSubmitting = false; 
+        this.resetForm();
+      },
+      error: (error) => {
+        console.error('Error during volunteer registration:', error);
+        let errorMessage = this.currentLanguage === 'english'
+          ? 'Volunteer registration failed. Please try again.'
+          : 'தன்னார்வலர் பதிவு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.';
+
+        if (error.status === 409) {
+          errorMessage = this.currentLanguage === 'english'
+            ? 'Registration failed: This email is already registered.'
+            : 'பதிவு தோல்வியடைந்தது: இந்த மின்னஞ்சல் ஏற்கனவே பதிவு செய்யப்பட்டுள்ளது.';
+        } else if (error.error && error.error.message) {
+          errorMessage = this.currentLanguage === 'english'
+            ? `Registration failed: ${error.error.message}`
+            : `பதிவு தோல்வியடைந்தது: ${error.error.message}`;
+        }
+
+        this.submissionMessage = errorMessage;
+        this.showSubmissionSuccess = false;
+        this.isSubmitting = false; 
+        this.cdRef.detectChanges();
+      }
+    });
   }
 
   resetForm(): void {
     this.volunteerForm.reset();
-
     const areasFormArray = this.volunteerForm.get('areasOfInterest') as FormArray;
     areasFormArray.clear();
     this.areasOfInterest.forEach(() => {
       areasFormArray.push(new FormControl(false));
     });
-
     this.cdRef.detectChanges();
   }
 
@@ -267,7 +269,6 @@ export class VolunteerComponent implements OnInit {
     this.areasOfInterest.forEach(() => {
       areasFormArray.push(new FormControl(false));
     });
-
     this.cdRef.detectChanges();
     this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
   }

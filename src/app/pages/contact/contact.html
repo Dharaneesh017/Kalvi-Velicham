@@ -22,28 +22,46 @@
 
     <div class="contact-form-container">
       <h2>{{ languageService.translate('send_message_title') }}</h2>
-      <form class="contact-form">
+      <!-- Use ngForm to track form validity and submission -->
+      <form #contactForm="ngForm" class="contact-form" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="name">{{ languageService.translate('your_name') }}</label>
-          <input type="text" id="name" name="name" required>
+          <input type="text" id="name" name="name" [(ngModel)]="formData.name" required>
         </div>
         <div class="form-group">
           <label for="email">{{ languageService.translate('your_email') }}</label>
-          <input type="email" id="email" name="email" required>
+          <input type="email" id="email" name="email" [(ngModel)]="formData.email" required email>
         </div>
         <div class="form-group">
           <label for="subject">{{ languageService.translate('subject') }}</label>
-          <input type="text" id="subject" name="subject" required>
+          <input type="text" id="subject" name="subject" [(ngModel)]="formData.subject" required>
         </div>
         <div class="form-group">
           <label for="message">{{ languageService.translate('message') }}</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
+          <textarea id="message" name="message" rows="5" [(ngModel)]="formData.message" required></textarea>
         </div>
-        <button type="submit" class="submit-btn">{{ languageService.translate('send_message') }}</button>
+        <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || isSubmitting"
+          [class.is-submitting]="isSubmitting">
+          <span *ngIf="!isSubmitting">{{ languageService.translate('send_message') }}</span>
+          <span *ngIf="isSubmitting">
+            <i class="fas fa-spinner fa-spin"></i> Sending...
+          </span>
+        </button>
       </form>
     </div>
   </div>
 </section>
+
+<!-- Success Pop-up -->
+<div class="success-popup-overlay" [class.show]="showSuccessPopup">
+  <div class="success-popup-card">
+    <i class="fas fa-check-circle success-icon"></i>
+    <h3>Thank you for contacting us!</h3>
+    <p>We have received your message and will get back to you soon.</p>
+    <button class="close-btn" (click)="closePopup()">OK</button>
+  </div>
+</div>
+
 <footer class="footer">
   <div class="container">
     <div class="footer-content">

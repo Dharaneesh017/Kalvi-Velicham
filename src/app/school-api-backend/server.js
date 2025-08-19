@@ -20,6 +20,15 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
+
+// Add these lines right after the transporter is created
+transporter.verify(function(error, success) {
+  if (error) {
+    console.log("Transporter verification failed:", error);
+  } else {
+    console.log("Server is ready to take our messages");
+  }
+});
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('MongoDB connected successfully!'))
@@ -202,9 +211,74 @@ app.get('/api/schools/completed', async (req, res) => {
 
 app.post('/api/volunteer', async (req, res) => {
   try {
-    const newVolunteer = new Volunteer(req.body);
+    const { fullName, email, phone, district, areasOfInterest, availability, message } = req.body;
+    
+    // Create a new volunteer instance
+    const newVolunteer = new Volunteer({
+        fullName,
+        email,
+        phone,
+        district,
+        areasOfInterest,
+        availability,
+        message,
+    });
+    
+    // Save the volunteer to the database
     await newVolunteer.save();
-    res.status(201).json({ message: 'Volunteer registered successfully!', volunteerId: newVolunteer._id });
+
+    // Nodemailer Logic - Sending two emails in a single try/catch block
+    // This is more efficient and ensures better error handling
+    try {
+        // Email 1: Send thank you email to the volunteer
+        const volunteerMailOptions = {
+          from: process.env.EMAIL_USER,
+          to: email, // This is the volunteer's email from the form
+          subject: 'Thank You for Volunteering!',
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; color: #333;">
+                <h2 style="color: #0a2651;">Thank you for your interest!</h2>
+                <p>Dear ${fullName},</p>
+                <p>Thank you for your application to volunteer with the Tamil Nadu School Renovation Initiative. We have received your details and will get back to you soon with more information.</p>
+                <p>We appreciate your willingness to contribute to our mission of building a brighter future for students.</p>
+                <p>Sincerely,</p>
+                <p>The Tamil Nadu School Renovation Initiative Team</p>
+            </div>
+          `
+        };
+
+        await transporter.sendMail(volunteerMailOptions);
+        console.log('Volunteer thank you email sent successfully!');
+
+        // Email 2: Send notification email to you (the admin)
+        const adminMailOptions = {
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER, // This is your email from the .env file
+            replyTo: email, // The volunteer's email, so you can reply directly
+            subject: `New Volunteer Application from ${fullName}`,
+            html: `
+                <div style="font-family: sans-serif; padding: 20px; color: #333;">
+                    <h2 style="color: #0a2651;">New Volunteer Application</h2>
+                    <p><strong>Name:</strong> ${fullName}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Phone:</strong> ${phone}</p>
+                    <p><strong>District:</strong> ${district}</p>
+                    <p><strong>Areas of Interest:</strong> ${areasOfInterest.join(', ')}</p>
+                    <p><strong>Availability:</strong> ${availability}</p>
+                    <p><strong>Message:</strong> ${message}</p>
+                </div>
+            `
+        };
+
+        await transporter.sendMail(adminMailOptions);
+        console.log('Admin notification email sent successfully!');
+
+    } catch (emailError) {
+        console.error('Error during email sending:', emailError);
+    }
+    
+    res.status(201).json({ message: 'Volunteer registered successfully!' });
+
   } catch (error) {
     if (error.name === 'ValidationError') {
       const errors = Object.keys(error.errors).map(key => ({ field: key, message: error.errors[key].message }));
@@ -280,7 +354,41 @@ app.post('/api/auth/login', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+app.post('/api/contact-message', async (req, res) => {
+    try {
+        const { name, email, subject, message } = req.body;
 
+        // Simple validation
+        if (!name || !email || !subject || !message) {
+            return res.status(400).json({ message: 'All fields are required.' });
+        }
+
+        const mailOptions = {
+            from: email, // The sender's email
+            to: process.env.EMAIL_USER, // Your email address
+            subject: `New Contact Message: ${subject}`,
+            html: `
+                <div style="font-family: sans-serif; padding: 20px; color: #333;">
+                    <h2 style="color: #0a2651;">New Message from Contact Form</h2>
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Subject:</strong> ${subject}</p>
+                    <hr style="border: 1px solid #ddd; margin: 20px 0;">
+                    <p><strong>Message:</strong></p>
+                    <p>${message}</p>
+                </div>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log('Contact message sent successfully!');
+        res.status(200).json({ message: 'Message sent successfully!' });
+
+    } catch (error) {
+        console.error('Error sending contact message:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
 // --- *** NEW: MOCK DONATION SUBMISSION ROUTE *** ---
 app.post('/api/donations/submit-mock-payment',

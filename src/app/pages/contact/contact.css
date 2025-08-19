@@ -1,7 +1,77 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css");
 /* Inter Font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+.success-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
 
+.success-popup-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.success-popup-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.success-popup-overlay.show .success-popup-card {
+    transform: scale(1);
+}
+
+.success-icon {
+    font-size: 60px;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+.success-popup-card h3 {
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.success-popup-card p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.success-popup-card .close-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Loading spinner style */
+.submit-btn.is-submitting {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.submit-btn .fa-spinner {
+    margin-right: 8px;
+}
 :root {
     --primary-blue: #0a2651;
     --accent-orange: #f7931a;
