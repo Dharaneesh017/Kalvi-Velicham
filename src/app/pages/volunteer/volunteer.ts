@@ -214,7 +214,7 @@ export class VolunteerComponent implements OnInit {
     };
 
     // C. Post data to the server and handle the response
-    this.http.post('http://localhost:3000/api/volunteer', formData).subscribe({
+        this.volunteerService.registerVolunteer(formData).subscribe({
       next: (response: any) => {
         console.log('Volunteer registered successfully:', response);
         this.submissionMessage =
@@ -222,10 +222,11 @@ export class VolunteerComponent implements OnInit {
             ? 'Thank you for volunteering! We have received your application and will reach out to you soon.'
             : 'தன்னார்வத் தொண்டில் இணைந்ததற்கு நன்றி! உங்கள் விண்ணப்பம் பெறப்பட்டது, விரைவில் உங்களை தொடர்புகொள்வோம்.';
         this.showSubmissionSuccess = true;
-        this.isSubmitting = false; 
+        this.isSubmitting = false;
         this.resetForm();
       },
       error: (error) => {
+        // ... (your existing error handling logic is perfect and remains the same)
         console.error('Error during volunteer registration:', error);
         let errorMessage = this.currentLanguage === 'english'
           ? 'Volunteer registration failed. Please try again.'
@@ -243,7 +244,7 @@ export class VolunteerComponent implements OnInit {
 
         this.submissionMessage = errorMessage;
         this.showSubmissionSuccess = false;
-        this.isSubmitting = false; 
+        this.isSubmitting = false;
         this.cdRef.detectChanges();
       }
     });

@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 import * as L from 'leaflet';
 import { Icon } from 'leaflet';
+import { environment } from '../../environments/environment';
 
 // Define a new type that extends FetchedSchool and adds coordinates.
 interface SchoolWithCoords extends FetchedSchool {
@@ -129,17 +130,15 @@ successStories = [
     this.currentLanguage = lang;
   });
    this.startImageSlider(); 
-  this.schoolService.getSchools().subscribe({
-  next: (schools) => {
-    this.fetchedSchools = schools.map(school => {
-      // Define the base URL for your images
-      const serverUrl = 'http://localhost:3000/uploads/';
+ this.schoolService.getSchools().subscribe({
+      next: (schools) => {
+        // --- THIS IS THE FIX for images ---
+        const serverUrl = environment.apiUrl.replace('/api', '/uploads'); // Get base URL from environment
 
-      // Use the actual photo filenames from the school object
-      const realConditionPhotos = school.conditionPhotos
-        ? school.conditionPhotos.map(photoName => serverUrl + photoName)
-        : [];
-
+        this.fetchedSchools = schools.map(school => {
+          const realConditionPhotos = school.conditionPhotos
+            ? school.conditionPhotos.map(photoName => serverUrl + photoName)
+            : [];
       return {
         ...school,
         lat: (school as any).lat || (11.1271 + (Math.random() - 0.5) * 0.5),

@@ -1,11 +1,11 @@
 // donate.ts
 import { Component, OnInit } from '@angular/core';
-
+import { environment } from '../../environments/environment';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SchoolService, FetchedSchool } from '../../services/school.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { LanguageService } from '../../services/language.service'; // Added LanguageService import
+import { LanguageService } from '../../services/language.service'; // Added LanguageService impor
 
 // 1. ADD THIS INTERFACE (COPIED FROM HOME.TS)
 interface SchoolWithSlider extends FetchedSchool {
@@ -96,8 +96,10 @@ schoolName: string | null = null;
   fetchSchools(): void {
     this.schoolService.getSchools().subscribe({
       next: (schools) => {
+        // --- FIX for images ---
+        const serverUrl = environment.apiUrl.replace('/api', '/uploads');
+
         this.schools = schools.map(school => {
-          const serverUrl = 'http://localhost:3000/uploads/';
           const realConditionPhotos = school.conditionPhotos
             ? school.conditionPhotos.map(photoName => serverUrl + photoName)
             : [];
@@ -113,7 +115,7 @@ schoolName: string | null = null;
     });
   }
   
-  // 4. ADD THESE SLIDER METHODS (COPIED FROM HOME.TS)
+  
   onSchoolHover(school: SchoolWithSlider, hovering: boolean): void {
     school.hovering = hovering;
     if (!hovering) {
@@ -325,7 +327,7 @@ schoolName: string | null = null;
       formData.append('image', formValue.image);
     }
 
-    const apiUrl = 'http://localhost:3000/api/donations/submit-mock-payment';
+    const apiUrl = `${environment.apiUrl}/donations/submit-mock-payment`;
 
     this.http.post<any>(apiUrl, formData).subscribe({
       next: (response) => {
