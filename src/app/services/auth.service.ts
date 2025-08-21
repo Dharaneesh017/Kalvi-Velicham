@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router'; // For redirection after login/register
-
+import { environment } from '../environments/environment'; 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   // Replace with your actual backend API URL
-  private apiUrl = 'https://kalvi-velicham.onrender.com/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) { }
 

@@ -29,7 +29,7 @@ transporter.verify(function(error, success) {
     console.log("Server is ready to take our messages");
   }
 });
-// Connect to MongoDB
+
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('MongoDB connected successfully!'))
   .catch(err => console.error('MongoDB connection error:', err));

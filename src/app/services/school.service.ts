@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../environments/environment'; 
 /**
  * Defines the structure for the data being SENT TO the server.
  * This is used when submitting the form.
@@ -76,7 +76,7 @@ export interface FetchedSchool {
 })
 export class SchoolService {
   // --- FIX 1: Set the API URL to the common base path ---
-  private apiUrl = 'https://kalvi-velicham.onrender.com/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
