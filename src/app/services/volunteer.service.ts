@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class VolunteerService {
-  private apiUrl = 'http://localhost:3000/api/volunteer'; // Match your backend URL
+  private apiUrl = 'https://kalvi-velicham.onrender.com/api'; // Match your backend URL
 
   constructor(private http: HttpClient) { }
 

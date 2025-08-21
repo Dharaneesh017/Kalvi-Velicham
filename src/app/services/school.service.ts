@@ -76,7 +76,7 @@ export interface FetchedSchool {
 })
 export class SchoolService {
   // --- FIX 1: Set the API URL to the common base path ---
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://kalvi-velicham.onrender.com/api';
 
   constructor(private http: HttpClient) { }
 

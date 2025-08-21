@@ -8,7 +8,7 @@ import { Router } from '@angular/router'; // For redirection after login/registe
 })
 export class AuthService {
   // Replace with your actual backend API URL
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://kalvi-velicham.onrender.com/api';
 
   constructor(private http: HttpClient, private router: Router) { }
 
