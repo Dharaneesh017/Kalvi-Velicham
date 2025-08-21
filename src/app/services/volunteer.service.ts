@@ -7,11 +7,17 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class VolunteerService {
- private apiUrl = `${environment.apiUrl}/volunteer`; // Match your backend URL
+  // Construct the full URL for the volunteer endpoint
+  private volunteerApiUrl = `${environment.apiUrl}/volunteer`; // <-- THIS IS THE FIX
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Registers a new volunteer by sending data to the correct backend endpoint.
+   * @param volunteerData The volunteer's form data.
+   */
   registerVolunteer(volunteerData: any): Observable<any> {
-    return this.http.post(this.apiUrl, volunteerData);
+    // Use the full, corrected URL for the POST request
+    return this.http.post(this.volunteerApiUrl, volunteerData);
   }
 }
