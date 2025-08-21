@@ -97,7 +97,7 @@ schoolName: string | null = null;
     this.schoolService.getSchools().subscribe({
       next: (schools) => {
         // --- FIX for images ---
-        const serverUrl = environment.apiUrl.replace('/api', '/uploads');
+        const serverUrl = `${environment.backendUrl}/uploads/`;
 
         this.schools = schools.map(school => {
           const realConditionPhotos = school.conditionPhotos

@@ -133,7 +133,7 @@ successStories = [
  this.schoolService.getSchools().subscribe({
       next: (schools) => {
         // --- THIS IS THE FIX for images ---
-        const serverUrl = environment.apiUrl.replace('/api', '/uploads'); // Get base URL from environment
+        const serverUrl = `${environment.backendUrl}/uploads/`; // Get base URL from environment
 
         this.fetchedSchools = schools.map(school => {
           const realConditionPhotos = school.conditionPhotos
