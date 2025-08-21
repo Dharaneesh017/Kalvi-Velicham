@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class VolunteerService {
-  private apiUrl = `${environment.apiUrl}/volunteer`;; // Match your backend URL
+ private apiUrl = environment.apiUrl; // Match your backend URL
 
   constructor(private http: HttpClient) { }
 
