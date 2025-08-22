@@ -166,27 +166,33 @@ app.post('/api/schools',
       const schoolData = req.body;
       schoolData.fundingGoal = convertBudgetToGoal(schoolData.budgetRange);
 
-      // IMPORTANT: Get the permanent URL from Cloudinary's response
-      if (req.files.recognitionCert) {
-        schoolData.recognitionCert = req.files.recognitionCert[0].path; 
+         // --- THIS IS THE FIX ---
+      // Safely check if files exist before trying to access their properties
+      if (req.files && req.files.recognitionCert) {
+        schoolData.recognitionCert = req.files.recognitionCert[0].path;
       }
-      if (req.files.assessmentReport) {
+      if (req.files && req.files.assessmentReport) {
         schoolData.assessmentReport = req.files.assessmentReport[0].path;
       }
-      if (req.files.budgetEstimates) {
+      if (req.files && req.files.budgetEstimates) {
         schoolData.budgetEstimates = req.files.budgetEstimates[0].path;
       }
-      if (req.files.conditionPhotos) {
-        schoolData.conditionPhotos = req.files.conditionPhotos.map(file => file.path); // Use .path
+      if (req.files && req.files.conditionPhotos) {
+        schoolData.conditionPhotos = req.files.conditionPhotos.map(file => file.path);
       }
-
       const newSchool = new School(schoolData);
       await newSchool.save();
       res.status(201).json({ message: 'School data submitted successfully!', schoolId: newSchool._id });
     } catch (error) {
-      // (Your existing error handling is perfect and remains the same)
-      if (error.code === 11000) return res.status(409).json({ message: 'A school with this UDISE Code already exists.' });
-      console.error(error);
+      if (error.name === 'ValidationError') {
+        const errors = Object.keys(error.errors).map(key => ({ field: key, message: error.errors[key].message }));
+        return res.status(400).json({ message: 'Validation failed', errors: errors });
+      }
+      if (error.code === 11000) {
+        return res.status(409).json({ message: 'A school with this UDISE Code already exists.' });
+      }
+      // Use the improved logging here
+      console.error("Detailed error during school registration:", error);
       res.status(500).json({ message: 'Internal Server Error' });
     }
   }
