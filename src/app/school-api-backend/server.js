@@ -154,11 +154,13 @@ const Donation = mongoose.model('Donation', donationSchema);
 
 // --- API Routes ---
 // ... (Your existing routes for schools, volunteers, auth remain the same) ...
+// in server.js
+
 app.post('/api/schools',
   upload.fields([
     { name: 'recognitionCert', maxCount: 1 },
     { name: 'assessmentReport', maxCount: 1 },
-    { name: 'conditionPhotos', maxCount: 5 }, 
+    { name: 'conditionPhotos', maxCount: 5 },
     { name: 'budgetEstimates', maxCount: 1 }
   ]),
   async (req, res) => {
@@ -166,8 +168,8 @@ app.post('/api/schools',
       const schoolData = req.body;
       schoolData.fundingGoal = convertBudgetToGoal(schoolData.budgetRange);
 
-         // --- THIS IS THE FIX ---
-      // Safely check if files exist before trying to access their properties
+      // --- THIS IS THE FIX ---
+      // Safely check if req.files and the specific file fields exist before accessing them
       if (req.files && req.files.recognitionCert) {
         schoolData.recognitionCert = req.files.recognitionCert[0].path;
       }
@@ -180,10 +182,13 @@ app.post('/api/schools',
       if (req.files && req.files.conditionPhotos) {
         schoolData.conditionPhotos = req.files.conditionPhotos.map(file => file.path);
       }
+      // --- END OF FIX ---
+
       const newSchool = new School(schoolData);
       await newSchool.save();
       res.status(201).json({ message: 'School data submitted successfully!', schoolId: newSchool._id });
     } catch (error) {
+      // Your existing error handling is perfect and can remain the same
       if (error.name === 'ValidationError') {
         const errors = Object.keys(error.errors).map(key => ({ field: key, message: error.errors[key].message }));
         return res.status(400).json({ message: 'Validation failed', errors: errors });
@@ -191,8 +196,7 @@ app.post('/api/schools',
       if (error.code === 11000) {
         return res.status(409).json({ message: 'A school with this UDISE Code already exists.' });
       }
-      // Use the improved logging here
-      console.error("Detailed error during school registration:", error);
+      console.error("Detailed error during school registration:", error); // Log the detailed error
       res.status(500).json({ message: 'Internal Server Error' });
     }
   }
