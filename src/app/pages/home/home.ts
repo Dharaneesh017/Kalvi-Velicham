@@ -132,18 +132,16 @@ successStories = [
    this.startImageSlider(); 
  this.schoolService.getSchools().subscribe({
       next: (schools) => {
-        // --- THIS IS THE FIX for images ---
-        const serverUrl = `${environment.backendUrl}/uploads/`; // Get base URL from environment
+     
+        // Get base URL from environment
 
         this.fetchedSchools = schools.map(school => {
-          const realConditionPhotos = school.conditionPhotos
-            ? school.conditionPhotos.map(photoName => serverUrl + photoName)
-            : [];
+
       return {
         ...school,
         lat: (school as any).lat || (11.1271 + (Math.random() - 0.5) * 0.5),
         lng: (school as any).lng || (78.6569 + (Math.random() - 0.5) * 0.5),
-        conditionPhotos: realConditionPhotos, // <-- FIX: Use the real photo URLs
+         // <-- FIX: Use the real photo URLs
         hovering: false,
         currentPhotoIndex: 0
       };
