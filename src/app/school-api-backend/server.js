@@ -11,22 +11,7 @@ const PORT = process.env.PORT || 3000; // API will run on this port
 const multer = require('multer'); // <-- 1. Require multer
 const path = require('path');    
 const nodemailer = require('nodemailer'); 
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'kalvi-velicham', 
-    allowed_formats: ['jpeg', 'png', 'jpg', 'pdf']
-  },
-});
-const upload = multer({ storage: storage });
 // --- MONGODB CONNECTION URI ---
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/school_renovation_db';
 const transporter = nodemailer.createTransport({
@@ -53,8 +38,20 @@ mongoose.connect(MONGODB_URI)
 // --- Middleware Setup ---
 app.use(cors());
 app.use(express.json());
-
-
+app.use('/uploads', express.static('uploads'));
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    // --- START: MODIFICATION TO SANITIZE FILENAME ---
+    // Sanitize the original filename to remove invalid characters
+    const sanitizedOriginalName = file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '');
+    // Create a unique filename
+    cb(null, Date.now() + '-' + sanitizedOriginalName);
+    // --- END: MODIFICATION ---
+  }
+});
 function convertBudgetToGoal(budgetRange) {
   if (!budgetRange) return 500000; // Default goal if not specified
   switch (budgetRange) {
@@ -65,7 +62,7 @@ function convertBudgetToGoal(budgetRange) {
     default: return 500000;
   }
 }
-
+const upload = multer({ storage: storage });
 const schoolSchema = new mongoose.Schema({
   schoolNameEn: { type: String, required: true },
   schoolNameTa: { type: String, required: true },
@@ -154,48 +151,35 @@ const Donation = mongoose.model('Donation', donationSchema);
 
 // --- API Routes ---
 // ... (Your existing routes for schools, volunteers, auth remain the same) ...
-// in server.js
-
 app.post('/api/schools',
   upload.fields([
     { name: 'recognitionCert', maxCount: 1 },
     { name: 'assessmentReport', maxCount: 1 },
-    { name: 'conditionPhotos', maxCount: 5 },
+    { name: 'conditionPhotos', maxCount: 5 }, 
     { name: 'budgetEstimates', maxCount: 1 }
   ]),
   async (req, res) => {
     try {
       const schoolData = req.body;
-      schoolData.fundingGoal = convertBudgetToGoal(schoolData.budgetRange);
+       schoolData.fundingGoal = convertBudgetToGoal(schoolData.budgetRange);
 
-      // --- THIS IS THE FIX ---
-      // Safely check if req.files and the specific file fields exist before accessing them
-      if (req.files && req.files.recognitionCert) {
-        schoolData.recognitionCert = req.files.recognitionCert[0].path;
+      if (req.files.recognitionCert) {
+        schoolData.recognitionCert = req.files.recognitionCert[0].filename;
       }
-      if (req.files && req.files.assessmentReport) {
-        schoolData.assessmentReport = req.files.assessmentReport[0].path;
+      if (req.files.assessmentReport) {
+        schoolData.assessmentReport = req.files.assessmentReport[0].filename;
       }
-      if (req.files && req.files.budgetEstimates) {
-        schoolData.budgetEstimates = req.files.budgetEstimates[0].path;
+      if (req.files.budgetEstimates) {
+        schoolData.budgetEstimates = req.files.budgetEstimates[0].filename;
       }
-      if (req.files && req.files.conditionPhotos) {
-        schoolData.conditionPhotos = req.files.conditionPhotos.map(file => file.path);
+      if (req.files.conditionPhotos) {
+        schoolData.conditionPhotos = req.files.conditionPhotos.map(file => file.filename);
       }
-      // --- END OF FIX ---
 
       const newSchool = new School(schoolData);
       await newSchool.save();
       res.status(201).json({ message: 'School data submitted successfully!', schoolId: newSchool._id });
-    }  catch (error) {
-      // --- THIS IS THE NEW, IMPROVED LOGGING ---
-      // This will print the full error details, including the exact line that failed.
-      console.error("!!! CRITICAL ERROR during school registration !!!");
-      console.error("Error Name:", error.name);
-      console.error("Error Message:", error.message);
-      console.error("Error Stack:", error.stack); // Most important line for debugging
-
-      // Keep the specific checks for known error types
+    } catch (error) {
       if (error.name === 'ValidationError') {
         const errors = Object.keys(error.errors).map(key => ({ field: key, message: error.errors[key].message }));
         return res.status(400).json({ message: 'Validation failed', errors: errors });
@@ -203,8 +187,7 @@ app.post('/api/schools',
       if (error.code === 11000) {
         return res.status(409).json({ message: 'A school with this UDISE Code already exists.' });
       }
-
-      // Send a generic response to the user
+      console.error(error); // Log other errors
       res.status(500).json({ message: 'Internal Server Error' });
     }
   }
@@ -416,9 +399,9 @@ app.post('/api/donations/submit-mock-payment',
       // Multer has now parsed the form, so req.body will have the text fields
       const donationData = req.body;
 
-   
+      // 2. CHECK FOR THE UPLOADED FILE and add its name to the data
       if (req.file) {
-        donationData.image = req.file.path;
+        donationData.image = req.file.filename;
       }
 
       const mockTransactionId = `MOCK_${donationData.paymentMethod.toUpperCase()}_${Date.now()}`;

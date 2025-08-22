@@ -92,16 +92,20 @@ schoolName: string | null = null;
     });
   }
 
- fetchSchools(): void {
+  // 3. REPLACE THE fetchSchools METHOD WITH THIS LOGIC FROM HOME.TS
+  fetchSchools(): void {
     this.schoolService.getSchools().subscribe({
       next: (schools) => {
-        // --- THIS IS THE CORRECTED LOGIC ---
-        // The backend now sends full URLs from Cloudinary.
-        // We can use the school data directly without changing the image paths.
+        // --- FIX for images ---
+        const serverUrl = `${environment.backendUrl}/uploads/`;
+
         this.schools = schools.map(school => {
+          const realConditionPhotos = school.conditionPhotos
+            ? school.conditionPhotos.map(photoName => serverUrl + photoName)
+            : [];
           return {
             ...school,
-            // The 'conditionPhotos' array already has the full URLs
+            conditionPhotos: realConditionPhotos,
             hovering: false,
             currentPhotoIndex: 0
           };
@@ -110,6 +114,7 @@ schoolName: string | null = null;
       error: (err) => { console.error('Failed to fetch schools', err); }
     });
   }
+  
   
   onSchoolHover(school: SchoolWithSlider, hovering: boolean): void {
     school.hovering = hovering;
