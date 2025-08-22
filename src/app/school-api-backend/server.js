@@ -187,8 +187,15 @@ app.post('/api/schools',
       const newSchool = new School(schoolData);
       await newSchool.save();
       res.status(201).json({ message: 'School data submitted successfully!', schoolId: newSchool._id });
-    } catch (error) {
-      // Your existing error handling is perfect and can remain the same
+    }  catch (error) {
+      // --- THIS IS THE NEW, IMPROVED LOGGING ---
+      // This will print the full error details, including the exact line that failed.
+      console.error("!!! CRITICAL ERROR during school registration !!!");
+      console.error("Error Name:", error.name);
+      console.error("Error Message:", error.message);
+      console.error("Error Stack:", error.stack); // Most important line for debugging
+
+      // Keep the specific checks for known error types
       if (error.name === 'ValidationError') {
         const errors = Object.keys(error.errors).map(key => ({ field: key, message: error.errors[key].message }));
         return res.status(400).json({ message: 'Validation failed', errors: errors });
@@ -196,7 +203,8 @@ app.post('/api/schools',
       if (error.code === 11000) {
         return res.status(409).json({ message: 'A school with this UDISE Code already exists.' });
       }
-      console.error("Detailed error during school registration:", error); // Log the detailed error
+
+      // Send a generic response to the user
       res.status(500).json({ message: 'Internal Server Error' });
     }
   }

@@ -1,5 +1,5 @@
 {
-  "name": "school-api-backend",
+"name": "school-api-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -22,4 +22,5 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^7.0.5"
   }
+
 }
