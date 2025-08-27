@@ -7,7 +7,7 @@ A full-stack web application designed to connect donors and volunteers with gove
 ### ✨ Live Application Links
 
 * **Live Site (Netlify):** **[https://kalvi-velicham.netlify.app/](https://kalvi-velicham.netlify.app/)**
-* **Live Backend API (Render):** **[https://kalvi-velicham.onrender.com/](https://kalvi-velicham.onrender.com/)**
+
 
 ---
 
@@ -26,7 +26,7 @@ A full-stack web application designed to connect donors and volunteers with gove
 ## 📸 Project Screenshots
 
 
-(https://github.com/Dharaneesh017/Kalvi-Velicham/issues/1#issue-3359493469)
+<img src="https://github.com/Dharaneesh017/Kalvi-Velicham/issues/1#issue-3359493469" alt="Schools Listing Page" width="100%">
 ---
 
 ## 🛠️ Tech Stack
