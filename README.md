@@ -1,59 +1,123 @@
-# SchoolPortal
+# Tamil Nadu School Renovation Initiative
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.2.
+![Homepage Screenshot](https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/74837803-b097-4447-9812-32a225ca316b)
 
-## Development server
+A full-stack web application designed to connect donors and volunteers with government schools in Tamil Nadu that require renovation and support. This platform empowers schools to showcase their needs and allows compassionate individuals to make a direct impact through financial contributions or by volunteering their time.
 
-To start a local development server, run:
+### ✨ Live Application Links
 
-```bash
-ng serve
-```
+* **Live Site (Netlify):** **[https://kalvi-velicham.netlify.app/](https://kalvi-velicham.netlify.app/)**
+* **Live Backend API (Render):** **[https://kalvi-velicham.onrender.com/](https://kalvi-velicham.onrender.com/)**
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🌟 Key Features
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+* **Bilingual Interface:** Seamless user experience in both **English** and **Tamil**.
+* **Dynamic School Listings:** Schools can register their profiles, detailing their renovation needs, budget requirements, and current condition with photo uploads.
+* **Secure Donor Authentication:** A complete login and registration system for donors to track their contributions.
+* **Multi-Step Donation Form:** An intuitive and user-friendly process for making donations to specific schools.
+* **Volunteer Registration:** A simple portal for individuals to sign up and offer their skills and time.
+* **Permanent Image Storage:** All user-uploaded images are stored permanently in the cloud using Cloudinary, ensuring data integrity.
+* **Automated Email Notifications:** Donors and volunteers receive instant confirmation and thank-you emails via Nodemailer.
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📸 Project Screenshots
 
-```bash
-ng generate --help
-```
+<table>
+  <tr>
+    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/059316de-f7e9-4677-99e7-578964d50d03" alt="Schools Listing Page" width="100%"></td>
+    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/e06f52e2-9b54-46ab-a50d-b4b3c9b7754b" alt="Donation Form" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Schools Listing Page</em></td>
+    <td align="center"><em>Multi-Step Donation Form</em></td>
+  </tr>
+   <tr>
+    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/69591410-b99b-404a-8f3a-714041b8c089" alt="Success Stories" width="100%"></td>
+    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/38e051c5-7f9a-4c91-9543-1e5f4d1e2a0e" alt="Volunteer Form" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Success Stories</em></td>
+    <td align="center"><em>Volunteer Form</em></td>
+  </tr>
+</table>
 
-## Building
+---
 
-To build the project run:
+## 🛠️ Tech Stack
 
-```bash
-ng build
-```
+This project is built with the MEAN stack and deployed on a modern, robust infrastructure.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+* **Frontend:** **Angular**
+* **Backend:** **Node.js** with **Express.js**
+* **Database:** **MongoDB** (with **MongoDB Atlas** for cloud hosting)
+* **Image Storage:** **Cloudinary**
+* **Deployment:**
+    * **Frontend:** Deployed on **Netlify**.
+    * **Backend:** Deployed on **Render**.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🚀 Getting Started Locally
 
-```bash
-ng test
-```
+To get a local copy up and running, follow these simple steps.
 
-## Running end-to-end tests
+### Prerequisites
 
-For end-to-end (e2e) testing, run:
+* Node.js and npm installed.
+* Angular CLI installed (`npm install -g @angular/cli`).
 
-```bash
-ng e2e
-```
+### Setup & Installation
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+1.  **Clone the Repository**
+    ```sh
+    git clone [https://github.com/Dharaneesh017/Kalvi-Velicham.git](https://github.com/Dharaneesh017/Kalvi-Velicham.git)
+    ```
 
-## Additional Resources
+2.  **Install Backend Dependencies**
+    Navigate to the backend folder and install the necessary packages.
+    ```sh
+    cd Kalvi-Velicham/src/app/school-api-backend
+    npm install
+    ```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+3.  **Install Frontend Dependencies**
+    Navigate back to the project's root folder and install the frontend packages.
+    ```sh
+    cd ../../../
+    npm install
+    ```
+
+4.  **Set Up Environment Variables**
+    In the backend folder (`src/app/school-api-backend`), create a `.env` file and add the following keys. This file should be in your `.gitignore`.
+    ```env
+    # MongoDB Connection String from Atlas
+    MONGODB_URI=your_mongodb_connection_string_with_encoded_password
+
+    # JWT Secret Key for authentication
+    JWT_SECRET=your_super_secret_key
+
+    # Nodemailer Credentials for sending emails
+    EMAIL_USER=your_gmail_address@gmail.com
+    EMAIL_PASS=your_16_digit_gmail_app_password
+
+    # Cloudinary Credentials for image storage
+    CLOUDINARY_CLOUD_NAME=your_cloud_name
+    CLOUDINARY_API_KEY=your_api_key
+    CLOUDINARY_API_SECRET=your_api_secret
+    ```
+
+5.  **Run the Application**
+    * **Run the Backend Server:**
+        ```sh
+        # From the src/app/school-api-backend folder
+        node server.js
+        ```
+    * **Run the Frontend Application:**
+        ```sh
+        # From the project's root folder
+        ng serve
+        ```
+    Open your browser and navigate to `http://localhost:4200/`.
