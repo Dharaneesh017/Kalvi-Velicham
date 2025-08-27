@@ -1,6 +1,6 @@
 # Tamil Nadu School Renovation Initiative
 
-![Homepage Screenshot](https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/74837803-b097-4447-9812-32a225ca316b)
+
 
 A full-stack web application designed to connect donors and volunteers with government schools in Tamil Nadu that require renovation and support. This platform empowers schools to showcase their needs and allows compassionate individuals to make a direct impact through financial contributions or by volunteering their time.
 
@@ -25,25 +25,8 @@ A full-stack web application designed to connect donors and volunteers with gove
 
 ## 📸 Project Screenshots
 
-<table>
-  <tr>
-    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/059316de-f7e9-4677-99e7-578964d50d03" alt="Schools Listing Page" width="100%"></td>
-    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/e06f52e2-9b54-46ab-a50d-b4b3c9b7754b" alt="Donation Form" width="100%"></td>
-  </tr>
-  <tr>
-    <td align="center"><em>Schools Listing Page</em></td>
-    <td align="center"><em>Multi-Step Donation Form</em></td>
-  </tr>
-   <tr>
-    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/69591410-b99b-404a-8f3a-714041b8c089" alt="Success Stories" width="100%"></td>
-    <td><img src="https://github.com/Dharaneesh017/Kalvi-Velicham/assets/175471436/38e051c5-7f9a-4c91-9543-1e5f4d1e2a0e" alt="Volunteer Form" width="100%"></td>
-  </tr>
-  <tr>
-    <td align="center"><em>Success Stories</em></td>
-    <td align="center"><em>Volunteer Form</em></td>
-  </tr>
-</table>
 
+(https://github.com/Dharaneesh017/Kalvi-Velicham/issues/1#issue-3359493469)
 ---
 
 ## 🛠️ Tech Stack
