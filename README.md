@@ -26,7 +26,9 @@ A full-stack web application designed to connect donors and volunteers with gove
 ## 📸 Project Screenshots
 
 
-<img src="https://github.com/Dharaneesh017/Kalvi-Velicham/issues/1#issue-3359493469" alt="Click to view Project Screenshots" width="100%">
+<img width="1898" height="927" alt="Image" src="https://github.com/user-attachments/assets/e416f334-f44b-4bb2-92d7-8e3991bff6da" />
+<img width="1899" height="926" alt="Image" src="https://github.com/user-attachments/assets/f9317156-000b-4f53-bd77-e932a8275c06" />
+<img width="1904" height="932" alt="Image" src="https://github.com/user-attachments/assets/6844b207-1b45-46fd-be58-b165590d45ba" />
 ---
 
 ## 🛠️ Tech Stack
