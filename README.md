@@ -26,7 +26,7 @@ A full-stack web application designed to connect donors and volunteers with gove
 ## 📸 Project Screenshots
 
 
-<img src="https://github.com/Dharaneesh017/Kalvi-Velicham/issues/1#issue-3359493469" alt="Schools Listing Page" width="100%">
+<img src="https://github.com/Dharaneesh017/Kalvi-Velicham/issues/1#issue-3359493469" alt="Click to view Project Screenshots" width="100%">
 ---
 
 ## 🛠️ Tech Stack
